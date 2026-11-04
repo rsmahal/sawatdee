@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Sawatdee",
+      "hasCanvas": false,
+      "bodyTextLen": 964,
+      "bodyTextHash": "20afc75188d8c9868f01b465325af1d3b4950a1d1550c7ac367ab1934600a9ac",
+      "bodyTextPrefix": "ส SAWATDEE สวัสดี Speak Thai from the first lesson. A pocket cou",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Sawatdee",
+      "hasCanvas": false,
+      "bodyTextLen": 447,
+      "bodyTextHash": "8e0b6577c54828a40f4d4319fa5d9f34e45324952799efc9991d4017f439ccd5",
+      "bodyTextPrefix": "Sawatdee Learn Thai 0 0 XP · 0/10 I SAY ค่ะ ครับ TODAY สบายดี sà",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}

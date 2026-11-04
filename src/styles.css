@@ -1,0 +1,154 @@
+@import "tailwindcss";
+@import "@fontsource/nunito/latin-600.css";
+@import "@fontsource/nunito/latin-700.css";
+@import "@fontsource/nunito/latin-800.css";
+@import "@fontsource/noto-sans-thai/thai-500.css";
+@import "@fontsource/noto-sans-thai/thai-600.css";
+@import "@fontsource/noto-sans-thai/thai-700.css";
+@import "@fontsource/noto-sans-thai/thai-800.css";
+
+@theme {
+  --font-sans: "Nunito", "Noto Sans Thai", "Loma", ui-sans-serif, system-ui, sans-serif;
+  --color-paper: #fff6ee;
+  --color-sheet: #fffdfb;
+  --color-ink: #1c1410;
+  --color-muted: #8a7368;
+  --color-line: #f0e2d6;
+  --color-soft: #fff1e6;
+  --color-chili: #e23a2f;
+  --color-chili-deep: #c42c22;
+  --color-teal: #0e7a6c;
+  --color-teal-deep: #0a5c52;
+  --color-marigold: #e6a00a;
+  --color-marigold-deep: #b87a06;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    line-height: 1.5;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  button {
+    touch-action: manipulation;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 3px;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--color-marigold) 45%, white);
+  }
+  :lang(th) {
+    line-height: 1.5;
+  }
+}
+
+.thai-display {
+  font-family: "Noto Sans Thai", "Loma", sans-serif;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.btn-3d {
+  box-shadow: 0 6px 0 var(--btn-lip, var(--color-chili-deep));
+  transition:
+    transform 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+.btn-3d:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 var(--btn-lip, var(--color-chili-deep));
+}
+.btn-3d:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+}
+.btn-chili {
+  --btn-lip: var(--color-chili-deep);
+  background: var(--color-chili);
+  color: var(--color-sheet);
+}
+.btn-teal {
+  --btn-lip: var(--color-teal-deep);
+  background: var(--color-teal);
+  color: var(--color-sheet);
+}
+.btn-sheet {
+  --btn-lip: color-mix(in srgb, var(--color-ink) 22%, transparent);
+  background: var(--color-sheet);
+  color: var(--color-ink);
+}
+
+.path-node {
+  box-shadow: 0 8px 0 var(--node-lip, var(--color-line));
+  transition:
+    transform 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+.path-node:active {
+  transform: translateY(4px);
+  box-shadow: 0 4px 0 var(--node-lip, var(--color-line));
+}
+.path-node-go {
+  --node-lip: var(--color-chili-deep);
+  background: var(--color-chili);
+  color: var(--color-sheet);
+}
+.path-node-done {
+  --node-lip: var(--color-teal-deep);
+  background: var(--color-teal);
+  color: var(--color-sheet);
+}
+.path-node-lock {
+  --node-lip: var(--color-line);
+  background: var(--color-soft);
+  color: var(--color-muted);
+}
+.path-node-check {
+  --node-lip: var(--color-marigold-deep);
+  background: var(--color-marigold);
+  color: var(--color-ink);
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+.nudge {
+  animation: nudge 180ms ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-3d,
+  .btn-3d:active,
+  .path-node,
+  .path-node:active {
+    transition: none;
+    transform: none;
+  }
+  .nudge {
+    animation: none;
+  }
+}
