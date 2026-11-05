@@ -37,6 +37,7 @@ type Actions = {
   recordAnswer: (ok: boolean, gain: number) => void;
   finishLesson: (id: string, stars: number, bonus: number) => void;
   resetProgress: () => void;
+  applyLearning: (learning: Learning) => void;
 };
 
 const initial: Data = {
@@ -134,6 +135,7 @@ export const useProgress = create<Data & Actions>()(
           answered: 0,
           correct: 0,
         }),
+      applyLearning: (learning) => set({ ...learning }),
     }),
     {
       name: "sawatdee-v1",
@@ -142,17 +144,89 @@ export const useProgress = create<Data & Actions>()(
         const saved = (persisted ?? {}) as Partial<Data>;
         return {
           ...current,
-          ...saved,
-          cards: saved.cards ?? {},
           scriptStyle: saved.scriptStyle === "traditional" ? "traditional" : "modern",
           theme: saved.theme === "dark" ? "dark" : "light",
-          completed: saved.completed ?? {},
         };
       },
+      partialize: (state) => ({ theme: state.theme, scriptStyle: state.scriptStyle }),
     },
   ),
 );
 
 export function xpGain(comboBefore: number) {
   return 10 + Math.min(Math.max(comboBefore, 0), 4) * 2;
+}
+
+export type Learning = {
+  xp: number;
+  streak: number;
+  lastDay: string | null;
+  completed: Record<string, number>;
+  speaker: Speaker;
+  showRoman: boolean;
+  autoplay: boolean;
+  cards: Record<string, SrsCard>;
+  answered: number;
+  correct: number;
+};
+
+export function learningSnapshot(state: Data): Learning {
+  return {
+    xp: state.xp,
+    streak: state.streak,
+    lastDay: state.lastDay,
+    completed: state.completed,
+    speaker: state.speaker,
+    showRoman: state.showRoman,
+    autoplay: state.autoplay,
+    cards: state.cards,
+    answered: state.answered,
+    correct: state.correct,
+  };
+}
+
+function num(value: unknown, fallback: number) {
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
+
+export function parseLearning(raw: unknown): Learning | null {
+  if (!raw || typeof raw !== "object") return null;
+  const row = raw as Record<string, unknown>;
+  const completed: Record<string, number> = {};
+  if (row.completed && typeof row.completed === "object") {
+    for (const [id, stars] of Object.entries(row.completed)) {
+      if (typeof stars === "number" && stars >= 0 && stars <= 3) completed[id] = stars;
+    }
+  }
+  const cards: Record<string, SrsCard> = {};
+  if (row.cards && typeof row.cards === "object") {
+    for (const [key, value] of Object.entries(row.cards).slice(0, 400)) {
+      if (!value || typeof value !== "object") continue;
+      const card = value as Partial<SrsCard>;
+      if (typeof card.thai !== "string" || typeof card.due !== "string") continue;
+      cards[key] = {
+        thai: card.thai,
+        roman: typeof card.roman === "string" ? card.roman : "",
+        en: typeof card.en === "string" ? card.en : "",
+        ease: num(card.ease, 2.5),
+        interval: num(card.interval, 0),
+        due: card.due,
+        reps: num(card.reps, 0),
+        lapses: num(card.lapses, 0),
+        seen: typeof card.seen === "string" ? card.seen : card.due,
+      };
+    }
+  }
+  return {
+    xp: Math.max(0, Math.round(num(row.xp, 0))),
+    streak: Math.max(0, Math.round(num(row.streak, 0))),
+    lastDay: typeof row.lastDay === "string" ? row.lastDay : null,
+    completed,
+    speaker: row.speaker === "m" ? "m" : "f",
+    showRoman: row.showRoman !== false,
+    autoplay: row.autoplay !== false,
+    cards,
+    answered: Math.max(0, Math.round(num(row.answered, 0))),
+    correct: Math.max(0, Math.round(num(row.correct, 0))),
+  };
 }

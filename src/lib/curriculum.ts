@@ -187,64 +187,87 @@ function pairs(list: Word[], coach?: string): Exercise {
   return { kind: "pairs", pairs: list, coach };
 }
 
+export const levels = [
+  {
+    id: "A1",
+    title: "A1",
+    blurb: "Greet people, buy food, and ask where something is.",
+  },
+  {
+    id: "A2",
+    title: "A2",
+    blurb: "Describe what you see, order a meal, and ask someone to slow down.",
+  },
+] as const;
+
 export const units = [
   {
     id: "hello",
+    level: "A1",
     kicker: "Unit 1",
     title: "Say hello",
     blurb: "Greet people, thank them, and answer yes or no.",
   },
   {
     id: "people",
+    level: "A1",
     kicker: "Unit 2",
     title: "People",
     blurb: "Ask how someone is, and name the family.",
   },
   {
     id: "market",
+    level: "A1",
     kicker: "Unit 3",
     title: "At the market",
     blurb: "Order food and ask what it costs.",
   },
   {
     id: "town",
+    level: "A1",
     kicker: "Unit 4",
     title: "Around town",
     blurb: "Count, then find the bathroom.",
   },
   {
     id: "time",
+    level: "A1",
     kicker: "Unit 5",
     title: "Time",
     blurb: "Today, tomorrow, and how to ask the time.",
   },
   {
     id: "describe",
-    kicker: "Unit 6",
+    level: "A2",
+    kicker: "Unit 1",
     title: "Describe it",
     blurb: "Colors, size, and how hot it is.",
   },
   {
     id: "meal",
-    kicker: "Unit 7",
+    level: "A2",
+    kicker: "Unit 2",
     title: "A meal",
     blurb: "Order a dish, say you're full, ask for the bill.",
   },
   {
     id: "going",
-    kicker: "Unit 8",
+    level: "A2",
+    kicker: "Unit 3",
     title: "Getting there",
     blurb: "Near, far, and the words for the station.",
   },
   {
     id: "talking",
-    kicker: "Unit 9",
+    level: "A2",
+    kicker: "Unit 4",
     title: "When you're stuck",
     blurb: "Your name, and asking someone to slow down.",
   },
   {
     id: "out",
-    kicker: "Unit 10",
+    level: "A2",
+    kicker: "Unit 5",
     title: "Out for the day",
     blurb: "Rain, being tired, and what you like.",
   },

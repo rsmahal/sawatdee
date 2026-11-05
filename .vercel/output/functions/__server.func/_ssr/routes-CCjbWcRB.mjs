@@ -1,14 +1,81 @@
 import { o as __toESM } from "../_runtime.mjs";
-import { q as require_react, x as require_jsx_runtime, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
+import { S as require_jsx_runtime, Y as require_react, b as Navigate, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
+import { a as getServerFnById, i as TSS_SERVER_FUNCTION, r as createServerFn } from "./ssr.mjs";
+import { i as signOut } from "./client-1vAx-gM_.mjs";
+import { a as nextInterval, c as todayKey, i as learningSnapshot, l as useProgress, n as duePhrase, o as parseLearning, r as gapLabel, s as reviewStats, t as authMiddleware, u as xpGain } from "./progress-BpyYwz8Y.mjs";
+import { n as useCurrentUserState, t as useCurrentUser } from "./use-current-user-B7Cbrtsy.mjs";
+import { i as hasGateSessionMarker } from "./server-BfsoOYoH.mjs";
 import { a as Star, c as Lock, d as Flame, f as ChevronRight, h as Award, l as House, m as BookOpen, n as Volume2, o as RotateCcw, p as Check, r as UserRound, s as Repeat, t as X, u as Heart } from "../_libs/lucide-react.mjs";
-import { n as hasGateSessionMarker } from "./router-5zbzp2Lk.mjs";
-import { a as useCurrentUserState, i as useCurrentUser, r as signOut } from "./use-current-user-IbbRlbZj.mjs";
 import { t as clsx } from "../_libs/clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
-import { n as create, t as persist } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BKtSyzzu.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CCjbWcRB.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
+var subscribeToNothing = () => () => {};
+var noGateSessionOnServer = () => false;
+/**
+* Auth state components — plain wrappers around `useCurrentUserState()`.
+*
+* With auth on, visitors are signed out until they authenticate — in the sandbox
+* live preview too, which does real sign-in. The shared dev user appears only
+* when auth is disabled (`VITE_AUTH_ENABLED=false`, the shipped default).
+* While the session is still resolving, gates that care about signed-out state
+* render nothing so there's no signed-out flash on hard reload.
+*/
+/** Where `RedirectToSignIn` sends signed-out visitors. Create this route. */
+var SIGN_IN_PATH = "/login";
+/**
+* Client-side redirect to the sign-in route (TanStack `<Navigate>` — NOT a full
+* `window.location` reload). A hard navigation re-bootstraps the SPA and re-runs
+* session loading, which feels like a second "Loading…" on /login.
+*
+* Guard routes by waiting out `isPending` first (see `use-current-user`), then
+* render this.
+*/
+function RedirectToSignIn({ to = SIGN_IN_PATH }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Navigate, { to });
+}
+/**
+* Minimal signed-in identity chip + sign-out. Restyle freely (see the
+* `design-ui` skill). Sign-out is only shown when auth is enabled (the
+* disabled-auth dev user has nothing to sign out of) and the session is not
+* gate-materialized — behind the gate the next request signs the viewer
+* straight back in, so a sign-out control there is a broken loop.
+*/
+function UserButton() {
+	const user = useCurrentUser();
+	const [signingOut, setSigningOut] = (0, import_react.useState)(false);
+	const gateSession = (0, import_react.useSyncExternalStore)(subscribeToNothing, hasGateSessionMarker, noGateSessionOnServer);
+	if (!user) return null;
+	const label = user.displayName ?? user.primaryEmail ?? "Account";
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex items-center gap-2",
+		children: [
+			user.profileImageUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+				src: user.profileImageUrl,
+				alt: "",
+				className: "h-8 w-8 rounded-full object-cover"
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "grid h-8 w-8 place-items-center rounded-full bg-black/10 text-sm font-medium dark:bg-white/20",
+				children: label.charAt(0).toUpperCase()
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "text-sm font-medium",
+				children: label
+			}),
+			!gateSession && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				disabled: signingOut,
+				onClick: () => {
+					setSigningOut(true);
+					signOut().catch(() => setSigningOut(false));
+				},
+				className: "cursor-pointer text-sm underline-offset-4 opacity-70 hover:underline disabled:cursor-wait disabled:no-underline",
+				children: signingOut ? "Signing out…" : "Sign out"
+			})
+		]
+	});
+}
 function cn(...inputs) {
 	return twMerge(clsx(inputs));
 }
@@ -177,64 +244,83 @@ function pairs(list, coach) {
 		coach
 	};
 }
+var levels = [{
+	id: "A1",
+	title: "A1",
+	blurb: "Greet people, buy food, and ask where something is."
+}, {
+	id: "A2",
+	title: "A2",
+	blurb: "Describe what you see, order a meal, and ask someone to slow down."
+}];
 var units = [
 	{
 		id: "hello",
+		level: "A1",
 		kicker: "Unit 1",
 		title: "Say hello",
 		blurb: "Greet people, thank them, and answer yes or no."
 	},
 	{
 		id: "people",
+		level: "A1",
 		kicker: "Unit 2",
 		title: "People",
 		blurb: "Ask how someone is, and name the family."
 	},
 	{
 		id: "market",
+		level: "A1",
 		kicker: "Unit 3",
 		title: "At the market",
 		blurb: "Order food and ask what it costs."
 	},
 	{
 		id: "town",
+		level: "A1",
 		kicker: "Unit 4",
 		title: "Around town",
 		blurb: "Count, then find the bathroom."
 	},
 	{
 		id: "time",
+		level: "A1",
 		kicker: "Unit 5",
 		title: "Time",
 		blurb: "Today, tomorrow, and how to ask the time."
 	},
 	{
 		id: "describe",
-		kicker: "Unit 6",
+		level: "A2",
+		kicker: "Unit 1",
 		title: "Describe it",
 		blurb: "Colors, size, and how hot it is."
 	},
 	{
 		id: "meal",
-		kicker: "Unit 7",
+		level: "A2",
+		kicker: "Unit 2",
 		title: "A meal",
 		blurb: "Order a dish, say you're full, ask for the bill."
 	},
 	{
 		id: "going",
-		kicker: "Unit 8",
+		level: "A2",
+		kicker: "Unit 3",
 		title: "Getting there",
 		blurb: "Near, far, and the words for the station."
 	},
 	{
 		id: "talking",
-		kicker: "Unit 9",
+		level: "A2",
+		kicker: "Unit 4",
 		title: "When you're stuck",
 		blurb: "Your name, and asking someone to slow down."
 	},
 	{
 		id: "out",
-		kicker: "Unit 10",
+		level: "A2",
+		kicker: "Unit 5",
 		title: "Out for the day",
 		blurb: "Rain, being tired, and what you like."
 	}
@@ -1449,197 +1535,24 @@ function resolveTok(tok, speaker) {
 function particleLabel(speaker) {
 	return speaker === "m" ? "ครับ · khráp" : "ค่ะ · khâ";
 }
-function dayKey(date) {
-	return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-}
-function addDays(day, days) {
-	const [y, m, d] = day.split("-").map(Number);
-	const date = new Date(y ?? 0, (m ?? 1) - 1, d ?? 1);
-	date.setDate(date.getDate() + days);
-	return dayKey(date);
-}
-function todayKey() {
-	return dayKey(/* @__PURE__ */ new Date());
-}
-/** 1 day, then 3, then interval × ease, capped at 90. A miss clears the ladder. */
-function nextInterval(card, grade) {
-	if (grade === "again") return 0;
-	if (grade === "shaky") return 1;
-	const reps = card.reps + 1;
-	if (reps <= 1) return 1;
-	if (reps === 2) return 3;
-	return Math.min(90, Math.max(1, Math.round(Math.max(card.interval, 1) * card.ease)));
-}
-function clampEase(ease) {
-	return Math.round(Math.min(2.8, Math.max(1.3, ease)) * 100) / 100;
-}
-function scheduleCard(card, grade, today) {
-	const interval = nextInterval(card, grade);
-	if (grade === "again") return {
-		...card,
-		reps: 0,
-		interval: 0,
-		ease: clampEase(card.ease - .2),
-		lapses: card.lapses + 1,
-		due: today
+var createSsrRpc = (functionId) => {
+	const url = "/_serverFn/" + functionId;
+	const serverFnMeta = { id: functionId };
+	const fn = async (...args) => {
+		return (await getServerFnById(functionId, { origin: "server" }))(...args);
 	};
-	if (grade === "shaky") return {
-		...card,
-		reps: 1,
-		interval,
-		ease: clampEase(card.ease - .05),
-		due: addDays(today, interval)
-	};
-	return {
-		...card,
-		reps: card.reps + 1,
-		interval,
-		due: addDays(today, interval)
-	};
-}
-function daysUntil(due, today) {
-	const [y, m, d] = due.split("-").map(Number);
-	const [Y, M, D] = today.split("-").map(Number);
-	const a = Date.UTC(y ?? 0, (m ?? 1) - 1, d ?? 1);
-	const b = Date.UTC(Y ?? 0, (M ?? 1) - 1, D ?? 1);
-	return Math.round((a - b) / 864e5);
-}
-function duePhrase(due, today) {
-	const days = daysUntil(due, today);
-	if (days <= 0) return "Due";
-	if (days === 1) return "Tomorrow";
-	return `In ${days} days`;
-}
-function gapLabel(days) {
-	if (days <= 0) return "This one stays due.";
-	if (days === 1) return "Back tomorrow.";
-	return `Back in ${days} days.`;
-}
-function reviewStats(cards, today) {
-	const list = Object.values(cards);
-	const due = list.filter((card) => card.due <= today);
-	const later = list.filter((card) => card.due > today).sort((a, b) => a.due.localeCompare(b.due));
-	return {
-		total: list.length,
-		due: due.length,
-		mastered: list.filter((card) => card.interval >= 21).length,
-		nextDue: later[0]?.due ?? null
-	};
-}
-var initial = {
-	xp: 0,
-	streak: 0,
-	lastDay: null,
-	completed: {},
-	speaker: "f",
-	showRoman: true,
-	autoplay: true,
-	scriptStyle: "modern",
-	theme: "light",
-	cards: {},
-	answered: 0,
-	correct: 0
+	return Object.assign(fn, {
+		url,
+		serverFnMeta,
+		[TSS_SERVER_FUNCTION]: true
+	});
 };
-var useProgress = create()(persist((set, get) => ({
-	...initial,
-	setSpeaker: (speaker) => set({ speaker }),
-	setShowRoman: (showRoman) => set({ showRoman }),
-	setAutoplay: (autoplay) => set({ autoplay }),
-	setScriptStyle: (scriptStyle) => set({ scriptStyle }),
-	setTheme: (theme) => set({ theme }),
-	ingestWords: (words) => set((state) => {
-		const today = todayKey();
-		const cards = { ...state.cards };
-		let changed = false;
-		for (const word of words) {
-			if (!word.thai) continue;
-			const existing = cards[word.thai];
-			if (existing) {
-				if (existing.roman !== word.roman || existing.en !== word.en) {
-					cards[word.thai] = {
-						...existing,
-						roman: word.roman,
-						en: word.en
-					};
-					changed = true;
-				}
-				continue;
-			}
-			cards[word.thai] = {
-				thai: word.thai,
-				roman: word.roman,
-				en: word.en,
-				ease: 2.5,
-				interval: 0,
-				due: today,
-				reps: 0,
-				lapses: 0,
-				seen: today
-			};
-			changed = true;
-		}
-		return changed ? { cards } : state;
-	}),
-	gradeReview: (thai, grade) => {
-		const card = get().cards[thai];
-		if (!card) return;
-		const next = scheduleCard(card, grade, todayKey());
-		set((state) => ({ cards: {
-			...state.cards,
-			[thai]: next
-		} }));
-	},
-	recordAnswer: (ok, gain) => set((state) => ({
-		xp: state.xp + gain,
-		answered: state.answered + 1,
-		correct: state.correct + (ok ? 1 : 0)
-	})),
-	finishLesson: (id, stars, bonus) => {
-		const state = get();
-		const today = todayKey();
-		const previous = /* @__PURE__ */ new Date();
-		previous.setDate(previous.getDate() - 1);
-		const yesterday = `${previous.getFullYear()}-${String(previous.getMonth() + 1).padStart(2, "0")}-${String(previous.getDate()).padStart(2, "0")}`;
-		let streak = state.streak;
-		if (state.lastDay !== today) streak = state.lastDay === yesterday ? state.streak + 1 : 1;
-		else if (streak === 0) streak = 1;
-		set({
-			xp: state.xp + bonus,
-			streak,
-			lastDay: today,
-			completed: {
-				...state.completed,
-				[id]: Math.max(state.completed[id] ?? 0, stars)
-			}
-		});
-	},
-	resetProgress: () => set({
-		xp: 0,
-		streak: 0,
-		lastDay: null,
-		completed: {},
-		cards: {},
-		answered: 0,
-		correct: 0
-	})
-}), {
-	name: "sawatdee-v1",
-	skipHydration: true,
-	merge: (persisted, current) => {
-		const saved = persisted ?? {};
-		return {
-			...current,
-			...saved,
-			cards: saved.cards ?? {},
-			scriptStyle: saved.scriptStyle === "traditional" ? "traditional" : "modern",
-			theme: saved.theme === "dark" ? "dark" : "light",
-			completed: saved.completed ?? {}
-		};
-	}
-}));
-function xpGain(comboBefore) {
-	return 10 + Math.min(Math.max(comboBefore, 0), 4) * 2;
-}
+var loadProgress = createServerFn({ method: "GET" }).middleware([authMiddleware]).handler(createSsrRpc("051aa46e3ecf11264c3d7e62a6ea80618cdeb21a96aa3fb3ae85f924992207ce"));
+var saveProgress = createServerFn({ method: "POST" }).validator((input) => {
+	const learning = parseLearning(input);
+	if (!learning) throw new Error("Invalid progress");
+	return learning;
+}).middleware([authMiddleware]).handler(createSsrRpc("89a9b707bb1464d1fa4a04be9382ae4c7fb2a8b57950e23a3285a2f8f31d52a8"));
 function canSpeak() {
 	return typeof window !== "undefined" && "speechSynthesis" in window;
 }
@@ -2412,88 +2325,104 @@ function Path({ onStart, onReview }) {
 				children: note
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "mt-6 grid gap-6",
-				children: units.map((unit) => {
-					const unitLessons = lessons.filter((lesson) => lesson.unit === unit.id);
-					const unitDone = unitLessons.filter((lesson) => completed[lesson.id]).length;
-					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "rounded-3xl bg-soft px-5 py-4",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-xs font-extrabold tracking-wide text-chili uppercase",
-								children: unit.kicker
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-end justify-between gap-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-									className: "text-xl font-extrabold",
-									children: unit.title
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									className: "text-sm font-extrabold text-muted tabular-nums",
-									children: [
-										unitDone,
-										"/",
-										unitLessons.length
-									]
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-sm text-muted",
-								children: unit.blurb
-							})
-						]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ol", {
-						className: "relative mt-4 grid gap-4 py-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "absolute top-4 bottom-4 left-1/2 w-1 -translate-x-1/2 bg-line",
-							"aria-hidden": true
-						}), unitLessons.map((lesson, index) => {
-							const open = isUnlocked(lesson.id, completed);
-							const done = Boolean(completed[lesson.id]);
-							const stars = completed[lesson.id] ?? 0;
-							const number = lessons.findIndex((item) => item.id === lesson.id) + 1;
-							const side = index % 2 === 0 ? "justify-start pl-6" : "justify-end pr-6";
-							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-								className: cn("relative flex", side),
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex w-28 flex-col items-center gap-1",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-											type: "button",
-											"aria-label": open ? `Start ${lesson.title}` : `${lesson.title} locked`,
-											onClick: () => {
-												if (!open) {
-													const prev = lessons[number - 2];
-													setNote(prev ? `Finish ${prev.title} first.` : "Locked.");
-													return;
-												}
-												setNote(null);
-												onStart(lesson.id);
-											},
-											className: cn("path-node grid h-20 w-20 place-items-center rounded-full", done && "path-node-done", !done && open && lesson.checkpoint && "path-node-check", !done && open && !lesson.checkpoint && "path-node-go", !open && "path-node-lock"),
-											children: done ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-8 w-8" }) : !open ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, { className: "h-6 w-6" }) : lesson.checkpoint ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Award, { className: "h-8 w-8" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-2xl font-extrabold tabular-nums",
-												children: number
-											})
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-center text-sm leading-tight font-extrabold",
-											children: lesson.title
-										}),
-										done && stars > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "flex text-marigold",
-											"aria-label": `${stars} stars`,
-											children: Array.from({ length: stars }, (_, star) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, {
-												className: "h-3.5 w-3.5",
-												fill: "currentColor"
-											}, star))
-										})
-									]
+				className: "mt-6 grid gap-8",
+				children: levels.map((level) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					className: "grid gap-6",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xs font-extrabold tracking-wide text-chili uppercase",
+							children: "CEFR"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "text-2xl font-extrabold",
+							children: level.title
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm text-pretty text-muted",
+							children: level.blurb
+						})
+					] }), units.filter((unit) => unit.level === level.id).map((unit) => {
+						const unitLessons = lessons.filter((lesson) => lesson.unit === unit.id);
+						const unitDone = unitLessons.filter((lesson) => completed[lesson.id]).length;
+						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "rounded-3xl bg-soft px-5 py-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-xs font-extrabold tracking-wide text-chili uppercase",
+									children: unit.kicker
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-end justify-between gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "text-xl font-extrabold",
+										children: unit.title
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+										className: "text-sm font-extrabold text-muted tabular-nums",
+										children: [
+											unitDone,
+											"/",
+											unitLessons.length
+										]
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-sm text-muted",
+									children: unit.blurb
 								})
-							}, lesson.id);
-						})]
-					})] }, unit.id);
-				})
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ol", {
+							className: "relative mt-4 grid gap-4 py-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "absolute top-4 bottom-4 left-1/2 w-1 -translate-x-1/2 bg-line",
+								"aria-hidden": true
+							}), unitLessons.map((lesson, index) => {
+								const open = isUnlocked(lesson.id, completed);
+								const done = Boolean(completed[lesson.id]);
+								const stars = completed[lesson.id] ?? 0;
+								const number = lessons.findIndex((item) => item.id === lesson.id) + 1;
+								const side = index % 2 === 0 ? "justify-start pl-6" : "justify-end pr-6";
+								return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
+									className: cn("relative flex", side),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex w-28 flex-col items-center gap-1",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												"aria-label": open ? `Start ${lesson.title}` : `${lesson.title} locked`,
+												onClick: () => {
+													if (!open) {
+														const prev = lessons[number - 2];
+														setNote(prev ? `Finish ${prev.title} first.` : "Locked.");
+														return;
+													}
+													setNote(null);
+													onStart(lesson.id);
+												},
+												className: cn("path-node grid h-20 w-20 place-items-center rounded-full", done && "path-node-done", !done && open && lesson.checkpoint && "path-node-check", !done && open && !lesson.checkpoint && "path-node-go", !open && "path-node-lock"),
+												children: done ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-8 w-8" }) : !open ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, { className: "h-6 w-6" }) : lesson.checkpoint ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Award, { className: "h-8 w-8" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-2xl font-extrabold tabular-nums",
+													children: number
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-center text-sm leading-tight font-extrabold",
+												children: lesson.title
+											}),
+											done && stars > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "flex text-marigold",
+												"aria-label": `${stars} stars`,
+												children: Array.from({ length: stars }, (_, star) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, {
+													className: "h-3.5 w-3.5",
+													fill: "currentColor"
+												}, star))
+											})
+										]
+									})
+								}, lesson.id);
+							})]
+						})] }, unit.id);
+					})]
+				}, level.id))
 			})
 		]
 	});
@@ -2528,49 +2457,6 @@ function SpeakerSwitch({ speaker, onChange }) {
 		})]
 	});
 }
-var subscribeToNothing = () => () => {};
-var noGateSessionOnServer = () => false;
-/**
-* Minimal signed-in identity chip + sign-out. Restyle freely (see the
-* `design-ui` skill). Sign-out is only shown when auth is enabled (the
-* disabled-auth dev user has nothing to sign out of) and the session is not
-* gate-materialized — behind the gate the next request signs the viewer
-* straight back in, so a sign-out control there is a broken loop.
-*/
-function UserButton() {
-	const user = useCurrentUser();
-	const [signingOut, setSigningOut] = (0, import_react.useState)(false);
-	const gateSession = (0, import_react.useSyncExternalStore)(subscribeToNothing, hasGateSessionMarker, noGateSessionOnServer);
-	if (!user) return null;
-	const label = user.displayName ?? user.primaryEmail ?? "Account";
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "flex items-center gap-2",
-		children: [
-			user.profileImageUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-				src: user.profileImageUrl,
-				alt: "",
-				className: "h-8 w-8 rounded-full object-cover"
-			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "grid h-8 w-8 place-items-center rounded-full bg-black/10 text-sm font-medium dark:bg-white/20",
-				children: label.charAt(0).toUpperCase()
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "text-sm font-medium",
-				children: label
-			}),
-			!gateSession && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-				type: "button",
-				disabled: signingOut,
-				onClick: () => {
-					setSigningOut(true);
-					signOut().catch(() => setSigningOut(false));
-				},
-				className: "cursor-pointer text-sm underline-offset-4 opacity-70 hover:underline disabled:cursor-wait disabled:no-underline",
-				children: signingOut ? "Signing out…" : "Sign out"
-			})
-		]
-	});
-}
 function Profile() {
 	const xp = useProgress((state) => state.xp);
 	const streak = useProgress((state) => state.streak);
@@ -2585,6 +2471,8 @@ function Profile() {
 	const setShowRoman = useProgress((state) => state.setShowRoman);
 	const setAutoplay = useProgress((state) => state.setAutoplay);
 	const resetProgress = useProgress((state) => state.resetProgress);
+	const theme = useProgress((state) => state.theme);
+	const setTheme = useProgress((state) => state.setTheme);
 	const [armReset, setArmReset] = (0, import_react.useState)(false);
 	const done = lessons.filter((lesson) => completed[lesson.id]).length;
 	const accuracy = answered === 0 ? null : Math.round(100 * correct / answered);
@@ -2602,9 +2490,18 @@ function Profile() {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-2 text-pretty text-muted",
-				children: "Progress stays on this device. Polite particles follow the speaker, not the person you're talking to."
+				children: "Lessons, review, and XP are saved to this account. Polite particles follow the speaker, not the person you're talking to."
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Account, {}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-4",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toggle, {
+					on: theme === "dark",
+					label: "Dark mode",
+					hint: "Night colors for the whole course.",
+					onToggle: () => setTheme(theme === "dark" ? "light" : "dark")
+				})
+			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "mt-5 grid grid-cols-2 gap-2",
 				children: [
@@ -2641,18 +2538,6 @@ function Profile() {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "mt-3",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScriptStylePicker, {})
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-				className: "mt-8 text-lg font-extrabold",
-				children: "Appearance"
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				className: "mt-1 text-sm text-pretty text-muted",
-				children: "Light is the paper course. Dark is the same colors at night."
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "mt-3",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThemePicker, {})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 				className: "mt-8 text-lg font-extrabold",
@@ -2746,38 +2631,6 @@ function Account() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "mt-5 rounded-2xl bg-soft px-4 py-4",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserButton, {})
-	});
-}
-function ThemePicker() {
-	const theme = useProgress((state) => state.theme);
-	const setTheme = useProgress((state) => state.setTheme);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "grid grid-cols-2 gap-2",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-			type: "button",
-			"aria-pressed": theme === "light",
-			onClick: () => setTheme("light"),
-			className: cn("min-h-16 rounded-2xl border-2 px-3 py-3 text-left", theme === "light" ? "border-ink bg-ink text-sheet" : "border-line bg-sheet"),
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "block font-extrabold",
-				children: "Light"
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: cn("block text-sm font-bold", theme === "light" ? "text-sheet/80" : "text-muted"),
-				children: "Paper"
-			})]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-			type: "button",
-			"aria-pressed": theme === "dark",
-			onClick: () => setTheme("dark"),
-			className: cn("min-h-16 rounded-2xl border-2 px-3 py-3 text-left", theme === "dark" ? "border-ink bg-ink text-sheet" : "border-line bg-sheet"),
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "block font-extrabold",
-				children: "Dark"
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: cn("block text-sm font-bold", theme === "dark" ? "text-sheet/80" : "text-muted"),
-				children: "Night"
-			})]
-		})]
 	});
 }
 function Stat$1({ label, value }) {
@@ -3856,25 +3709,86 @@ function ToneDrill() {
 	});
 }
 function SawatdeeApp() {
-	const [tab, setTab] = (0, import_react.useState)("learn");
-	const [lessonId, setLessonId] = (0, import_react.useState)(null);
-	const [reviewMode, setReviewMode] = (0, import_react.useState)(null);
+	const { user, isPending } = useCurrentUserState();
 	const scriptStyle = useProgress((state) => state.scriptStyle);
 	const theme = useProgress((state) => state.theme);
-	const due = reviewStats(useProgress((state) => state.cards), todayKey()).due;
 	(0, import_react.useLayoutEffect)(() => {
 		const root = document.documentElement;
 		root.classList.toggle("dark", theme === "dark");
 		root.classList.toggle("thai-traditional", scriptStyle === "traditional");
 	}, [theme, scriptStyle]);
 	(0, import_react.useEffect)(() => {
-		Promise.resolve(useProgress.persist.rehydrate()).then(() => {
-			const state = useProgress.getState();
-			const seen = lessons.filter((lesson) => state.completed[lesson.id]).flatMap((lesson) => lesson.words);
-			state.ingestWords(seen);
-		});
+		useProgress.persist.rehydrate();
 		warmVoices();
 	}, []);
+	if (isPending) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GateSplash, { label: "Loading your course" });
+	if (!user) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RedirectToSignIn, {});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Course, { userId: user.id });
+}
+function Course({ userId }) {
+	const [phase, setPhase] = (0, import_react.useState)("loading");
+	const [attempt, setAttempt] = (0, import_react.useState)(0);
+	const ready = (0, import_react.useRef)(false);
+	const lastSaved = (0, import_react.useRef)("");
+	const timer = (0, import_react.useRef)(null);
+	const [tab, setTab] = (0, import_react.useState)("learn");
+	const [lessonId, setLessonId] = (0, import_react.useState)(null);
+	const [reviewMode, setReviewMode] = (0, import_react.useState)(null);
+	const cards = useProgress((state) => state.cards);
+	const due = reviewStats(cards, todayKey()).due;
+	(0, import_react.useEffect)(() => {
+		ready.current = false;
+		setPhase("loading");
+		let cancel = false;
+		loadProgress().then((learning) => {
+			if (cancel) return;
+			if (learning) useProgress.getState().applyLearning(learning);
+			else useProgress.getState().resetProgress();
+			lastSaved.current = JSON.stringify(learningSnapshot(useProgress.getState()));
+			ready.current = true;
+			const seen = lessons.filter((lesson) => useProgress.getState().completed[lesson.id]).flatMap((lesson) => lesson.words);
+			useProgress.getState().ingestWords(seen);
+			setPhase("ready");
+		}).catch(() => {
+			if (!cancel) setPhase("error");
+		});
+		return () => {
+			cancel = true;
+			ready.current = false;
+			if (timer.current) window.clearTimeout(timer.current);
+		};
+	}, [userId, attempt]);
+	(0, import_react.useEffect)(() => {
+		return useProgress.subscribe((state) => {
+			if (!ready.current) return;
+			const snap = learningSnapshot(state);
+			const key = JSON.stringify(snap);
+			if (key === lastSaved.current) return;
+			if (timer.current) window.clearTimeout(timer.current);
+			timer.current = window.setTimeout(() => {
+				lastSaved.current = key;
+				saveProgress({ data: snap }).catch(() => {
+					lastSaved.current = "";
+				});
+			}, 350);
+		});
+	}, [userId]);
+	if (phase === "loading") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GateSplash, { label: "Loading your progress" });
+	if (phase === "error") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "grid min-h-dvh place-items-center bg-paper px-6",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "w-full max-w-sm text-center",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-lg font-extrabold",
+				children: "Couldn't load this account."
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				onClick: () => setAttempt((value) => value + 1),
+				className: "btn-3d btn-chili mt-4 min-h-12 w-full rounded-2xl font-extrabold",
+				children: "Try again"
+			})]
+		})
+	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "min-h-dvh bg-paper lg:flex lg:h-dvh lg:overflow-hidden",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandPanel, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -3928,6 +3842,15 @@ function SawatdeeApp() {
 				]
 			})] })
 		})]
+	});
+}
+function GateSplash({ label }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "grid min-h-dvh place-items-center bg-paper px-6",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "text-sm font-extrabold text-muted",
+			children: label
+		})
 	});
 }
 function TabButton({ active, label, onClick, dot, children }) {
@@ -4001,7 +3924,7 @@ function BrandPanel() {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-8 text-sm font-bold text-muted",
-					children: "Progress stays on this device."
+					children: "Sign in. Lessons and review stay with your account."
 				})
 			]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {

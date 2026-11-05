@@ -8,8 +8,9 @@ A pocket course in spoken Thai. Lessons teach the words you need on a first trip
 - Hear Thai spoken aloud. Polite particles follow whether you say ค่ะ or ครับ.
 - Review only words from lessons you have opened. A miss stays due. A correct answer waits 1 day, then 3, then longer.
 - Switch Thai letters between **modern** (loopless) and **traditional** (looped heads). That setting changes every Thai word in the app, not only the script page.
-- Use light or dark mode. Both settings live on You, and the letter style is also on Script.
-- Sign in with Google, or create an account with email and password. Lessons still work without an account. Progress stays on this device.
+- The path is split into CEFR bands: **A1** for greetings, food, money, directions, and time, then **A2** for describing things, meals, travel, and asking for help.
+- Use light or dark mode. Dark mode is a switch at the top of You. Letter style is on You and on Script.
+- You need an account. Sign in with Google, or with email and password. Lessons, review, and XP are saved to that account.
 
 ## Run it
 
@@ -27,7 +28,7 @@ npm run build
 
 ## Sign-in
 
-Google uses the app's sign-in broker. Email and password are stored by this app. Open **You** and choose **Sign in**, or go to `/login`.
+Google uses the app's sign-in broker. Email and password are stored by this app. The course opens on the sign-in page until you have an account.
 
 ## Where the words come from
 

@@ -1,8 +1,11 @@
-import { useEffect, useLayoutEffect, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { BookOpen, Home, Repeat, UserRound, Volume2 } from "lucide-react";
+import { RedirectToSignIn } from "@/lib/auth/gates";
+import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { cn } from "@/lib/cn";
 import { lessons } from "@/lib/curriculum";
-import { useProgress } from "@/lib/progress";
+import { loadProgress, saveProgress } from "@/lib/learner-progress";
+import { learningSnapshot, useProgress } from "@/lib/progress";
 import { reviewStats, todayKey } from "@/lib/srs";
 import { warmVoices } from "@/lib/speech";
 import { Lesson } from "./lesson";
@@ -15,13 +18,9 @@ type Tab = "learn" | "review" | "script" | "me";
 type ReviewMode = "due" | "ahead";
 
 export function SawatdeeApp() {
-  const [tab, setTab] = useState<Tab>("learn");
-  const [lessonId, setLessonId] = useState<string | null>(null);
-  const [reviewMode, setReviewMode] = useState<ReviewMode | null>(null);
+  const { user, isPending } = useCurrentUserState();
   const scriptStyle = useProgress((state) => state.scriptStyle);
   const theme = useProgress((state) => state.theme);
-  const cards = useProgress((state) => state.cards);
-  const due = reviewStats(cards, todayKey()).due;
 
   useLayoutEffect(() => {
     const root = document.documentElement;
@@ -30,13 +29,87 @@ export function SawatdeeApp() {
   }, [theme, scriptStyle]);
 
   useEffect(() => {
-    void Promise.resolve(useProgress.persist.rehydrate()).then(() => {
-      const state = useProgress.getState();
-      const seen = lessons.filter((lesson) => state.completed[lesson.id]).flatMap((lesson) => lesson.words);
-      state.ingestWords(seen);
-    });
+    void useProgress.persist.rehydrate();
     warmVoices();
   }, []);
+
+  if (isPending) return <GateSplash label="Loading your course" />;
+  if (!user) return <RedirectToSignIn />;
+  return <Course userId={user.id} />;
+}
+
+function Course({ userId }: { userId: string }) {
+  const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
+  const [attempt, setAttempt] = useState(0);
+  const ready = useRef(false);
+  const lastSaved = useRef("");
+  const timer = useRef<number | null>(null);
+  const [tab, setTab] = useState<Tab>("learn");
+  const [lessonId, setLessonId] = useState<string | null>(null);
+  const [reviewMode, setReviewMode] = useState<ReviewMode | null>(null);
+  const cards = useProgress((state) => state.cards);
+  const due = reviewStats(cards, todayKey()).due;
+
+  useEffect(() => {
+    ready.current = false;
+    setPhase("loading");
+    let cancel = false;
+    loadProgress()
+      .then((learning) => {
+        if (cancel) return;
+        if (learning) useProgress.getState().applyLearning(learning);
+        else useProgress.getState().resetProgress();
+        lastSaved.current = JSON.stringify(learningSnapshot(useProgress.getState()));
+        ready.current = true;
+        const seen = lessons
+          .filter((lesson) => useProgress.getState().completed[lesson.id])
+          .flatMap((lesson) => lesson.words);
+        useProgress.getState().ingestWords(seen);
+        setPhase("ready");
+      })
+      .catch(() => {
+        if (!cancel) setPhase("error");
+      });
+    return () => {
+      cancel = true;
+      ready.current = false;
+      if (timer.current) window.clearTimeout(timer.current);
+    };
+  }, [userId, attempt]);
+
+  useEffect(() => {
+    return useProgress.subscribe((state) => {
+      if (!ready.current) return;
+      const snap = learningSnapshot(state);
+      const key = JSON.stringify(snap);
+      if (key === lastSaved.current) return;
+      if (timer.current) window.clearTimeout(timer.current);
+      timer.current = window.setTimeout(() => {
+        lastSaved.current = key;
+        void saveProgress({ data: snap }).catch(() => {
+          lastSaved.current = "";
+        });
+      }, 350);
+    });
+  }, [userId]);
+
+  if (phase === "loading") return <GateSplash label="Loading your progress" />;
+  if (phase === "error") {
+    return (
+      <div className="grid min-h-dvh place-items-center bg-paper px-6">
+        <div className="w-full max-w-sm text-center">
+          <p className="text-lg font-extrabold">Couldn't load this account.</p>
+          <button
+            type="button"
+            onClick={() => setAttempt((value) => value + 1)}
+            className="btn-3d btn-chili mt-4 min-h-12 w-full rounded-2xl font-extrabold"
+          >
+            Try again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-dvh bg-paper lg:flex lg:h-dvh lg:overflow-hidden">
@@ -71,6 +144,14 @@ export function SawatdeeApp() {
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+function GateSplash({ label }: { label: string }) {
+  return (
+    <div className="grid min-h-dvh place-items-center bg-paper px-6">
+      <p className="text-sm font-extrabold text-muted">{label}</p>
     </div>
   );
 }
@@ -147,7 +228,7 @@ function BrandPanel() {
             body="A starter alphabet, vowel shapes, Thai digits, and a tone drill live under Script."
           />
         </ul>
-        <p className="mt-8 text-sm font-bold text-muted">Progress stays on this device.</p>
+        <p className="mt-8 text-sm font-bold text-muted">Sign in. Lessons and review stay with your account.</p>
       </div>
       <p aria-hidden className="pointer-events-none absolute -right-2 -bottom-10 text-9xl font-extrabold text-line select-none">
         <span lang="th" className="thai-display">

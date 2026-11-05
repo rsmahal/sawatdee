@@ -1,11 +1,58 @@
 import { o as __toESM } from "../_runtime.mjs";
-import { Ht as capitalizeFirstLetter, Ut as toKebabCase, m as isSafeUrlScheme, o as createFetch } from "../_libs/@better-auth/core+[...].mjs";
-import { q as require_react } from "../_libs/@tanstack/react-router+[...].mjs";
-import { n as defu } from "../_libs/defu.mjs";
-import { a as getBaseURL, i as PACKAGE_VERSION, r as GENERIC_OAUTH_ERROR_CODES } from "./router-5zbzp2Lk.mjs";
+import { Y as require_react } from "../_libs/@tanstack/react-router+[...].mjs";
+import { s as __exportAll } from "./ssr.mjs";
+import { an as isSafeUrlScheme, in as createFetch, nn as toKebabCase, tn as capitalizeFirstLetter } from "../_libs/@better-auth/core+[...].mjs";
+import { n as PACKAGE_VERSION, r as getBaseURL, t as GENERIC_OAUTH_ERROR_CODES } from "./url-BE6YaD7r.mjs";
 import { a as atom, i as onSet, n as STORE_UNMOUNT_DELAY, r as onMount, t as listenKeys } from "../_libs/nanostores.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/use-current-user-IbbRlbZj.js
+import { n as defu } from "../_libs/defu.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/client-1vAx-gM_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
+var genericOAuthClient = () => {
+	return {
+		id: "generic-oauth-client",
+		version: PACKAGE_VERSION,
+		$InferServerPlugin: {},
+		$ERROR_CODES: GENERIC_OAUTH_ERROR_CODES
+	};
+};
+function isPlainObject(value) {
+	if (typeof value !== "object" || value === null) return false;
+	const prototype = Object.getPrototypeOf(value);
+	return prototype === Object.prototype || prototype === null;
+}
+/**
+* Deep structural equality for JSON-serializable values.
+* Handles: primitives, null, arrays, and plain objects.
+* Short-circuits on referential equality at every recursion level.
+*/
+function isJsonEqual(a, b) {
+	if (a === b) return true;
+	if (Array.isArray(a) && Array.isArray(b)) {
+		if (a.length !== b.length) return false;
+		for (let i = 0; i < a.length; i++) if (!isJsonEqual(a[i], b[i])) return false;
+		return true;
+	}
+	if (isPlainObject(a) && isPlainObject(b)) {
+		const keysA = Object.keys(a);
+		const keysB = Object.keys(b);
+		if (keysA.length !== keysB.length) return false;
+		for (const key of keysA) if (!(key in b) || !isJsonEqual(a[key], b[key])) return false;
+		return true;
+	}
+	return false;
+}
+/**
+* Attach an equality gate to a nanostores atom via `onSet`.
+* When `isEqual(currentValue, newValue)` returns true, the `set()` call
+* is aborted: no listeners fire, no framework re-renders occur.
+*
+* Returns the unsubscribe function from `onSet`.
+*/
+function withEquality(store, isEqual) {
+	return onSet(store, ({ newValue, abort }) => {
+		if (isEqual(store.value, newValue)) abort();
+	});
+}
 var PROTO_POLLUTION_PATTERNS = {
 	proto: /"(?:_|\\u0{2}5[Ff]){2}(?:p|\\u0{2}70)(?:r|\\u0{2}72)(?:o|\\u0{2}6[Ff])(?:t|\\u0{2}74)(?:o|\\u0{2}6[Ff])(?:_|\\u0{2}5[Ff]){2}"\s*:/,
 	constructor: /"(?:c|\\u0063)(?:o|\\u006[Ff])(?:n|\\u006[Ee])(?:s|\\u0073)(?:t|\\u0074)(?:r|\\u0072)(?:u|\\u0075)(?:c|\\u0063)(?:t|\\u0074)(?:o|\\u006[Ff])(?:r|\\u0072)"\s*:/,
@@ -72,52 +119,6 @@ function betterJSONParse(value, options = {}) {
 }
 function parseJSON(value, options = { strict: true }) {
 	return betterJSONParse(value, options);
-}
-var genericOAuthClient = () => {
-	return {
-		id: "generic-oauth-client",
-		version: PACKAGE_VERSION,
-		$InferServerPlugin: {},
-		$ERROR_CODES: GENERIC_OAUTH_ERROR_CODES
-	};
-};
-function isPlainObject(value) {
-	if (typeof value !== "object" || value === null) return false;
-	const prototype = Object.getPrototypeOf(value);
-	return prototype === Object.prototype || prototype === null;
-}
-/**
-* Deep structural equality for JSON-serializable values.
-* Handles: primitives, null, arrays, and plain objects.
-* Short-circuits on referential equality at every recursion level.
-*/
-function isJsonEqual(a, b) {
-	if (a === b) return true;
-	if (Array.isArray(a) && Array.isArray(b)) {
-		if (a.length !== b.length) return false;
-		for (let i = 0; i < a.length; i++) if (!isJsonEqual(a[i], b[i])) return false;
-		return true;
-	}
-	if (isPlainObject(a) && isPlainObject(b)) {
-		const keysA = Object.keys(a);
-		const keysB = Object.keys(b);
-		if (keysA.length !== keysB.length) return false;
-		for (const key of keysA) if (!(key in b) || !isJsonEqual(a[key], b[key])) return false;
-		return true;
-	}
-	return false;
-}
-/**
-* Attach an equality gate to a nanostores atom via `onSet`.
-* When `isEqual(currentValue, newValue)` returns true, the `set()` call
-* is aborted: no listeners fire, no framework re-renders occur.
-*
-* Returns the unsubscribe function from `onSet`.
-*/
-function withEquality(store, isEqual) {
-	return onSet(store, ({ newValue, abort }) => {
-		if (isEqual(store.value, newValue)) abort();
-	});
 }
 var redirectPlugin = {
 	id: "redirect",
@@ -862,6 +863,13 @@ async function runPreSignInSignOut({ livePreview, hasBearer, requestSignOut, cle
 	if (hasBearer || !livePreview) await settleWithin(requestSignOut, timeoutMs ?? signOutTimeoutMs(livePreview));
 	clearToken();
 }
+var client_exports = /* @__PURE__ */ __exportAll({
+	authClient: () => authClient,
+	authEnabled: () => true,
+	getBearerToken: () => getBearerToken,
+	signIn: () => signIn,
+	signOut: () => signOut
+});
 /**
 * Better Auth client for this React SPA (browser-side).
 *
@@ -1030,60 +1038,5 @@ async function signOut(redirectTo = "/") {
 		}
 	});
 }
-/**
-* Current user + loading state. Same behavior in live preview and when deployed:
-*   - Auth enabled -> the real signed-in user; `user` is `null` while
-*                            the session resolves (`isPending: true`) and when
-*                            signed out (`isPending: false`). Session comes from
-*                            Better Auth `useSession()` → `/api/auth/get-session`
-*                            (cookie when deployed; bearer in live preview).
-*   - Auth disabled (`VITE_AUTH_ENABLED=false`) -> `DEV_USER`, never pending.
-*
-* Protect a route by waiting out `isPending` before acting on `user` —
-* redirecting on `user: null` alone bounces signed-in visitors to sign-in on
-* every hard reload:
-*
-*   import { RedirectToSignIn } from "@/lib/auth/gates";
-*   const { user, isPending } = useCurrentUserState();
-*   if (isPending) return null;              // still resolving — don't redirect yet
-*   if (!user) return <RedirectToSignIn />;  // definitely signed out
-*
-* `authEnabled` is a module-level constant fixed at load, so the guarded hook
-* call keeps a stable hook order across every render of a given component.
-*/
-function useCurrentUserState() {
-	return useSessionUserState();
-}
-function useSessionUserState() {
-	const { data, isPending } = authClient.useSession();
-	const id = data?.user.id;
-	const displayName = data?.user.name ?? null;
-	const primaryEmail = data?.user.email ?? null;
-	const profileImageUrl = data?.user.image ?? null;
-	const user = (0, import_react.useMemo)(() => id ? {
-		id,
-		displayName,
-		primaryEmail,
-		profileImageUrl,
-		isDevFallback: false
-	} : null, [
-		id,
-		displayName,
-		primaryEmail,
-		profileImageUrl
-	]);
-	return (0, import_react.useMemo)(() => ({
-		user,
-		isPending
-	}), [user, isPending]);
-}
-/**
-* Convenience view of `useCurrentUserState().user` for display (e.g.
-* `user?.displayName ?? "Guest"`). NOTE: `null` means *loading OR signed out* —
-* for redirects/guards use `useCurrentUserState()` and check `isPending`.
-*/
-function useCurrentUser() {
-	return useCurrentUserState().user;
-}
 //#endregion
-export { useCurrentUserState as a, useCurrentUser as i, signIn as n, signOut as r, authClient as t };
+export { signOut as i, client_exports as n, signIn as r, authClient as t };

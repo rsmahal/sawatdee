@@ -21,6 +21,8 @@ export function Profile() {
   const setShowRoman = useProgress((state) => state.setShowRoman);
   const setAutoplay = useProgress((state) => state.setAutoplay);
   const resetProgress = useProgress((state) => state.resetProgress);
+  const theme = useProgress((state) => state.theme);
+  const setTheme = useProgress((state) => state.setTheme);
   const [armReset, setArmReset] = useState(false);
 
   const done = lessons.filter((lesson) => completed[lesson.id]).length;
@@ -32,10 +34,20 @@ export function Profile() {
       <p className="text-sm font-extrabold text-chili">You</p>
       <h1 className="text-3xl font-extrabold">Profile</h1>
       <p className="mt-2 text-pretty text-muted">
-        Progress stays on this device. Polite particles follow the speaker, not the person you're talking to.
+        Lessons, review, and XP are saved to this account. Polite particles follow the speaker, not the person
+        you're talking to.
       </p>
 
       <Account />
+
+      <div className="mt-4">
+        <Toggle
+          on={theme === "dark"}
+          label="Dark mode"
+          hint="Night colors for the whole course."
+          onToggle={() => setTheme(theme === "dark" ? "light" : "dark")}
+        />
+      </div>
 
       <div className="mt-5 grid grid-cols-2 gap-2">
         <Stat label="XP" value={String(xp)} />
@@ -56,12 +68,6 @@ export function Profile() {
       </p>
       <div className="mt-3">
         <ScriptStylePicker />
-      </div>
-
-      <h2 className="mt-8 text-lg font-extrabold">Appearance</h2>
-      <p className="mt-1 text-sm text-pretty text-muted">Light is the paper course. Dark is the same colors at night.</p>
-      <div className="mt-3">
-        <ThemePicker />
       </div>
 
       <h2 className="mt-8 text-lg font-extrabold">How words get in</h2>
@@ -146,43 +152,6 @@ function Account() {
   return (
     <div className="mt-5 rounded-2xl bg-soft px-4 py-4">
       <UserButton />
-    </div>
-  );
-}
-
-function ThemePicker() {
-  const theme = useProgress((state) => state.theme);
-  const setTheme = useProgress((state) => state.setTheme);
-  return (
-    <div className="grid grid-cols-2 gap-2">
-      <button
-        type="button"
-        aria-pressed={theme === "light"}
-        onClick={() => setTheme("light")}
-        className={cn(
-          "min-h-16 rounded-2xl border-2 px-3 py-3 text-left",
-          theme === "light" ? "border-ink bg-ink text-sheet" : "border-line bg-sheet",
-        )}
-      >
-        <span className="block font-extrabold">Light</span>
-        <span className={cn("block text-sm font-bold", theme === "light" ? "text-sheet/80" : "text-muted")}>
-          Paper
-        </span>
-      </button>
-      <button
-        type="button"
-        aria-pressed={theme === "dark"}
-        onClick={() => setTheme("dark")}
-        className={cn(
-          "min-h-16 rounded-2xl border-2 px-3 py-3 text-left",
-          theme === "dark" ? "border-ink bg-ink text-sheet" : "border-line bg-sheet",
-        )}
-      >
-        <span className="block font-extrabold">Dark</span>
-        <span className={cn("block text-sm font-bold", theme === "dark" ? "text-sheet/80" : "text-muted")}>
-          Night
-        </span>
-      </button>
     </div>
   );
 }

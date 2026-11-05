@@ -1,7 +1,8 @@
 import { o as __toESM } from "../_runtime.mjs";
-import { q as require_react, x as require_jsx_runtime, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { a as useCurrentUserState, n as signIn, t as authClient } from "./use-current-user-IbbRlbZj.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/login-Dnu0DGYf.js
+import { S as require_jsx_runtime, Y as require_react, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
+import { r as signIn, t as authClient } from "./client-1vAx-gM_.mjs";
+import { n as useCurrentUserState } from "./use-current-user-B7Cbrtsy.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/login-Cm7gVSwE.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function Login() {
@@ -66,7 +67,7 @@ function Login() {
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-pretty text-muted",
-					children: "Sign in with Google, or with an email and password you choose."
+					children: "Create an account or sign in. Google, or an email and password. Your lessons are saved to you."
 				}),
 				isPending ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mt-6 h-40 animate-pulse rounded-3xl bg-soft" }) : user ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "mt-6 rounded-3xl bg-sheet p-5",
@@ -167,14 +168,6 @@ function Login() {
 							]
 						})
 					]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "mt-6 text-center text-sm font-bold",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-						to: "/",
-						className: "text-muted",
-						children: "Continue without an account"
-					})
 				})
 			]
 		})

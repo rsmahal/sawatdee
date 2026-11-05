@@ -62,7 +62,9 @@ function Login() {
             สวัสดี
           </span>
         </h1>
-        <p className="mt-2 text-pretty text-muted">Sign in with Google, or with an email and password you choose.</p>
+        <p className="mt-2 text-pretty text-muted">
+          Create an account or sign in. Google, or an email and password. Your lessons are saved to you.
+        </p>
 
         {isPending ? (
           <div className="mt-6 h-40 animate-pulse rounded-3xl bg-soft" />
@@ -164,11 +166,6 @@ function Login() {
         ) : (
           <p className="mt-6 text-sm text-muted">Sign-in is turned off.</p>
         )}
-        <p className="mt-6 text-center text-sm font-bold">
-          <Link to="/" className="text-muted">
-            Continue without an account
-          </Link>
-        </p>
       </div>
     </main>
   );

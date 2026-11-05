@@ -7,9 +7,9 @@
       "status": 200,
       "title": "Sawatdee",
       "hasCanvas": false,
-      "bodyTextLen": 1618,
-      "bodyTextHash": "e6a0f1317b90ac25011087740d8bca9d3108ef2cba8a349fa1188a3a2fa1c57e",
-      "bodyTextPrefix": "ส SAWATDEE สวัสดี Speak Thai from the first lesson. A pocket cou",
+      "bodyTextLen": 213,
+      "bodyTextHash": "c31a3c3a7de6705a4572d1d1bcc11ae7222703e5c16ed3f4e7900dc2d2b557a7",
+      "bodyTextPrefix": "Sawatdee สวัสดี Create an account or sign in. Google, or an emai",
       "horizontalOverflow": false,
       "consoleErrors": [],
       "pageErrors": [],
@@ -21,9 +21,9 @@
       "status": 200,
       "title": "Sawatdee",
       "hasCanvas": false,
-      "bodyTextLen": 1034,
-      "bodyTextHash": "dda8056f2669617a1dd9f0fbd553cedec97ca7cd27c33fbdcff9b1ecefd29d4f",
-      "bodyTextPrefix": "Sawatdee Learn Thai A first-trip list, in the order you need the",
+      "bodyTextLen": 213,
+      "bodyTextHash": "c31a3c3a7de6705a4572d1d1bcc11ae7222703e5c16ed3f4e7900dc2d2b557a7",
+      "bodyTextPrefix": "Sawatdee สวัสดี Create an account or sign in. Google, or an emai",
       "horizontalOverflow": false,
       "consoleErrors": [],
       "pageErrors": [],
@@ -35,6 +35,7 @@
   "verdictFile": "/workspace/screenshots/app-builder-built.json",
   "divergesFromBaseline": true,
   "baselineReasons": [
-    "mobile: body text replaced (similar length, page start changed)"
+    "desktop: body text collapsed (1627 -> 213 chars)",
+    "mobile: body text collapsed (1043 -> 213 chars)"
   ]
 }

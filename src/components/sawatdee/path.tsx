@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Award, Check, ChevronRight, Flame, Lock, Star, Volume2 } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { dailyPhrases, courseNote, isUnlocked, lessons, nextLesson, units, type Speaker } from "@/lib/curriculum";
+import { dailyPhrases, courseNote, isUnlocked, lessons, levels, nextLesson, units, type Speaker } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
 import { reviewStats, todayKey } from "@/lib/srs";
 import { speakThai } from "@/lib/speech";
@@ -94,79 +94,90 @@ export function Path({ onStart, onReview }: { onStart: (id: string) => void; onR
       )}
       {note && <p className="mt-3 text-sm font-bold text-chili">{note}</p>}
 
-      <div className="mt-6 grid gap-6">
-        {units.map((unit) => {
-          const unitLessons = lessons.filter((lesson) => lesson.unit === unit.id);
-          const unitDone = unitLessons.filter((lesson) => completed[lesson.id]).length;
-          return (
-            <section key={unit.id}>
-              <div className="rounded-3xl bg-soft px-5 py-4">
-                <p className="text-xs font-extrabold tracking-wide text-chili uppercase">{unit.kicker}</p>
-                <div className="flex items-end justify-between gap-3">
-                  <h2 className="text-xl font-extrabold">{unit.title}</h2>
-                  <p className="text-sm font-extrabold text-muted tabular-nums">
-                    {unitDone}/{unitLessons.length}
-                  </p>
-                </div>
-                <p className="text-sm text-muted">{unit.blurb}</p>
-              </div>
-              <ol className="relative mt-4 grid gap-4 py-2">
-                <div className="absolute top-4 bottom-4 left-1/2 w-1 -translate-x-1/2 bg-line" aria-hidden />
-                {unitLessons.map((lesson, index) => {
-                  const open = isUnlocked(lesson.id, completed);
-                  const done = Boolean(completed[lesson.id]);
-                  const stars = completed[lesson.id] ?? 0;
-                  const number = lessons.findIndex((item) => item.id === lesson.id) + 1;
-                  const side = index % 2 === 0 ? "justify-start pl-6" : "justify-end pr-6";
-                  return (
-                    <li key={lesson.id} className={cn("relative flex", side)}>
-                      <div className="flex w-28 flex-col items-center gap-1">
-                        <button
-                          type="button"
-                          aria-label={open ? `Start ${lesson.title}` : `${lesson.title} locked`}
-                          onClick={() => {
-                            if (!open) {
-                              const prev = lessons[number - 2];
-                              setNote(prev ? `Finish ${prev.title} first.` : "Locked.");
-                              return;
-                            }
-                            setNote(null);
-                            onStart(lesson.id);
-                          }}
-                          className={cn(
-                            "path-node grid h-20 w-20 place-items-center rounded-full",
-                            done && "path-node-done",
-                            !done && open && lesson.checkpoint && "path-node-check",
-                            !done && open && !lesson.checkpoint && "path-node-go",
-                            !open && "path-node-lock",
-                          )}
-                        >
-                          {done ? (
-                            <Check className="h-8 w-8" />
-                          ) : !open ? (
-                            <Lock className="h-6 w-6" />
-                          ) : lesson.checkpoint ? (
-                            <Award className="h-8 w-8" />
-                          ) : (
-                            <span className="text-2xl font-extrabold tabular-nums">{number}</span>
-                          )}
-                        </button>
-                        <span className="text-center text-sm leading-tight font-extrabold">{lesson.title}</span>
-                        {done && stars > 0 && (
-                          <span className="flex text-marigold" aria-label={`${stars} stars`}>
-                            {Array.from({ length: stars }, (_, star) => (
-                              <Star key={star} className="h-3.5 w-3.5" fill="currentColor" />
-                            ))}
-                          </span>
-                        )}
+      <div className="mt-6 grid gap-8">
+        {levels.map((level) => (
+          <section key={level.id} className="grid gap-6">
+            <header>
+              <p className="text-xs font-extrabold tracking-wide text-chili uppercase">CEFR</p>
+              <h2 className="text-2xl font-extrabold">{level.title}</h2>
+              <p className="text-sm text-pretty text-muted">{level.blurb}</p>
+            </header>
+            {units
+              .filter((unit) => unit.level === level.id)
+              .map((unit) => {
+                const unitLessons = lessons.filter((lesson) => lesson.unit === unit.id);
+                const unitDone = unitLessons.filter((lesson) => completed[lesson.id]).length;
+                return (
+                  <div key={unit.id}>
+                    <div className="rounded-3xl bg-soft px-5 py-4">
+                      <p className="text-xs font-extrabold tracking-wide text-chili uppercase">{unit.kicker}</p>
+                      <div className="flex items-end justify-between gap-3">
+                        <h3 className="text-xl font-extrabold">{unit.title}</h3>
+                        <p className="text-sm font-extrabold text-muted tabular-nums">
+                          {unitDone}/{unitLessons.length}
+                        </p>
                       </div>
-                    </li>
-                  );
-                })}
-              </ol>
-            </section>
-          );
-        })}
+                      <p className="text-sm text-muted">{unit.blurb}</p>
+                    </div>
+                    <ol className="relative mt-4 grid gap-4 py-2">
+                      <div className="absolute top-4 bottom-4 left-1/2 w-1 -translate-x-1/2 bg-line" aria-hidden />
+                      {unitLessons.map((lesson, index) => {
+                        const open = isUnlocked(lesson.id, completed);
+                        const done = Boolean(completed[lesson.id]);
+                        const stars = completed[lesson.id] ?? 0;
+                        const number = lessons.findIndex((item) => item.id === lesson.id) + 1;
+                        const side = index % 2 === 0 ? "justify-start pl-6" : "justify-end pr-6";
+                        return (
+                          <li key={lesson.id} className={cn("relative flex", side)}>
+                            <div className="flex w-28 flex-col items-center gap-1">
+                              <button
+                                type="button"
+                                aria-label={open ? `Start ${lesson.title}` : `${lesson.title} locked`}
+                                onClick={() => {
+                                  if (!open) {
+                                    const prev = lessons[number - 2];
+                                    setNote(prev ? `Finish ${prev.title} first.` : "Locked.");
+                                    return;
+                                  }
+                                  setNote(null);
+                                  onStart(lesson.id);
+                                }}
+                                className={cn(
+                                  "path-node grid h-20 w-20 place-items-center rounded-full",
+                                  done && "path-node-done",
+                                  !done && open && lesson.checkpoint && "path-node-check",
+                                  !done && open && !lesson.checkpoint && "path-node-go",
+                                  !open && "path-node-lock",
+                                )}
+                              >
+                                {done ? (
+                                  <Check className="h-8 w-8" />
+                                ) : !open ? (
+                                  <Lock className="h-6 w-6" />
+                                ) : lesson.checkpoint ? (
+                                  <Award className="h-8 w-8" />
+                                ) : (
+                                  <span className="text-2xl font-extrabold tabular-nums">{number}</span>
+                                )}
+                              </button>
+                              <span className="text-center text-sm leading-tight font-extrabold">{lesson.title}</span>
+                              {done && stars > 0 && (
+                                <span className="flex text-marigold" aria-label={`${stars} stars`}>
+                                  {Array.from({ length: stars }, (_, star) => (
+                                    <Star key={star} className="h-3.5 w-3.5" fill="currentColor" />
+                                  ))}
+                                </span>
+                              )}
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  </div>
+                );
+              })}
+          </section>
+        ))}
       </div>
     </div>
   );
