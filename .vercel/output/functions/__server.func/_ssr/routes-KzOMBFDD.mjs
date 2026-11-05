@@ -1,97 +1,14 @@
 import { i as __toESM } from "../_runtime.mjs";
 import { K as require_react, b as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
-import { a as Star, c as Heart, d as Check, f as BookOpen, l as Flame, n as Volume2, o as Lock, p as Award, r as UserRound, s as House, t as X, u as ChevronRight } from "../_libs/lucide-react.mjs";
+import { a as Star, c as Lock, d as Flame, f as ChevronRight, h as Award, l as House, m as BookOpen, n as Volume2, o as RotateCcw, p as Check, r as UserRound, s as Repeat, t as X, u as Heart } from "../_libs/lucide-react.mjs";
 import { t as clsx } from "../_libs/clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { n as create, t as persist } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-axSWa9Zo.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-KzOMBFDD.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
 	return twMerge(clsx(inputs));
-}
-var initial = {
-	xp: 0,
-	streak: 0,
-	lastDay: null,
-	completed: {},
-	speaker: "f",
-	showRoman: true,
-	autoplay: true,
-	answered: 0,
-	correct: 0
-};
-function dayKey(date) {
-	return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-}
-var useProgress = create()(persist((set, get) => ({
-	...initial,
-	setSpeaker: (speaker) => set({ speaker }),
-	setShowRoman: (showRoman) => set({ showRoman }),
-	setAutoplay: (autoplay) => set({ autoplay }),
-	recordAnswer: (ok, gain) => set((state) => ({
-		xp: state.xp + gain,
-		answered: state.answered + 1,
-		correct: state.correct + (ok ? 1 : 0)
-	})),
-	finishLesson: (id, stars, bonus) => {
-		const state = get();
-		const today = dayKey(/* @__PURE__ */ new Date());
-		const previous = /* @__PURE__ */ new Date();
-		previous.setDate(previous.getDate() - 1);
-		const yesterday = dayKey(previous);
-		let streak = state.streak;
-		if (state.lastDay !== today) streak = state.lastDay === yesterday ? state.streak + 1 : 1;
-		else if (streak === 0) streak = 1;
-		set({
-			xp: state.xp + bonus,
-			streak,
-			lastDay: today,
-			completed: {
-				...state.completed,
-				[id]: Math.max(state.completed[id] ?? 0, stars)
-			}
-		});
-	},
-	resetProgress: () => set({
-		xp: 0,
-		streak: 0,
-		lastDay: null,
-		completed: {},
-		answered: 0,
-		correct: 0
-	})
-}), {
-	name: "sawatdee-v1",
-	skipHydration: true
-}));
-function xpGain(comboBefore) {
-	return 10 + Math.min(Math.max(comboBefore, 0), 4) * 2;
-}
-function canSpeak() {
-	return typeof window !== "undefined" && "speechSynthesis" in window;
-}
-function warmVoices() {
-	if (!canSpeak()) return;
-	window.speechSynthesis.getVoices();
-	window.speechSynthesis.addEventListener("voiceschanged", () => {
-		window.speechSynthesis.getVoices();
-	});
-}
-function speakThai(text) {
-	if (!canSpeak() || !text) return;
-	const synth = window.speechSynthesis;
-	const utter = new SpeechSynthesisUtterance(text);
-	utter.lang = "th-TH";
-	utter.rate = .82;
-	const voice = synth.getVoices().find((item) => item.lang.toLowerCase().startsWith("th"));
-	if (voice) utter.voice = voice;
-	synth.cancel();
-	synth.speak(utter);
-}
-function stopSpeech() {
-	if (!canSpeak()) return;
-	window.speechSynthesis.cancel();
 }
 var w = (thai, roman, en) => ({
 	thai,
@@ -164,8 +81,75 @@ var right = w("ขวา", "khwǎa", "Right");
 var straight = w("ตรงไป", "dtrong-bpai", "Straight ahead");
 var turn = w("เลี้ยว", "líiao", "To turn");
 var taxi = w("แท็กซี่", "tháek-sîi", "Taxi");
+var today = w("วันนี้", "wan-níi", "Today");
+var tomorrow = w("พรุ่งนี้", "phrûng-níi", "Tomorrow");
+var yesterday = w("เมื่อวาน", "mûea-waan", "Yesterday");
+var now = w("ตอนนี้", "dtaawn-níi", "Now");
+var morning = w("เช้า", "cháao", "Morning");
+var evening = w("เย็น", "yen", "Evening");
+var afternoon = w("บ่าย", "bàai", "Afternoon");
+var whatTime = w("กี่โมง", "gìi-moong", "What time");
+var hour = w("โมง", "moong", "Hour, in telling time");
+var minute = w("นาที", "naa-thii", "Minute");
+var clock = w("นาฬิกา", "naa-lí-gaa", "Clock");
+var red = w("สีแด่ง", "sǐi-dàaeng", "Red");
+var white = w("สีขาว", "sǐi-khǎao", "White");
+var black = w("สีด้ำ", "sǐi-dâm", "Black");
+var blue = w("สีฟ้า", "sǐi-fáa", "Blue");
+var green = w("สีเขียว", "sǐi-khǐao", "Green");
+var yellow = w("สีเหลือง", "sǐi-lǔeang", "Yellow");
+var big = w("ใหญ่", "yài", "Big");
+var small = w("เล็ก", "lék", "Small");
+var pretty = w("สวย", "sǔai", "Pretty");
+var hot = w("ร้อน", "ráawn", "Hot");
+var cold = w("หนาว", "nǎao", "Cold");
+var very = w("ม่าก", "mâak", "Very");
+var padThai = w("ผั่ดไทย", "phàt-thai", "Pad Thai");
+var somtam = w("ส่มต้ำ", "sòm-dtâm", "Papaya salad");
+var chicken = w("ไก่", "gài", "Chicken");
+var pork = w("มู", "mǔu", "Pork");
+var spicy = w("เผ็ด", "phèt", "Spicy");
+var take = w("เอา", "ao", "I'll take");
+var full = w("อิ่ม", "ìm", "Full, after eating");
+var bill = w("เช็คบิล", "chék-bin", "The bill");
+var plainWater = w("น้ำเปล่า", "náam-bplào", "Plain water");
+var twenty = w("ยี้สิบ", "yíi-sìp", "Twenty");
+var hundred = w("ร้อย", "ráawy", "Hundred");
+var thousand = w("พัน", "phan", "Thousand");
+var near = w("ใกล้", "glâi", "Near");
+var far = w("ไกล", "glai", "Far");
+var here = w("ที่นี่", "thîi-nîi", "Here");
+var there = w("ที่นั่น", "thîi-nân", "There");
+var stop = w("หยุด", "yùt", "Stop");
+var hotel = w("โรงแรม", "roong-raaem", "Hotel");
+var station = w("สถานี", "sà-thǎa-nii", "Station");
+var airport = w("สนามบิน", "sà-naam-bin", "Airport");
+var bus = w("รถเมล์", "rót-mee", "Bus");
+var train = w("รถไฟฟ้า", "rót-fai-fáa", "Skytrain");
+var nameW = w("ชื่อ", "chûue", "Name");
+var what = w("อะไร", "à-rai", "What");
+var person = w("คน", "khon", "Person");
+var thaiPerson = w("คนไทย", "khon-thai", "Thai person");
+var speak = w("พู่ด", "phûut", "To speak");
+var understand = w("เข้าใจ่", "khâo-jài", "To understand");
+var aLittle = w("นิดหน่อย", "nít-nòi", "A little");
+var slowly = w("ช้าๆ", "cháa-cháa", "Slowly");
+var thaiLang = w("ภาษาไทย", "phaa-sǎa-thai", "Thai language");
+var rain = w("ฝน", "fǒn", "Rain");
+var fall = w("ตก", "dtòk", "To fall");
+var sunshine = w("แด่ด", "dàaet", "Sunshine");
+var tired = w("เหนื่อย", "nùeai", "Tired");
+var like = w("ช่อบ", "châawp", "To like");
+var fun = w("สนุก", "sà-nùk", "Fun");
+var kha = w("ค่ะ", "khâ", "Polite particle, women");
+var khaQ = w("คะ", "khá", "Question particle, women");
+var khrap = w("ครับ", "khráp", "Polite particle, men");
 var toneCoach = "สี่ stays low. ห้า drops. Don't swap them.";
 var maiCoach = "ไหม rises, and it asks. ไม่ falls, and it means no.";
+var whiteCoach = "ขาว rises. ข้าว, rice, falls.";
+var nearCoach = "ใกล้ falls and means near. ไกล is mid and means far.";
+var twentyCoach = "Twenty is ยี้สิบ. สองสิบ is not the word people use.";
+var timeCoach = "กี่โมง asks the time. On a Thai clock, สองโมง is 8 in the morning, not 2.";
 function choice(dir, word, traps, coach) {
 	return {
 		kind: "choice",
@@ -215,6 +199,42 @@ var units = [
 		kicker: "Unit 4",
 		title: "Around town",
 		blurb: "Count, then find the bathroom."
+	},
+	{
+		id: "time",
+		kicker: "Unit 5",
+		title: "Time",
+		blurb: "Today, tomorrow, and how to ask the time."
+	},
+	{
+		id: "describe",
+		kicker: "Unit 6",
+		title: "Describe it",
+		blurb: "Colors, size, and how hot it is."
+	},
+	{
+		id: "meal",
+		kicker: "Unit 7",
+		title: "A meal",
+		blurb: "Order a dish, say you're full, ask for the bill."
+	},
+	{
+		id: "going",
+		kicker: "Unit 8",
+		title: "Getting there",
+		blurb: "Near, far, and the words for the station."
+	},
+	{
+		id: "talking",
+		kicker: "Unit 9",
+		title: "When you're stuck",
+		blurb: "Your name, and asking someone to slow down."
+	},
+	{
+		id: "out",
+		kicker: "Unit 10",
+		title: "Out for the day",
+		blurb: "Rain, being tired, and what you like."
 	}
 ];
 var lessons = [
@@ -349,7 +369,10 @@ var lessons = [
 			howru,
 			you,
 			iF,
-			iM
+			iM,
+			kha,
+			khaQ,
+			khrap
 		],
 		exercises: [
 			choice("th-en", well, [
@@ -730,8 +753,662 @@ var lessons = [
 				bye
 			])
 		]
+	},
+	{
+		id: "today",
+		unit: "time",
+		title: "Today",
+		subtitle: "Now, yesterday, tomorrow",
+		tip: "นี้ on the end of วันนี้ and พรุ่งนี้ is the same high “this”. เมื่อวาน looks backward.",
+		words: [
+			today,
+			tomorrow,
+			yesterday,
+			now,
+			morning,
+			evening
+		],
+		exercises: [
+			choice("th-en", today, [
+				tomorrow,
+				yesterday,
+				now
+			]),
+			choice("en-th", tomorrow, [
+				today,
+				morning,
+				evening
+			]),
+			choice("listen", yesterday, [
+				today,
+				tomorrow,
+				now
+			]),
+			tiles("Today.", [t(today)], [
+				t(tomorrow),
+				t(yesterday),
+				t(now)
+			]),
+			tiles("Tomorrow morning.", [t(tomorrow), t(morning)], [
+				t(evening),
+				t(today),
+				t(now)
+			]),
+			choice("th-en", morning, [
+				evening,
+				now,
+				today
+			]),
+			pairs([
+				today,
+				tomorrow,
+				yesterday,
+				morning
+			])
+		]
+	},
+	{
+		id: "what-time",
+		unit: "time",
+		title: "What time",
+		subtitle: "Ask first. The Thai clock can wait.",
+		tip: "กี่โมง is how you ask the time. Answers use a Thai clock, where สองโมง is 8 in the morning, not 2. Learn the question before that system.",
+		words: [
+			whatTime,
+			hour,
+			minute,
+			clock,
+			afternoon
+		],
+		exercises: [
+			choice("th-en", whatTime, [
+				hour,
+				minute,
+				clock
+			], timeCoach),
+			choice("en-th", minute, [
+				hour,
+				clock,
+				afternoon
+			]),
+			choice("listen", clock, [
+				minute,
+				hour,
+				whatTime
+			]),
+			tiles("What time?", [t(whatTime), POLITE_Q], [
+				t(now),
+				t(morning),
+				t(hour)
+			], timeCoach),
+			tiles("In the afternoon.", [t(afternoon)], [
+				t(morning),
+				t(evening),
+				t(now)
+			]),
+			pairs([
+				whatTime,
+				minute,
+				clock,
+				afternoon
+			]),
+			choice("th-en", hour, [
+				minute,
+				clock,
+				afternoon
+			])
+		]
+	},
+	{
+		id: "colors",
+		unit: "describe",
+		title: "Colors",
+		subtitle: "สี sits in front",
+		tip: "สี means color and comes first: สีแดง, สีขาว. ขาว rises. ข้าว, rice, falls.",
+		words: [
+			red,
+			white,
+			black,
+			blue,
+			green,
+			yellow
+		],
+		exercises: [
+			choice("th-en", white, [
+				red,
+				black,
+				rice
+			], whiteCoach),
+			choice("en-th", red, [
+				blue,
+				green,
+				yellow
+			]),
+			choice("listen", blue, [
+				green,
+				black,
+				white
+			]),
+			tiles("Red.", [t(red)], [
+				t(white),
+				t(black),
+				t(blue)
+			]),
+			tiles("White.", [t(white)], [
+				t(rice),
+				t(black),
+				t(red)
+			], whiteCoach),
+			pairs([
+				red,
+				white,
+				black,
+				blue
+			]),
+			choice("th-en", yellow, [
+				green,
+				white,
+				red
+			])
+		]
+	},
+	{
+		id: "size",
+		unit: "describe",
+		title: "Big and hot",
+		subtitle: "Size, heat, and very",
+		tip: "มาก comes after the word it strengthens. ร้อนมาก is very hot. ใหญ่ is big. เล็ก is small.",
+		words: [
+			big,
+			small,
+			pretty,
+			hot,
+			cold,
+			very
+		],
+		exercises: [
+			choice("th-en", hot, [
+				cold,
+				big,
+				very
+			]),
+			choice("en-th", small, [
+				big,
+				pretty,
+				cold
+			]),
+			choice("listen", big, [
+				small,
+				hot,
+				pretty
+			]),
+			tiles("Very hot.", [t(hot), t(very)], [
+				t(cold),
+				t(big),
+				t(small)
+			]),
+			tiles("Small.", [t(small)], [
+				t(big),
+				t(pretty),
+				t(cold)
+			]),
+			pairs([
+				big,
+				small,
+				hot,
+				cold
+			]),
+			choice("th-en", pretty, [
+				big,
+				hot,
+				very
+			])
+		]
+	},
+	{
+		id: "dishes",
+		unit: "meal",
+		title: "Order food",
+		subtitle: "A few things you'll actually say",
+		tip: "เอา is the short way to order: เอาผัดไทย. ขอ still works. ไม่เผ็ด is how you turn the heat off.",
+		words: [
+			padThai,
+			somtam,
+			chicken,
+			pork,
+			spicy,
+			take
+		],
+		exercises: [
+			choice("th-en", padThai, [
+				somtam,
+				chicken,
+				rice
+			]),
+			choice("en-th", somtam, [
+				padThai,
+				spicy,
+				pork
+			]),
+			choice("listen", chicken, [
+				pork,
+				padThai,
+				rice
+			]),
+			tiles("I'll take Pad Thai.", [
+				t(take),
+				t(padThai),
+				POLITE
+			], [
+				t(somtam),
+				t(please),
+				t(chicken)
+			]),
+			tiles("Not spicy.", [t(no), t(spicy)], [
+				t(very),
+				t(tasty),
+				t(pork)
+			]),
+			pairs([
+				padThai,
+				somtam,
+				chicken,
+				pork
+			]),
+			choice("th-en", spicy, [
+				chicken,
+				tasty,
+				pork
+			])
+		]
+	},
+	{
+		id: "bill",
+		unit: "meal",
+		title: "The bill",
+		subtitle: "Full, water, and bigger numbers",
+		tip: "อิ่ม means you've had enough. เช็คบิล asks for the bill. Twenty is ยี้สิบ, not สองสิบ. ร้อย is a hundred. พัน is a thousand.",
+		words: [
+			full,
+			bill,
+			plainWater,
+			twenty,
+			hundred,
+			thousand
+		],
+		exercises: [
+			choice("th-en", full, [
+				bill,
+				hungry,
+				tasty
+			]),
+			choice("en-th", bill, [
+				full,
+				water,
+				hundred
+			]),
+			choice("listen", twenty, [
+				ten,
+				hundred,
+				thousand
+			], twentyCoach),
+			tiles("The bill, please.", [t(bill), POLITE], [
+				t(full),
+				t(please),
+				t(water)
+			]),
+			tiles("One hundred baht.", [
+				t(one),
+				t(hundred),
+				t(baht)
+			], [
+				t(twenty),
+				t(thousand),
+				t(ten)
+			]),
+			tiles("Twenty baht.", [t(twenty), t(baht)], [
+				t(ten),
+				t(two),
+				t(hundred)
+			], twentyCoach),
+			pairs([
+				full,
+				bill,
+				twenty,
+				hundred
+			]),
+			choice("th-en", plainWater, [
+				water,
+				tea,
+				coffee
+			])
+		]
+	},
+	{
+		id: "near-far",
+		unit: "going",
+		title: "Here and there",
+		subtitle: "Near, far, stop",
+		tip: "ใกล้ falls and means near. ไกล is mid and means far. ที่นี่ is here. ที่นั่น is there.",
+		words: [
+			near,
+			far,
+			here,
+			there,
+			stop
+		],
+		exercises: [
+			choice("th-en", near, [
+				far,
+				here,
+				there
+			], nearCoach),
+			choice("en-th", far, [
+				near,
+				stop,
+				here
+			], nearCoach),
+			choice("listen", here, [
+				there,
+				near,
+				far
+			]),
+			tiles("Stop here.", [t(stop), t(here)], [
+				t(there),
+				t(far),
+				t(go)
+			]),
+			tiles("Not far.", [t(no), t(far)], [
+				t(near),
+				t(here),
+				t(stop)
+			]),
+			pairs([
+				near,
+				far,
+				here,
+				there
+			]),
+			choice("th-en", stop, [
+				here,
+				far,
+				go
+			])
+		]
+	},
+	{
+		id: "station",
+		unit: "going",
+		title: "Station",
+		subtitle: "Hotel, airport, bus, train",
+		tip: "รถไฟฟ้า is the skytrain. รถเมล์ is the bus. อยู่ที่ไหน still asks where.",
+		words: [
+			hotel,
+			station,
+			airport,
+			bus,
+			train
+		],
+		exercises: [
+			choice("th-en", hotel, [
+				station,
+				airport,
+				temple
+			]),
+			choice("en-th", airport, [
+				station,
+				hotel,
+				bus
+			]),
+			choice("listen", train, [
+				bus,
+				taxi,
+				station
+			]),
+			tiles("Where is the station?", [
+				t(station),
+				t(located),
+				t(where),
+				POLITE_Q
+			], [t(hotel), t(airport)]),
+			tiles("Go to the hotel.", [t(go), t(hotel)], [
+				t(station),
+				t(airport),
+				t(bus)
+			]),
+			pairs([
+				hotel,
+				station,
+				airport,
+				bus
+			]),
+			choice("th-en", bus, [
+				train,
+				taxi,
+				hotel
+			])
+		]
+	},
+	{
+		id: "names",
+		unit: "talking",
+		title: "Your name",
+		subtitle: "ชื่อ and อะไร",
+		tip: "ชื่ออะไร asks the name. ฉันชื่อ or ผมชื่อ starts the answer, then your name. คนไทย is a Thai person.",
+		words: [
+			nameW,
+			what,
+			person,
+			thaiPerson
+		],
+		exercises: [
+			choice("th-en", nameW, [
+				what,
+				person,
+				you
+			]),
+			choice("en-th", what, [
+				nameW,
+				person,
+				you
+			]),
+			choice("listen", person, [
+				thaiPerson,
+				friend,
+				you
+			]),
+			tiles("What's your name?", [
+				t(nameW),
+				t(what),
+				POLITE_Q
+			], [t(person), t(you)]),
+			tiles("My name...", [SELF, t(nameW)], [
+				OTHER,
+				t(what),
+				t(person)
+			]),
+			pairs([
+				nameW,
+				what,
+				person,
+				thaiPerson
+			]),
+			choice("th-en", thaiPerson, [
+				person,
+				friend,
+				you
+			])
+		]
+	},
+	{
+		id: "slowly",
+		unit: "talking",
+		title: "Slowly",
+		subtitle: "When the sentence goes past you",
+		tip: "ไม่เข้าใจ is the most useful sentence in the course. พูดช้าๆ asks them to slow down. นิดหน่อย is a little.",
+		words: [
+			speak,
+			understand,
+			aLittle,
+			slowly,
+			thaiLang
+		],
+		exercises: [
+			choice("th-en", understand, [
+				speak,
+				slowly,
+				aLittle
+			]),
+			choice("en-th", speak, [
+				understand,
+				slowly,
+				thaiLang
+			]),
+			choice("listen", slowly, [
+				aLittle,
+				speak,
+				understand
+			]),
+			tiles("I don't understand.", [
+				SELF,
+				t(no),
+				t(understand)
+			], [
+				t(speak),
+				OTHER,
+				t(yes)
+			]),
+			tiles("Speak slowly.", [
+				t(speak),
+				t(slowly),
+				POLITE
+			], [t(aLittle), t(understand)]),
+			tiles("A little Thai.", [t(thaiLang), t(aLittle)], [
+				t(speak),
+				t(slowly),
+				t(understand)
+			]),
+			pairs([
+				speak,
+				understand,
+				slowly,
+				aLittle
+			])
+		]
+	},
+	{
+		id: "outside",
+		unit: "out",
+		title: "Rain and rest",
+		subtitle: "Weather, tired, like",
+		tip: "ฝนตก is raining. ชอบ goes before the thing you like. เหนื่อย is tired.",
+		words: [
+			rain,
+			fall,
+			sunshine,
+			tired,
+			like,
+			fun
+		],
+		exercises: [
+			choice("th-en", rain, [
+				sunshine,
+				tired,
+				fun
+			]),
+			choice("en-th", tired, [
+				fun,
+				like,
+				rain
+			]),
+			choice("listen", like, [
+				fun,
+				tired,
+				rain
+			]),
+			tiles("It's raining.", [t(rain), t(fall)], [
+				t(sunshine),
+				t(tired),
+				t(fun)
+			]),
+			tiles("I like it.", [SELF, t(like)], [
+				t(no),
+				OTHER,
+				t(tired)
+			]),
+			tiles("I'm tired.", [SELF, t(tired)], [
+				t(fun),
+				t(like),
+				OTHER
+			]),
+			pairs([
+				rain,
+				sunshine,
+				tired,
+				fun
+			])
+		]
+	},
+	{
+		id: "checkpoint-2",
+		unit: "out",
+		title: "Say it again",
+		subtitle: "A mix from the whole course",
+		tip: "No new words. Same five hearts. Build the phrases the way you would say them out loud.",
+		checkpoint: true,
+		words: [],
+		exercises: [
+			choice("listen", understand, [
+				hello,
+				thanks,
+				rain
+			]),
+			tiles("I don't understand.", [
+				SELF,
+				t(no),
+				t(understand)
+			], [
+				t(speak),
+				t(yes),
+				OTHER
+			]),
+			tiles("Where is the hotel?", [
+				t(hotel),
+				t(located),
+				t(where),
+				POLITE_Q
+			], [t(station), t(market)]),
+			tiles("Not spicy.", [t(no), t(spicy)], [t(very), t(tasty)]),
+			choice("th-en", tomorrow, [
+				today,
+				yesterday,
+				now
+			]),
+			choice("en-th", bill, [
+				full,
+				water,
+				hundred
+			]),
+			pairs([
+				near,
+				white,
+				chicken,
+				twenty
+			]),
+			tiles("Speak slowly.", [
+				t(speak),
+				t(slowly),
+				POLITE
+			], [t(aLittle), t(understand)]),
+			choice("listen", padThai, [
+				somtam,
+				rice,
+				water
+			])
+		]
 	}
 ];
+var courseNote = "A first-trip list, in the order you need the words. Not a dictionary dump.";
 var dailyPhrases = [
 	hello,
 	thanks,
@@ -741,7 +1418,12 @@ var dailyPhrases = [
 	howMuch,
 	bathroom,
 	well,
-	left
+	left,
+	today,
+	whatTime,
+	understand,
+	padThai,
+	near
 ];
 function lessonById(id) {
 	return lessons.find((lesson) => lesson.id === id) ?? null;
@@ -764,6 +1446,219 @@ function resolveTok(tok, speaker) {
 }
 function particleLabel(speaker) {
 	return speaker === "m" ? "ครับ · khráp" : "ค่ะ · khâ";
+}
+function dayKey(date) {
+	return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+function addDays(day, days) {
+	const [y, m, d] = day.split("-").map(Number);
+	const date = new Date(y ?? 0, (m ?? 1) - 1, d ?? 1);
+	date.setDate(date.getDate() + days);
+	return dayKey(date);
+}
+function todayKey() {
+	return dayKey(/* @__PURE__ */ new Date());
+}
+/** 1 day, then 3, then interval × ease, capped at 90. A miss clears the ladder. */
+function nextInterval(card, grade) {
+	if (grade === "again") return 0;
+	if (grade === "shaky") return 1;
+	const reps = card.reps + 1;
+	if (reps <= 1) return 1;
+	if (reps === 2) return 3;
+	return Math.min(90, Math.max(1, Math.round(Math.max(card.interval, 1) * card.ease)));
+}
+function clampEase(ease) {
+	return Math.round(Math.min(2.8, Math.max(1.3, ease)) * 100) / 100;
+}
+function scheduleCard(card, grade, today) {
+	const interval = nextInterval(card, grade);
+	if (grade === "again") return {
+		...card,
+		reps: 0,
+		interval: 0,
+		ease: clampEase(card.ease - .2),
+		lapses: card.lapses + 1,
+		due: today
+	};
+	if (grade === "shaky") return {
+		...card,
+		reps: 1,
+		interval,
+		ease: clampEase(card.ease - .05),
+		due: addDays(today, interval)
+	};
+	return {
+		...card,
+		reps: card.reps + 1,
+		interval,
+		due: addDays(today, interval)
+	};
+}
+function daysUntil(due, today) {
+	const [y, m, d] = due.split("-").map(Number);
+	const [Y, M, D] = today.split("-").map(Number);
+	const a = Date.UTC(y ?? 0, (m ?? 1) - 1, d ?? 1);
+	const b = Date.UTC(Y ?? 0, (M ?? 1) - 1, D ?? 1);
+	return Math.round((a - b) / 864e5);
+}
+function duePhrase(due, today) {
+	const days = daysUntil(due, today);
+	if (days <= 0) return "Due";
+	if (days === 1) return "Tomorrow";
+	return `In ${days} days`;
+}
+function gapLabel(days) {
+	if (days <= 0) return "This one stays due.";
+	if (days === 1) return "Back tomorrow.";
+	return `Back in ${days} days.`;
+}
+function reviewStats(cards, today) {
+	const list = Object.values(cards);
+	const due = list.filter((card) => card.due <= today);
+	const later = list.filter((card) => card.due > today).sort((a, b) => a.due.localeCompare(b.due));
+	return {
+		total: list.length,
+		due: due.length,
+		mastered: list.filter((card) => card.interval >= 21).length,
+		nextDue: later[0]?.due ?? null
+	};
+}
+var initial = {
+	xp: 0,
+	streak: 0,
+	lastDay: null,
+	completed: {},
+	speaker: "f",
+	showRoman: true,
+	autoplay: true,
+	scriptStyle: "modern",
+	cards: {},
+	answered: 0,
+	correct: 0
+};
+var useProgress = create()(persist((set, get) => ({
+	...initial,
+	setSpeaker: (speaker) => set({ speaker }),
+	setShowRoman: (showRoman) => set({ showRoman }),
+	setAutoplay: (autoplay) => set({ autoplay }),
+	setScriptStyle: (scriptStyle) => set({ scriptStyle }),
+	ingestWords: (words) => set((state) => {
+		const today = todayKey();
+		const cards = { ...state.cards };
+		let changed = false;
+		for (const word of words) {
+			if (!word.thai) continue;
+			const existing = cards[word.thai];
+			if (existing) {
+				if (existing.roman !== word.roman || existing.en !== word.en) {
+					cards[word.thai] = {
+						...existing,
+						roman: word.roman,
+						en: word.en
+					};
+					changed = true;
+				}
+				continue;
+			}
+			cards[word.thai] = {
+				thai: word.thai,
+				roman: word.roman,
+				en: word.en,
+				ease: 2.5,
+				interval: 0,
+				due: today,
+				reps: 0,
+				lapses: 0,
+				seen: today
+			};
+			changed = true;
+		}
+		return changed ? { cards } : state;
+	}),
+	gradeReview: (thai, grade) => {
+		const card = get().cards[thai];
+		if (!card) return;
+		const next = scheduleCard(card, grade, todayKey());
+		set((state) => ({ cards: {
+			...state.cards,
+			[thai]: next
+		} }));
+	},
+	recordAnswer: (ok, gain) => set((state) => ({
+		xp: state.xp + gain,
+		answered: state.answered + 1,
+		correct: state.correct + (ok ? 1 : 0)
+	})),
+	finishLesson: (id, stars, bonus) => {
+		const state = get();
+		const today = todayKey();
+		const previous = /* @__PURE__ */ new Date();
+		previous.setDate(previous.getDate() - 1);
+		const yesterday = `${previous.getFullYear()}-${String(previous.getMonth() + 1).padStart(2, "0")}-${String(previous.getDate()).padStart(2, "0")}`;
+		let streak = state.streak;
+		if (state.lastDay !== today) streak = state.lastDay === yesterday ? state.streak + 1 : 1;
+		else if (streak === 0) streak = 1;
+		set({
+			xp: state.xp + bonus,
+			streak,
+			lastDay: today,
+			completed: {
+				...state.completed,
+				[id]: Math.max(state.completed[id] ?? 0, stars)
+			}
+		});
+	},
+	resetProgress: () => set({
+		xp: 0,
+		streak: 0,
+		lastDay: null,
+		completed: {},
+		cards: {},
+		answered: 0,
+		correct: 0
+	})
+}), {
+	name: "sawatdee-v1",
+	skipHydration: true,
+	merge: (persisted, current) => {
+		const saved = persisted ?? {};
+		return {
+			...current,
+			...saved,
+			cards: saved.cards ?? {},
+			scriptStyle: saved.scriptStyle === "traditional" ? "traditional" : "modern",
+			completed: saved.completed ?? {}
+		};
+	}
+}));
+function xpGain(comboBefore) {
+	return 10 + Math.min(Math.max(comboBefore, 0), 4) * 2;
+}
+function canSpeak() {
+	return typeof window !== "undefined" && "speechSynthesis" in window;
+}
+function warmVoices() {
+	if (!canSpeak()) return;
+	window.speechSynthesis.getVoices();
+	window.speechSynthesis.addEventListener("voiceschanged", () => {
+		window.speechSynthesis.getVoices();
+	});
+}
+function speakThai(text) {
+	if (!canSpeak() || !text) return;
+	const synth = window.speechSynthesis;
+	const utter = new SpeechSynthesisUtterance(text);
+	utter.lang = "th-TH";
+	utter.rate = .82;
+	const voice = synth.getVoices().find((item) => item.lang.toLowerCase().startsWith("th"));
+	if (voice) utter.voice = voice;
+	synth.cancel();
+	synth.speak(utter);
+}
+function stopSpeech() {
+	if (!canSpeak()) return;
+	window.speechSynthesis.cancel();
 }
 function shuffle(items) {
 	const next = items.slice();
@@ -1072,6 +1967,10 @@ function Lesson({ lessonId, onExit }) {
 	const autoplay = useProgress((state) => state.autoplay);
 	const recordAnswer = useProgress((state) => state.recordAnswer);
 	const finishLesson = useProgress((state) => state.finishLesson);
+	const ingestWords = useProgress((state) => state.ingestWords);
+	(0, import_react.useEffect)(() => {
+		if (lesson) ingestWords(lesson.words);
+	}, [lesson, ingestWords]);
 	const [phase, setPhase] = (0, import_react.useState)("intro");
 	const [index, setIndex] = (0, import_react.useState)(0);
 	const [hearts, setHearts] = (0, import_react.useState)(5);
@@ -1138,7 +2037,7 @@ function Lesson({ lessonId, onExit }) {
 			phase === "intro" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
 					className: "flex items-center gap-2 px-4 pt-4",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton, {
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton$1, {
 						label: "Leave lesson",
 						onClick: () => setConfirmExit(true),
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "h-5 w-5" })
@@ -1208,7 +2107,7 @@ function Lesson({ lessonId, onExit }) {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
 					className: "flex items-center gap-3 px-3 pt-3",
 					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton, {
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton$1, {
 							label: "Leave lesson",
 							onClick: () => setConfirmExit(true),
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "h-5 w-5" })
@@ -1375,7 +2274,7 @@ function EndScreen({ title, body, sessionXp, stars, action, onAction, tone = "te
 		})
 	})] });
 }
-function IconButton({ label, onClick, children }) {
+function IconButton$1({ label, onClick, children }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 		type: "button",
 		"aria-label": label,
@@ -1384,29 +2283,41 @@ function IconButton({ label, onClick, children }) {
 		children
 	});
 }
-function Path({ onStart }) {
+function Path({ onStart, onReview }) {
 	const xp = useProgress((state) => state.xp);
 	const streak = useProgress((state) => state.streak);
 	const completed = useProgress((state) => state.completed);
+	const cards = useProgress((state) => state.cards);
 	const speaker = useProgress((state) => state.speaker);
 	const setSpeaker = useProgress((state) => state.setSpeaker);
 	const showRoman = useProgress((state) => state.showRoman);
 	const [note, setNote] = (0, import_react.useState)(null);
 	const next = nextLesson(completed);
 	const doneCount = lessons.filter((lesson) => completed[lesson.id]).length;
+	const due = reviewStats(cards, todayKey()).due;
 	const phrase = dailyPhrases[Math.floor(Date.now() / 864e5) % dailyPhrases.length] ?? dailyPhrases[0];
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "px-5 pt-6 pb-8",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
 				className: "flex items-start justify-between gap-3",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "text-sm font-extrabold text-chili",
-					children: "Sawatdee"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-					className: "text-3xl font-extrabold text-balance",
-					children: "Learn Thai"
-				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "min-w-0 flex-1",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm font-extrabold text-chili",
+							children: "Sawatdee"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+							className: "text-3xl font-extrabold text-balance",
+							children: "Learn Thai"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "mt-1 max-w-xs text-sm text-pretty text-muted",
+							children: courseNote
+						})
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex items-center gap-1 rounded-full bg-soft px-3 py-2 font-extrabold tabular-nums",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flame, {
 						className: "h-5 w-5 text-marigold",
@@ -1473,6 +2384,23 @@ function Path({ onStart }) {
 					className: "text-sm",
 					children: "Replay any lesson. Stars stay at your best."
 				})]
+			}),
+			due > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+				type: "button",
+				onClick: onReview,
+				className: "mt-3 flex min-h-14 w-full items-center justify-between rounded-2xl bg-soft px-4 text-left",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "block text-xs font-extrabold tracking-wide text-chili uppercase",
+					children: "Review"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "font-extrabold",
+					children: [
+						due,
+						" ",
+						due === 1 ? "word" : "words",
+						" due"
+					]
+				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "h-5 w-5 text-chili" })]
 			}),
 			note && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-3 text-sm font-bold text-chili",
@@ -1587,7 +2515,10 @@ function SpeakerSwitch({ speaker, onChange }) {
 				"aria-label": name,
 				onClick: () => onChange(id),
 				className: cn("min-h-11 rounded-full px-3 text-sm font-extrabold", speaker === id ? "bg-ink text-sheet" : "text-muted"),
-				children: label
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					lang: "th",
+					children: label
+				})
 			}, id))
 		})]
 	});
@@ -1601,14 +2532,15 @@ function Profile() {
 	const speaker = useProgress((state) => state.speaker);
 	const showRoman = useProgress((state) => state.showRoman);
 	const autoplay = useProgress((state) => state.autoplay);
+	const cards = useProgress((state) => state.cards);
 	const setSpeaker = useProgress((state) => state.setSpeaker);
 	const setShowRoman = useProgress((state) => state.setShowRoman);
 	const setAutoplay = useProgress((state) => state.setAutoplay);
 	const resetProgress = useProgress((state) => state.resetProgress);
 	const [armReset, setArmReset] = (0, import_react.useState)(false);
 	const done = lessons.filter((lesson) => completed[lesson.id]).length;
-	const words = lessons.filter((lesson) => completed[lesson.id]).reduce((sum, lesson) => sum + lesson.words.length, 0);
 	const accuracy = answered === 0 ? null : Math.round(100 * correct / answered);
+	const deck = reviewStats(cards, todayKey());
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "px-5 pt-6 pb-10",
 		children: [
@@ -1627,27 +2559,47 @@ function Profile() {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "mt-5 grid grid-cols-2 gap-2",
 				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat, {
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat$1, {
 						label: "XP",
 						value: String(xp)
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat, {
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat$1, {
 						label: "Streak",
 						value: String(streak)
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat, {
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat$1, {
 						label: "Lessons",
 						value: `${done}/${lessons.length}`
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat, {
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat$1, {
 						label: "Words",
-						value: String(words)
+						value: String(deck.total)
 					})
 				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-3 text-sm font-bold text-muted",
 				children: accuracy === null ? "Accuracy shows up after you check an answer." : `${accuracy}% accuracy across ${answered} answers.`
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				className: "mt-8 text-lg font-extrabold",
+				children: "Script style"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-1 text-sm text-pretty text-muted",
+				children: "Same letters. Modern is the loopless face used on signs and phones. Traditional keeps the looped heads you see in books."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-3",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScriptStylePicker, {})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				className: "mt-8 text-lg font-extrabold",
+				children: "How words get in"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "mt-1 text-sm text-pretty text-muted",
+				children: [courseNote, " Greetings, food, money, and directions come first, then time, describing things, and what to say when you get stuck. A word has to be something you would say out loud. No royal vocabulary, no slang. Later lessons reuse earlier words, and Review only schedules words from lessons you have opened."]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 				className: "mt-8 text-lg font-extrabold",
@@ -1709,7 +2661,7 @@ function Profile() {
 		]
 	});
 }
-function Stat({ label, value }) {
+function Stat$1({ label, value }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "rounded-2xl bg-soft px-4 py-3",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -1719,6 +2671,49 @@ function Stat({ label, value }) {
 			className: "text-2xl font-extrabold tabular-nums",
 			children: value
 		})]
+	});
+}
+function ScriptStylePicker() {
+	const style = useProgress((state) => state.scriptStyle);
+	const setScriptStyle = useProgress((state) => state.setScriptStyle);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "grid grid-cols-2 gap-2",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(StyleCard, {
+			active: style === "modern",
+			sampleClass: "thai-modern-sample",
+			title: "Modern",
+			hint: "Loopless",
+			onClick: () => setScriptStyle("modern")
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StyleCard, {
+			active: style === "traditional",
+			sampleClass: "thai-traditional-sample",
+			title: "Traditional",
+			hint: "Looped heads",
+			onClick: () => setScriptStyle("traditional")
+		})]
+	});
+}
+function StyleCard({ active, sampleClass, title, hint, onClick }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+		type: "button",
+		"aria-pressed": active,
+		onClick,
+		className: cn("min-h-24 rounded-2xl border-2 px-3 py-3 text-left", active ? "border-ink bg-ink text-sheet" : "border-line bg-sheet"),
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				lang: "th",
+				className: cn("thai-display block text-3xl", sampleClass),
+				children: "สวัสดี"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "mt-1 block font-extrabold",
+				children: title
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: cn("block text-sm font-bold", active ? "text-sheet/80" : "text-muted"),
+				children: hint
+			})
+		]
 	});
 }
 function SpeakerCard({ active, thai, roman, label, onClick }) {
@@ -1758,6 +2753,344 @@ function Toggle({ on, label, hint, onToggle }) {
 			className: cn("h-7 w-12 shrink-0 rounded-full p-1", on ? "bg-teal" : "bg-line"),
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: cn("block h-5 w-5 rounded-full bg-sheet transition-transform duration-150", on && "translate-x-5") })
 		})]
+	});
+}
+var COACH = {
+	สีขาว: "ขาว rises. ข้าว, rice, falls.",
+	ข้าว: "ข้าว falls. ขาว, white, rises.",
+	ใกล้: "ใกล้ falls and means near. ไกล is mid and means far.",
+	ไกล: "ไกล is mid and means far. ใกล้ falls and means near.",
+	ไม่: "ไม่ falls, and it means no. ไหม rises, and it asks.",
+	ยี่สิบ: "Twenty is ยี่สิบ. สองสิบ is not the word people use."
+};
+function toWord(card) {
+	return {
+		thai: card.thai,
+		roman: card.roman,
+		en: card.en
+	};
+}
+function makeExercise(card, pool, index) {
+	const traps = shuffle(pool.filter((item) => item.thai !== card.thai)).slice(0, 3).map(toWord);
+	return {
+		kind: "choice",
+		dir: [
+			"th-en",
+			"en-th",
+			"listen"
+		][index % 3] ?? "th-en",
+		word: toWord(card),
+		traps,
+		coach: COACH[card.thai]
+	};
+}
+function buildQueue(cards, mode) {
+	const today = todayKey();
+	const list = Object.values(cards);
+	return (mode === "due" ? shuffle(list.filter((card) => card.due <= today)).slice(0, 12) : list.filter((card) => card.due > today).sort((a, b) => a.due.localeCompare(b.due)).slice(0, 8)).map((card) => ({
+		thai: card.thai,
+		attempt: 0
+	}));
+}
+function Review({ onStart }) {
+	const cards = useProgress((state) => state.cards);
+	const showRoman = useProgress((state) => state.showRoman);
+	const today = todayKey();
+	const stats = reviewStats(cards, today);
+	const dueList = Object.values(cards).filter((card) => card.due <= today).sort((a, b) => a.thai.localeCompare(b.thai, "th"));
+	const later = Object.values(cards).filter((card) => card.due > today).sort((a, b) => a.due.localeCompare(b.due) || a.thai.localeCompare(b.thai, "th"));
+	const session = Math.min(stats.due, 12);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "px-5 pt-6 pb-10",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-sm font-extrabold text-chili",
+				children: "Review"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+				className: "text-3xl font-extrabold text-balance",
+				children: "Words you've seen"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-2 text-pretty text-muted",
+				children: "Opening a lesson adds its words here. A miss stays due and comes back later in the round. A correct answer waits 1 day, then 3, then longer, up to 90 days."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-5 grid grid-cols-3 gap-2",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat, {
+						label: "Deck",
+						value: String(stats.total)
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat, {
+						label: "Due",
+						value: String(stats.due)
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat, {
+						label: "Mastered",
+						value: String(stats.mastered)
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "mt-3 text-sm text-pretty text-muted",
+				children: ["Mastered means three weeks between reviews.", stats.total === 0 ? " Open a lesson and its word list lands here, ready to review." : stats.due === 0 ? stats.nextDue ? ` Next review ${stats.nextDue}.` : " Nothing is waiting." : ""]
+			}),
+			dueList.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DeckList, {
+				title: "Due",
+				cards: dueList.slice(0, 8),
+				extra: Math.max(0, dueList.length - 8),
+				today,
+				showRoman
+			}),
+			later.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DeckList, {
+				title: "Coming up",
+				cards: later.slice(0, 5),
+				extra: Math.max(0, later.length - 5),
+				today,
+				showRoman
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+				type: "button",
+				disabled: session === 0,
+				onClick: () => onStart("due"),
+				className: "btn-3d btn-chili mt-5 flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl font-extrabold",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RotateCcw, { className: "h-5 w-5" }), session === 0 ? "Nothing due" : session === stats.due ? `Review ${stats.due}` : `Review ${session} of ${stats.due}`]
+			}),
+			stats.total >= 2 && stats.due < stats.total && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				onClick: () => onStart("ahead"),
+				className: "mt-2 min-h-12 w-full rounded-2xl border-2 border-line font-extrabold",
+				children: "Practice ahead"
+			})
+		]
+	});
+}
+function ReviewSession({ mode, onExit }) {
+	const cards = useProgress((state) => state.cards);
+	const showRoman = useProgress((state) => state.showRoman);
+	const autoplay = useProgress((state) => state.autoplay);
+	const speaker = useProgress((state) => state.speaker);
+	const gradeReview = useProgress((state) => state.gradeReview);
+	const [queue, setQueue] = (0, import_react.useState)(() => buildQueue(cards, mode));
+	const [index, setIndex] = (0, import_react.useState)(0);
+	const [result, setResult] = (0, import_react.useState)(null);
+	const [canCheck, setCanCheck] = (0, import_react.useState)(false);
+	const [remembered, setRemembered] = (0, import_react.useState)(0);
+	const [missed, setMissed] = (0, import_react.useState)(0);
+	const [phase, setPhase] = (0, import_react.useState)(queue.length === 0 ? "done" : "play");
+	const gradeRef = (0, import_react.useRef)(null);
+	const onCanCheck = (0, import_react.useCallback)((ready) => setCanCheck(ready), []);
+	const item = queue[index];
+	const cardsRef = (0, import_react.useRef)(cards);
+	cardsRef.current = cards;
+	const exercise = (0, import_react.useMemo)(() => {
+		if (!item) return null;
+		const live = cardsRef.current;
+		const current = live[item.thai];
+		if (!current) return null;
+		return makeExercise(current, Object.values(live), index + item.attempt);
+	}, [item, index]);
+	const card = item ? cards[item.thai] : void 0;
+	function onCheck() {
+		const grade = gradeRef.current?.grade();
+		if (!grade || result) return;
+		if (item && item.attempt === 0) {
+			if (grade.ok) setRemembered((value) => value + 1);
+			else setMissed((value) => value + 1);
+		}
+		setResult(grade);
+	}
+	function onContinue() {
+		if (!result || !item || !card) return;
+		let nextQueue = queue;
+		let grade = null;
+		if (result.ok) grade = item.attempt === 0 ? "good" : "shaky";
+		else if (item.attempt === 0) {
+			grade = "again";
+			nextQueue = queue.slice();
+			const insertAt = Math.min(index + 3, nextQueue.length);
+			nextQueue.splice(insertAt, 0, {
+				thai: item.thai,
+				attempt: 1
+			});
+			setQueue(nextQueue);
+		}
+		if (grade) gradeReview(item.thai, grade);
+		if (index + 1 >= nextQueue.length) {
+			setPhase("done");
+			return;
+		}
+		setResult(null);
+		setCanCheck(false);
+		setIndex((value) => value + 1);
+	}
+	const gap = result && card && item ? result.ok ? gapLabel(nextInterval(card, item.attempt === 0 ? "good" : "shaky")) : item.attempt === 0 ? "Again later this round, and still due after." : "Still due." : "";
+	if (phase === "done" || !item || !exercise) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex min-h-0 flex-1 flex-col",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-1 flex-col items-center justify-center px-6 text-center",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "grid h-24 w-24 place-items-center rounded-full bg-teal text-sheet",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-12 w-12" })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+					className: "mt-5 text-3xl font-extrabold",
+					children: "Review done"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-2 max-w-xs text-pretty text-muted",
+					children: queue.length === 0 ? "Nothing was waiting." : `${remembered} remembered first try. ${missed} ${missed === 1 ? "comes" : "come"} back sooner.`
+				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {
+			className: "safe-bottom px-4 pt-2",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				onClick: onExit,
+				className: "btn-3d btn-chili flex min-h-12 w-full items-center justify-center rounded-2xl font-extrabold",
+				children: "Back"
+			})
+		})]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "relative flex min-h-0 flex-1 flex-col",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
+				className: "flex items-center gap-3 px-3 pt-3",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton, {
+						label: "Leave review",
+						onClick: onExit,
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { className: "h-5 w-5" })
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "h-3 flex-1 overflow-hidden rounded-full bg-soft",
+						"aria-hidden": true,
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "h-full rounded-full bg-teal transition-[width] duration-300 ease-out",
+							style: { width: `${(index + (result ? 1 : 0)) / queue.length * 100}%` }
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "shrink-0 text-sm font-extrabold text-muted tabular-nums",
+						children: [
+							index + 1,
+							"/",
+							queue.length
+						]
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-4",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExerciseBody, {
+					exercise,
+					speaker,
+					showRoman,
+					autoplay,
+					result,
+					gradeRef,
+					onAnswer: () => void 0,
+					onCanCheck
+				}, `${item.thai}-${index}`)
+			}),
+			result ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("footer", {
+				className: cn("safe-bottom px-4 pt-4", result.ok ? "bg-teal text-sheet" : "bg-chili text-sheet"),
+				"aria-live": "polite",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-xl font-extrabold",
+						children: result.ok ? "Kept." : "Not quite."
+					}),
+					result.solution && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						lang: "th",
+						className: "mt-1 font-bold",
+						children: result.solution
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 text-sm",
+						children: gap
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: onContinue,
+						className: "btn-3d btn-sheet mt-3 flex min-h-12 w-full items-center justify-center rounded-2xl font-extrabold",
+						children: "Continue"
+					})
+				]
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("footer", {
+				className: "safe-bottom px-4 pt-2",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					disabled: !canCheck,
+					onClick: onCheck,
+					className: "btn-3d btn-chili flex min-h-12 w-full items-center justify-center rounded-2xl font-extrabold",
+					children: "Check"
+				})
+			})
+		]
+	});
+}
+function DeckList({ title, cards, extra, today, showRoman }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "mt-5",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				className: "text-sm font-extrabold tracking-wide text-muted uppercase",
+				children: title
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+				className: "mt-2 grid gap-2",
+				children: cards.map((card) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+					className: "flex items-center justify-between gap-3 rounded-2xl bg-soft px-4 py-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "min-w-0",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							lang: "th",
+							className: "thai-display block text-xl",
+							children: card.thai
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "block text-sm font-bold text-muted",
+							children: [showRoman ? `${card.roman} · ` : "", card.en]
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "shrink-0 text-xs font-extrabold text-chili",
+						children: duePhrase(card.due, today)
+					})]
+				}, card.thai))
+			}),
+			extra > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "mt-2 text-sm font-bold text-muted",
+				children: [
+					"+",
+					extra,
+					" more"
+				]
+			})
+		]
+	});
+}
+function Stat({ label, value }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "rounded-2xl bg-soft px-3 py-3",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "text-xs font-extrabold tracking-wide text-muted uppercase",
+			children: label
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "text-2xl font-extrabold tabular-nums",
+			children: value
+		})]
+	});
+}
+function IconButton({ label, onClick, children }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+		type: "button",
+		"aria-label": label,
+		onClick,
+		className: "grid h-11 w-11 shrink-0 place-items-center rounded-full text-muted",
+		children
 	});
 }
 var tones = [
@@ -2128,6 +3461,18 @@ function ScriptLab() {
 				className: "mt-2 text-pretty text-muted",
 				children: "Marks on the romanization: unmarked mid, à low, á high, â falling, ǎ rising. Long vowels are doubled. bp and dt are unaspirated."
 			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				className: "mt-6 text-lg font-extrabold",
+				children: "How the letters look"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-1 text-sm text-pretty text-muted",
+				children: "Modern drops the little loops. Traditional keeps them. The spelling does not change."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-3",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScriptStylePicker, {})
+			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ToneDrill, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 				className: "mt-8 text-lg font-extrabold",
@@ -2394,26 +3739,40 @@ function ToneDrill() {
 function SawatdeeApp() {
 	const [tab, setTab] = (0, import_react.useState)("learn");
 	const [lessonId, setLessonId] = (0, import_react.useState)(null);
+	const [reviewMode, setReviewMode] = (0, import_react.useState)(null);
+	const scriptStyle = useProgress((state) => state.scriptStyle);
+	const due = reviewStats(useProgress((state) => state.cards), todayKey()).due;
 	(0, import_react.useEffect)(() => {
-		useProgress.persist.rehydrate();
+		Promise.resolve(useProgress.persist.rehydrate()).then(() => {
+			const state = useProgress.getState();
+			const seen = lessons.filter((lesson) => state.completed[lesson.id]).flatMap((lesson) => lesson.words);
+			state.ingestWords(seen);
+		});
 		warmVoices();
 	}, []);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "min-h-dvh bg-paper lg:flex lg:h-dvh lg:overflow-hidden",
+		className: cn("min-h-dvh bg-paper lg:flex lg:h-dvh lg:overflow-hidden", scriptStyle === "traditional" && "thai-traditional"),
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandPanel, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-sheet lg:mx-0 lg:shrink-0 lg:border-l lg:border-line",
 			children: lessonId ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lesson, {
 				lessonId,
 				onExit: () => setLessonId(null)
-			}, lessonId) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			}, lessonId) : reviewMode ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ReviewSession, {
+				mode: reviewMode,
+				onExit: () => setReviewMode(null)
+			}, reviewMode) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "min-h-0 flex-1 overflow-y-auto",
 				children: [
-					tab === "learn" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Path, { onStart: setLessonId }),
+					tab === "learn" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Path, {
+						onStart: setLessonId,
+						onReview: () => setTab("review")
+					}),
+					tab === "review" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Review, { onStart: setReviewMode }),
 					tab === "script" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScriptLab, {}),
 					tab === "me" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Profile, {})
 				]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
-				className: "safe-bottom grid shrink-0 grid-cols-3 gap-1 border-t border-line px-2 pt-2",
+				className: "safe-bottom grid shrink-0 grid-cols-4 gap-1 border-t border-line px-2 pt-2",
 				"aria-label": "Sections",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabButton, {
@@ -2421,6 +3780,13 @@ function SawatdeeApp() {
 						label: "Learn",
 						onClick: () => setTab("learn"),
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(House, { className: "h-5 w-5" })
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabButton, {
+						active: tab === "review",
+						label: "Review",
+						dot: due > 0,
+						onClick: () => setTab("review"),
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Repeat, { className: "h-5 w-5" })
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabButton, {
 						active: tab === "script",
@@ -2439,13 +3805,16 @@ function SawatdeeApp() {
 		})]
 	});
 }
-function TabButton({ active, label, onClick, children }) {
+function TabButton({ active, label, onClick, dot, children }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 		type: "button",
 		"aria-current": active ? "page" : void 0,
 		onClick,
 		className: cn("flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-2xl text-xs font-extrabold", active ? "bg-soft text-chili" : "text-muted"),
-		children: [children, label]
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+			className: "relative",
+			children: [children, dot ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "absolute -top-0.5 -right-1.5 h-2 w-2 rounded-full bg-chili" }) : null]
+		}), label]
 	});
 }
 function BrandPanel() {
@@ -2476,9 +3845,14 @@ function BrandPanel() {
 					className: "mt-8 text-5xl font-extrabold text-balance",
 					children: "Speak Thai from the first lesson."
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 					className: "mt-4 max-w-md text-lg text-pretty text-muted",
-					children: "A pocket course with real script, the five tones, and the polite particle that matches your voice. Ten lessons, from hello to the night market."
+					children: [
+						"A pocket course with real script, the five tones, and the polite particle that matches your voice.",
+						" ",
+						lessons.length,
+						" lessons, from hello to asking someone to slow down. Review brings back only the words you have already seen."
+					]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", {
 					className: "mt-8 grid gap-4",

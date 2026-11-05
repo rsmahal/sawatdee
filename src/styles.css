@@ -6,6 +6,9 @@
 @import "@fontsource/noto-sans-thai/thai-600.css";
 @import "@fontsource/noto-sans-thai/thai-700.css";
 @import "@fontsource/noto-sans-thai/thai-800.css";
+@import "@fontsource/noto-sans-thai-looped/thai-600.css";
+@import "@fontsource/noto-sans-thai-looped/thai-700.css";
+@import "@fontsource/noto-sans-thai-looped/thai-800.css";
 
 @theme {
   --font-sans: "Nunito", "Noto Sans Thai", "Loma", ui-sans-serif, system-ui, sans-serif;
@@ -57,6 +60,21 @@
   font-family: "Noto Sans Thai", "Loma", sans-serif;
   font-weight: 700;
   line-height: 1.45;
+}
+
+.thai-traditional .thai-display,
+.thai-traditional [lang="th"] {
+  font-family: "Noto Sans Thai Looped", "Noto Sans Thai", sans-serif;
+}
+
+.thai-modern-sample,
+.thai-modern-sample.thai-display {
+  font-family: "Noto Sans Thai", "Loma", sans-serif;
+}
+
+.thai-traditional-sample,
+.thai-traditional-sample.thai-display {
+  font-family: "Noto Sans Thai Looped", "Noto Sans Thai", sans-serif;
 }
 
 .safe-bottom {

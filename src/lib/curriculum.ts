@@ -99,8 +99,76 @@ const straight = w("ตรงไป", "dtrong-bpai", "Straight ahead");
 const turn = w("เลี้ยว", "líiao", "To turn");
 const taxi = w("แท็กซี่", "tháek-sîi", "Taxi");
 
+const today = w("วันนี้", "wan-níi", "Today");
+const tomorrow = w("พรุ่งนี้", "phrûng-níi", "Tomorrow");
+const yesterday = w("เมื่อวาน", "mûea-waan", "Yesterday");
+const now = w("ตอนนี้", "dtaawn-níi", "Now");
+const morning = w("เช้า", "cháao", "Morning");
+const evening = w("เย็น", "yen", "Evening");
+const afternoon = w("บ่าย", "bàai", "Afternoon");
+const whatTime = w("กี่โมง", "gìi-moong", "What time");
+const hour = w("โมง", "moong", "Hour, in telling time");
+const minute = w("นาที", "naa-thii", "Minute");
+const clock = w("นาฬิกา", "naa-lí-gaa", "Clock");
+const red = w("สีแด่ง", "sǐi-dàaeng", "Red");
+const white = w("สีขาว", "sǐi-khǎao", "White");
+const black = w("สีด้ำ", "sǐi-dâm", "Black");
+const blue = w("สีฟ้า", "sǐi-fáa", "Blue");
+const green = w("สีเขียว", "sǐi-khǐao", "Green");
+const yellow = w("สีเหลือง", "sǐi-lǔeang", "Yellow");
+const big = w("ใหญ่", "yài", "Big");
+const small = w("เล็ก", "lék", "Small");
+const pretty = w("สวย", "sǔai", "Pretty");
+const hot = w("ร้อน", "ráawn", "Hot");
+const cold = w("หนาว", "nǎao", "Cold");
+const very = w("ม่าก", "mâak", "Very");
+const padThai = w("ผั่ดไทย", "phàt-thai", "Pad Thai");
+const somtam = w("ส่มต้ำ", "sòm-dtâm", "Papaya salad");
+const chicken = w("ไก่", "gài", "Chicken");
+const pork = w("มู", "mǔu", "Pork");
+const spicy = w("เผ็ด", "phèt", "Spicy");
+const take = w("เอา", "ao", "I'll take");
+const full = w("อิ่ม", "ìm", "Full, after eating");
+const bill = w("เช็คบิล", "chék-bin", "The bill");
+const plainWater = w("น้ำเปล่า", "náam-bplào", "Plain water");
+const twenty = w("ยี้สิบ", "yíi-sìp", "Twenty");
+const hundred = w("ร้อย", "ráawy", "Hundred");
+const thousand = w("พัน", "phan", "Thousand");
+const near = w("ใกล้", "glâi", "Near");
+const far = w("ไกล", "glai", "Far");
+const here = w("ที่นี่", "thîi-nîi", "Here");
+const there = w("ที่นั่น", "thîi-nân", "There");
+const stop = w("หยุด", "yùt", "Stop");
+const hotel = w("โรงแรม", "roong-raaem", "Hotel");
+const station = w("สถานี", "sà-thǎa-nii", "Station");
+const airport = w("สนามบิน", "sà-naam-bin", "Airport");
+const bus = w("รถเมล์", "rót-mee", "Bus");
+const train = w("รถไฟฟ้า", "rót-fai-fáa", "Skytrain");
+const nameW = w("ชื่อ", "chûue", "Name");
+const what = w("อะไร", "à-rai", "What");
+const person = w("คน", "khon", "Person");
+const thaiPerson = w("คนไทย", "khon-thai", "Thai person");
+const speak = w("พู่ด", "phûut", "To speak");
+const understand = w("เข้าใจ่", "khâo-jài", "To understand");
+const aLittle = w("นิดหน่อย", "nít-nòi", "A little");
+const slowly = w("ช้าๆ", "cháa-cháa", "Slowly");
+const thaiLang = w("ภาษาไทย", "phaa-sǎa-thai", "Thai language");
+const rain = w("ฝน", "fǒn", "Rain");
+const fall = w("ตก", "dtòk", "To fall");
+const sunshine = w("แด่ด", "dàaet", "Sunshine");
+const tired = w("เหนื่อย", "nùeai", "Tired");
+const like = w("ช่อบ", "châawp", "To like");
+const fun = w("สนุก", "sà-nùk", "Fun");
+const kha = w("ค่ะ", "khâ", "Polite particle, women");
+const khaQ = w("คะ", "khá", "Question particle, women");
+const khrap = w("ครับ", "khráp", "Polite particle, men");
+
 const toneCoach = "สี่ stays low. ห้า drops. Don't swap them.";
 const maiCoach = "ไหม rises, and it asks. ไม่ falls, and it means no.";
+const whiteCoach = "ขาว rises. ข้าว, rice, falls.";
+const nearCoach = "ใกล้ falls and means near. ไกล is mid and means far.";
+const twentyCoach = "Twenty is ยี้สิบ. สองสิบ is not the word people use.";
+const timeCoach = "กี่โมง asks the time. On a Thai clock, สองโมง is 8 in the morning, not 2.";
 
 function choice(
   dir: "th-en" | "en-th" | "listen",
@@ -143,6 +211,42 @@ export const units = [
     kicker: "Unit 4",
     title: "Around town",
     blurb: "Count, then find the bathroom.",
+  },
+  {
+    id: "time",
+    kicker: "Unit 5",
+    title: "Time",
+    blurb: "Today, tomorrow, and how to ask the time.",
+  },
+  {
+    id: "describe",
+    kicker: "Unit 6",
+    title: "Describe it",
+    blurb: "Colors, size, and how hot it is.",
+  },
+  {
+    id: "meal",
+    kicker: "Unit 7",
+    title: "A meal",
+    blurb: "Order a dish, say you're full, ask for the bill.",
+  },
+  {
+    id: "going",
+    kicker: "Unit 8",
+    title: "Getting there",
+    blurb: "Near, far, and the words for the station.",
+  },
+  {
+    id: "talking",
+    kicker: "Unit 9",
+    title: "When you're stuck",
+    blurb: "Your name, and asking someone to slow down.",
+  },
+  {
+    id: "out",
+    kicker: "Unit 10",
+    title: "Out for the day",
+    blurb: "Rain, being tired, and what you like.",
   },
 ] as const;
 
@@ -204,7 +308,7 @@ export const lessons: Lesson[] = [
     title: "How are you",
     subtitle: "Questions, and the word for I",
     tip: "Women's questions end in คะ, not ค่ะ. Men stay with ครับ. ผม is I for men. ฉัน is the I this course uses for women.",
-    words: [well, howru, you, iF, iM],
+    words: [well, howru, you, iF, iM, kha, khaQ, khrap],
     exercises: [
       choice("th-en", well, [howru, you, yes]),
       choice("en-th", howru, [well, you, np], maiCoach),
@@ -334,9 +438,243 @@ export const lessons: Lesson[] = [
       choice("listen", sorry, [thanks, np, bye]),
     ],
   },
+  {
+    id: "today",
+    unit: "time",
+    title: "Today",
+    subtitle: "Now, yesterday, tomorrow",
+    tip: "นี้ on the end of วันนี้ and พรุ่งนี้ is the same high “this”. เมื่อวาน looks backward.",
+    words: [today, tomorrow, yesterday, now, morning, evening],
+    exercises: [
+      choice("th-en", today, [tomorrow, yesterday, now]),
+      choice("en-th", tomorrow, [today, morning, evening]),
+      choice("listen", yesterday, [today, tomorrow, now]),
+      tiles("Today.", [t(today)], [t(tomorrow), t(yesterday), t(now)]),
+      tiles("Tomorrow morning.", [t(tomorrow), t(morning)], [t(evening), t(today), t(now)]),
+      choice("th-en", morning, [evening, now, today]),
+      pairs([today, tomorrow, yesterday, morning]),
+    ],
+  },
+  {
+    id: "what-time",
+    unit: "time",
+    title: "What time",
+    subtitle: "Ask first. The Thai clock can wait.",
+    tip: "กี่โมง is how you ask the time. Answers use a Thai clock, where สองโมง is 8 in the morning, not 2. Learn the question before that system.",
+    words: [whatTime, hour, minute, clock, afternoon],
+    exercises: [
+      choice("th-en", whatTime, [hour, minute, clock], timeCoach),
+      choice("en-th", minute, [hour, clock, afternoon]),
+      choice("listen", clock, [minute, hour, whatTime]),
+      tiles("What time?", [t(whatTime), POLITE_Q], [t(now), t(morning), t(hour)], timeCoach),
+      tiles("In the afternoon.", [t(afternoon)], [t(morning), t(evening), t(now)]),
+      pairs([whatTime, minute, clock, afternoon]),
+      choice("th-en", hour, [minute, clock, afternoon]),
+    ],
+  },
+  {
+    id: "colors",
+    unit: "describe",
+    title: "Colors",
+    subtitle: "สี sits in front",
+    tip: "สี means color and comes first: สีแดง, สีขาว. ขาว rises. ข้าว, rice, falls.",
+    words: [red, white, black, blue, green, yellow],
+    exercises: [
+      choice("th-en", white, [red, black, rice], whiteCoach),
+      choice("en-th", red, [blue, green, yellow]),
+      choice("listen", blue, [green, black, white]),
+      tiles("Red.", [t(red)], [t(white), t(black), t(blue)]),
+      tiles("White.", [t(white)], [t(rice), t(black), t(red)], whiteCoach),
+      pairs([red, white, black, blue]),
+      choice("th-en", yellow, [green, white, red]),
+    ],
+  },
+  {
+    id: "size",
+    unit: "describe",
+    title: "Big and hot",
+    subtitle: "Size, heat, and very",
+    tip: "มาก comes after the word it strengthens. ร้อนมาก is very hot. ใหญ่ is big. เล็ก is small.",
+    words: [big, small, pretty, hot, cold, very],
+    exercises: [
+      choice("th-en", hot, [cold, big, very]),
+      choice("en-th", small, [big, pretty, cold]),
+      choice("listen", big, [small, hot, pretty]),
+      tiles("Very hot.", [t(hot), t(very)], [t(cold), t(big), t(small)]),
+      tiles("Small.", [t(small)], [t(big), t(pretty), t(cold)]),
+      pairs([big, small, hot, cold]),
+      choice("th-en", pretty, [big, hot, very]),
+    ],
+  },
+  {
+    id: "dishes",
+    unit: "meal",
+    title: "Order food",
+    subtitle: "A few things you'll actually say",
+    tip: "เอา is the short way to order: เอาผัดไทย. ขอ still works. ไม่เผ็ด is how you turn the heat off.",
+    words: [padThai, somtam, chicken, pork, spicy, take],
+    exercises: [
+      choice("th-en", padThai, [somtam, chicken, rice]),
+      choice("en-th", somtam, [padThai, spicy, pork]),
+      choice("listen", chicken, [pork, padThai, rice]),
+      tiles("I'll take Pad Thai.", [t(take), t(padThai), POLITE], [t(somtam), t(please), t(chicken)]),
+      tiles("Not spicy.", [t(no), t(spicy)], [t(very), t(tasty), t(pork)]),
+      pairs([padThai, somtam, chicken, pork]),
+      choice("th-en", spicy, [chicken, tasty, pork]),
+    ],
+  },
+  {
+    id: "bill",
+    unit: "meal",
+    title: "The bill",
+    subtitle: "Full, water, and bigger numbers",
+    tip: "อิ่ม means you've had enough. เช็คบิล asks for the bill. Twenty is ยี้สิบ, not สองสิบ. ร้อย is a hundred. พัน is a thousand.",
+    words: [full, bill, plainWater, twenty, hundred, thousand],
+    exercises: [
+      choice("th-en", full, [bill, hungry, tasty]),
+      choice("en-th", bill, [full, water, hundred]),
+      choice("listen", twenty, [ten, hundred, thousand], twentyCoach),
+      tiles("The bill, please.", [t(bill), POLITE], [t(full), t(please), t(water)]),
+      tiles("One hundred baht.", [t(one), t(hundred), t(baht)], [t(twenty), t(thousand), t(ten)]),
+      tiles("Twenty baht.", [t(twenty), t(baht)], [t(ten), t(two), t(hundred)], twentyCoach),
+      pairs([full, bill, twenty, hundred]),
+      choice("th-en", plainWater, [water, tea, coffee]),
+    ],
+  },
+  {
+    id: "near-far",
+    unit: "going",
+    title: "Here and there",
+    subtitle: "Near, far, stop",
+    tip: "ใกล้ falls and means near. ไกล is mid and means far. ที่นี่ is here. ที่นั่น is there.",
+    words: [near, far, here, there, stop],
+    exercises: [
+      choice("th-en", near, [far, here, there], nearCoach),
+      choice("en-th", far, [near, stop, here], nearCoach),
+      choice("listen", here, [there, near, far]),
+      tiles("Stop here.", [t(stop), t(here)], [t(there), t(far), t(go)]),
+      tiles("Not far.", [t(no), t(far)], [t(near), t(here), t(stop)]),
+      pairs([near, far, here, there]),
+      choice("th-en", stop, [here, far, go]),
+    ],
+  },
+  {
+    id: "station",
+    unit: "going",
+    title: "Station",
+    subtitle: "Hotel, airport, bus, train",
+    tip: "รถไฟฟ้า is the skytrain. รถเมล์ is the bus. อยู่ที่ไหน still asks where.",
+    words: [hotel, station, airport, bus, train],
+    exercises: [
+      choice("th-en", hotel, [station, airport, temple]),
+      choice("en-th", airport, [station, hotel, bus]),
+      choice("listen", train, [bus, taxi, station]),
+      tiles(
+        "Where is the station?",
+        [t(station), t(located), t(where), POLITE_Q],
+        [t(hotel), t(airport)],
+      ),
+      tiles("Go to the hotel.", [t(go), t(hotel)], [t(station), t(airport), t(bus)]),
+      pairs([hotel, station, airport, bus]),
+      choice("th-en", bus, [train, taxi, hotel]),
+    ],
+  },
+  {
+    id: "names",
+    unit: "talking",
+    title: "Your name",
+    subtitle: "ชื่อ and อะไร",
+    tip: "ชื่ออะไร asks the name. ฉันชื่อ or ผมชื่อ starts the answer, then your name. คนไทย is a Thai person.",
+    words: [nameW, what, person, thaiPerson],
+    exercises: [
+      choice("th-en", nameW, [what, person, you]),
+      choice("en-th", what, [nameW, person, you]),
+      choice("listen", person, [thaiPerson, friend, you]),
+      tiles("What's your name?", [t(nameW), t(what), POLITE_Q], [t(person), t(you)]),
+      tiles("My name...", [SELF, t(nameW)], [OTHER, t(what), t(person)]),
+      pairs([nameW, what, person, thaiPerson]),
+      choice("th-en", thaiPerson, [person, friend, you]),
+    ],
+  },
+  {
+    id: "slowly",
+    unit: "talking",
+    title: "Slowly",
+    subtitle: "When the sentence goes past you",
+    tip: "ไม่เข้าใจ is the most useful sentence in the course. พูดช้าๆ asks them to slow down. นิดหน่อย is a little.",
+    words: [speak, understand, aLittle, slowly, thaiLang],
+    exercises: [
+      choice("th-en", understand, [speak, slowly, aLittle]),
+      choice("en-th", speak, [understand, slowly, thaiLang]),
+      choice("listen", slowly, [aLittle, speak, understand]),
+      tiles("I don't understand.", [SELF, t(no), t(understand)], [t(speak), OTHER, t(yes)]),
+      tiles("Speak slowly.", [t(speak), t(slowly), POLITE], [t(aLittle), t(understand)]),
+      tiles("A little Thai.", [t(thaiLang), t(aLittle)], [t(speak), t(slowly), t(understand)]),
+      pairs([speak, understand, slowly, aLittle]),
+    ],
+  },
+  {
+    id: "outside",
+    unit: "out",
+    title: "Rain and rest",
+    subtitle: "Weather, tired, like",
+    tip: "ฝนตก is raining. ชอบ goes before the thing you like. เหนื่อย is tired.",
+    words: [rain, fall, sunshine, tired, like, fun],
+    exercises: [
+      choice("th-en", rain, [sunshine, tired, fun]),
+      choice("en-th", tired, [fun, like, rain]),
+      choice("listen", like, [fun, tired, rain]),
+      tiles("It's raining.", [t(rain), t(fall)], [t(sunshine), t(tired), t(fun)]),
+      tiles("I like it.", [SELF, t(like)], [t(no), OTHER, t(tired)]),
+      tiles("I'm tired.", [SELF, t(tired)], [t(fun), t(like), OTHER]),
+      pairs([rain, sunshine, tired, fun]),
+    ],
+  },
+  {
+    id: "checkpoint-2",
+    unit: "out",
+    title: "Say it again",
+    subtitle: "A mix from the whole course",
+    tip: "No new words. Same five hearts. Build the phrases the way you would say them out loud.",
+    checkpoint: true,
+    words: [],
+    exercises: [
+      choice("listen", understand, [hello, thanks, rain]),
+      tiles("I don't understand.", [SELF, t(no), t(understand)], [t(speak), t(yes), OTHER]),
+      tiles(
+        "Where is the hotel?",
+        [t(hotel), t(located), t(where), POLITE_Q],
+        [t(station), t(market)],
+      ),
+      tiles("Not spicy.", [t(no), t(spicy)], [t(very), t(tasty)]),
+      choice("th-en", tomorrow, [today, yesterday, now]),
+      choice("en-th", bill, [full, water, hundred]),
+      pairs([near, white, chicken, twenty]),
+      tiles("Speak slowly.", [t(speak), t(slowly), POLITE], [t(aLittle), t(understand)]),
+      choice("listen", padThai, [somtam, rice, water]),
+    ],
+  },
 ];
 
-export const dailyPhrases: Word[] = [hello, thanks, np, howru, tasty, howMuch, bathroom, well, left];
+export const courseNote =
+  "A first-trip list, in the order you need the words. Not a dictionary dump.";
+
+export const dailyPhrases: Word[] = [
+  hello,
+  thanks,
+  np,
+  howru,
+  tasty,
+  howMuch,
+  bathroom,
+  well,
+  left,
+  today,
+  whatTime,
+  understand,
+  padThai,
+  near,
+];
 
 export function lessonById(id: string) {
   return lessons.find((lesson) => lesson.id === id) ?? null;

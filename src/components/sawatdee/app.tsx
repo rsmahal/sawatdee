@@ -1,40 +1,63 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { BookOpen, Home, UserRound, Volume2 } from "lucide-react";
+import { BookOpen, Home, Repeat, UserRound, Volume2 } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { lessons } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
+import { reviewStats, todayKey } from "@/lib/srs";
 import { warmVoices } from "@/lib/speech";
 import { Lesson } from "./lesson";
 import { Path } from "./path";
 import { Profile } from "./profile";
+import { Review, ReviewSession } from "./review";
 import { ScriptLab } from "./script-lab";
 
-type Tab = "learn" | "script" | "me";
+type Tab = "learn" | "review" | "script" | "me";
+type ReviewMode = "due" | "ahead";
 
 export function SawatdeeApp() {
   const [tab, setTab] = useState<Tab>("learn");
   const [lessonId, setLessonId] = useState<string | null>(null);
+  const [reviewMode, setReviewMode] = useState<ReviewMode | null>(null);
+  const scriptStyle = useProgress((state) => state.scriptStyle);
+  const cards = useProgress((state) => state.cards);
+  const due = reviewStats(cards, todayKey()).due;
 
   useEffect(() => {
-    void useProgress.persist.rehydrate();
+    void Promise.resolve(useProgress.persist.rehydrate()).then(() => {
+      const state = useProgress.getState();
+      const seen = lessons.filter((lesson) => state.completed[lesson.id]).flatMap((lesson) => lesson.words);
+      state.ingestWords(seen);
+    });
     warmVoices();
   }, []);
 
   return (
-    <div className="min-h-dvh bg-paper lg:flex lg:h-dvh lg:overflow-hidden">
+    <div
+      className={cn(
+        "min-h-dvh bg-paper lg:flex lg:h-dvh lg:overflow-hidden",
+        scriptStyle === "traditional" && "thai-traditional",
+      )}
+    >
       <BrandPanel />
       <div className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-sheet lg:mx-0 lg:shrink-0 lg:border-l lg:border-line">
         {lessonId ? (
           <Lesson key={lessonId} lessonId={lessonId} onExit={() => setLessonId(null)} />
+        ) : reviewMode ? (
+          <ReviewSession key={reviewMode} mode={reviewMode} onExit={() => setReviewMode(null)} />
         ) : (
           <>
             <div className="min-h-0 flex-1 overflow-y-auto">
-              {tab === "learn" && <Path onStart={setLessonId} />}
+              {tab === "learn" && <Path onStart={setLessonId} onReview={() => setTab("review")} />}
+              {tab === "review" && <Review onStart={setReviewMode} />}
               {tab === "script" && <ScriptLab />}
               {tab === "me" && <Profile />}
             </div>
-            <nav className="safe-bottom grid shrink-0 grid-cols-3 gap-1 border-t border-line px-2 pt-2" aria-label="Sections">
+            <nav className="safe-bottom grid shrink-0 grid-cols-4 gap-1 border-t border-line px-2 pt-2" aria-label="Sections">
               <TabButton active={tab === "learn"} label="Learn" onClick={() => setTab("learn")}>
                 <Home className="h-5 w-5" />
+              </TabButton>
+              <TabButton active={tab === "review"} label="Review" dot={due > 0} onClick={() => setTab("review")}>
+                <Repeat className="h-5 w-5" />
               </TabButton>
               <TabButton active={tab === "script"} label="Script" onClick={() => setTab("script")}>
                 <BookOpen className="h-5 w-5" />
@@ -54,11 +77,13 @@ function TabButton({
   active,
   label,
   onClick,
+  dot,
   children,
 }: {
   active: boolean;
   label: string;
   onClick: () => void;
+  dot?: boolean;
   children: ReactNode;
 }) {
   return (
@@ -71,7 +96,10 @@ function TabButton({
         active ? "bg-soft text-chili" : "text-muted",
       )}
     >
-      {children}
+      <span className="relative">
+        {children}
+        {dot ? <span className="absolute -top-0.5 -right-1.5 h-2 w-2 rounded-full bg-chili" /> : null}
+      </span>
       {label}
     </button>
   );
@@ -96,8 +124,9 @@ function BrandPanel() {
         </div>
         <h2 className="mt-8 text-5xl font-extrabold text-balance">Speak Thai from the first lesson.</h2>
         <p className="mt-4 max-w-md text-lg text-pretty text-muted">
-          A pocket course with real script, the five tones, and the polite particle that matches your voice.
-          Ten lessons, from hello to the night market.
+          A pocket course with real script, the five tones, and the polite particle that matches your voice.{" "}
+          {lessons.length} lessons, from hello to asking someone to slow down. Review brings back only the words
+          you have already seen.
         </p>
         <ul className="mt-8 grid gap-4">
           <BrandPoint

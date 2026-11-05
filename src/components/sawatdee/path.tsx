@@ -1,28 +1,32 @@
 import { useState } from "react";
 import { Award, Check, ChevronRight, Flame, Lock, Star, Volume2 } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { dailyPhrases, isUnlocked, lessons, nextLesson, units, type Speaker } from "@/lib/curriculum";
+import { dailyPhrases, courseNote, isUnlocked, lessons, nextLesson, units, type Speaker } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
+import { reviewStats, todayKey } from "@/lib/srs";
 import { speakThai } from "@/lib/speech";
 
-export function Path({ onStart }: { onStart: (id: string) => void }) {
+export function Path({ onStart, onReview }: { onStart: (id: string) => void; onReview: () => void }) {
   const xp = useProgress((state) => state.xp);
   const streak = useProgress((state) => state.streak);
   const completed = useProgress((state) => state.completed);
+  const cards = useProgress((state) => state.cards);
   const speaker = useProgress((state) => state.speaker);
   const setSpeaker = useProgress((state) => state.setSpeaker);
   const showRoman = useProgress((state) => state.showRoman);
   const [note, setNote] = useState<string | null>(null);
   const next = nextLesson(completed);
   const doneCount = lessons.filter((lesson) => completed[lesson.id]).length;
+  const due = reviewStats(cards, todayKey()).due;
   const phrase = dailyPhrases[Math.floor(Date.now() / 86_400_000) % dailyPhrases.length] ?? dailyPhrases[0]!;
 
   return (
     <div className="px-5 pt-6 pb-8">
       <header className="flex items-start justify-between gap-3">
-        <div>
+        <div className="min-w-0 flex-1">
           <p className="text-sm font-extrabold text-chili">Sawatdee</p>
           <h1 className="text-3xl font-extrabold text-balance">Learn Thai</h1>
+          <p className="mt-1 max-w-xs text-sm text-pretty text-muted">{courseNote}</p>
         </div>
         <div className="flex items-center gap-1 rounded-full bg-soft px-3 py-2 font-extrabold tabular-nums">
           <Flame className="h-5 w-5 text-marigold" fill="currentColor" />
@@ -72,6 +76,21 @@ export function Path({ onStart }: { onStart: (id: string) => void }) {
           <p className="text-lg font-extrabold">Path complete.</p>
           <p className="text-sm">Replay any lesson. Stars stay at your best.</p>
         </div>
+      )}
+      {due > 0 && (
+        <button
+          type="button"
+          onClick={onReview}
+          className="mt-3 flex min-h-14 w-full items-center justify-between rounded-2xl bg-soft px-4 text-left"
+        >
+          <span>
+            <span className="block text-xs font-extrabold tracking-wide text-chili uppercase">Review</span>
+            <span className="font-extrabold">
+              {due} {due === 1 ? "word" : "words"} due
+            </span>
+          </span>
+          <ChevronRight className="h-5 w-5 text-chili" />
+        </button>
       )}
       {note && <p className="mt-3 text-sm font-bold text-chili">{note}</p>}
 
@@ -175,7 +194,7 @@ function SpeakerSwitch({ speaker, onChange }: { speaker: Speaker; onChange: (spe
               speaker === id ? "bg-ink text-sheet" : "text-muted",
             )}
           >
-            {label}
+            <span lang="th">{label}</span>
           </button>
         ))}
       </div>

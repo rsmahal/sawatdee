@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { lessons, particleLabel, type Speaker } from "@/lib/curriculum";
+import { lessons, particleLabel, courseNote, type Speaker } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
+import { reviewStats, todayKey } from "@/lib/srs";
 import { cn } from "@/lib/cn";
 
 export function Profile() {
@@ -12,6 +13,7 @@ export function Profile() {
   const speaker = useProgress((state) => state.speaker);
   const showRoman = useProgress((state) => state.showRoman);
   const autoplay = useProgress((state) => state.autoplay);
+  const cards = useProgress((state) => state.cards);
   const setSpeaker = useProgress((state) => state.setSpeaker);
   const setShowRoman = useProgress((state) => state.setShowRoman);
   const setAutoplay = useProgress((state) => state.setAutoplay);
@@ -19,10 +21,8 @@ export function Profile() {
   const [armReset, setArmReset] = useState(false);
 
   const done = lessons.filter((lesson) => completed[lesson.id]).length;
-  const words = lessons
-    .filter((lesson) => completed[lesson.id])
-    .reduce((sum, lesson) => sum + lesson.words.length, 0);
   const accuracy = answered === 0 ? null : Math.round((100 * correct) / answered);
+  const deck = reviewStats(cards, todayKey());
 
   return (
     <div className="px-5 pt-6 pb-10">
@@ -36,12 +36,28 @@ export function Profile() {
         <Stat label="XP" value={String(xp)} />
         <Stat label="Streak" value={String(streak)} />
         <Stat label="Lessons" value={`${done}/${lessons.length}`} />
-        <Stat label="Words" value={String(words)} />
+        <Stat label="Words" value={String(deck.total)} />
       </div>
       <p className="mt-3 text-sm font-bold text-muted">
         {accuracy === null
           ? "Accuracy shows up after you check an answer."
           : `${accuracy}% accuracy across ${answered} answers.`}
+      </p>
+
+      <h2 className="mt-8 text-lg font-extrabold">Script style</h2>
+      <p className="mt-1 text-sm text-pretty text-muted">
+        Same letters. Modern is the loopless face used on signs and phones. Traditional keeps the looped heads
+        you see in books.
+      </p>
+      <div className="mt-3">
+        <ScriptStylePicker />
+      </div>
+
+      <h2 className="mt-8 text-lg font-extrabold">How words get in</h2>
+      <p className="mt-1 text-sm text-pretty text-muted">
+        {courseNote} Greetings, food, money, and directions come first, then time, describing things, and what to
+        say when you get stuck. A word has to be something you would say out loud. No royal vocabulary, no slang.
+        Later lessons reuse earlier words, and Review only schedules words from lessons you have opened.
       </p>
 
       <h2 className="mt-8 text-lg font-extrabold">How you speak</h2>
@@ -105,6 +121,61 @@ function Stat({ label, value }: { label: string; value: string }) {
       <p className="text-xs font-extrabold tracking-wide text-muted uppercase">{label}</p>
       <p className="text-2xl font-extrabold tabular-nums">{value}</p>
     </div>
+  );
+}
+
+export function ScriptStylePicker() {
+  const style = useProgress((state) => state.scriptStyle);
+  const setScriptStyle = useProgress((state) => state.setScriptStyle);
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      <StyleCard
+        active={style === "modern"}
+        sampleClass="thai-modern-sample"
+        title="Modern"
+        hint="Loopless"
+        onClick={() => setScriptStyle("modern")}
+      />
+      <StyleCard
+        active={style === "traditional"}
+        sampleClass="thai-traditional-sample"
+        title="Traditional"
+        hint="Looped heads"
+        onClick={() => setScriptStyle("traditional")}
+      />
+    </div>
+  );
+}
+
+function StyleCard({
+  active,
+  sampleClass,
+  title,
+  hint,
+  onClick,
+}: {
+  active: boolean;
+  sampleClass: string;
+  title: string;
+  hint: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={cn(
+        "min-h-24 rounded-2xl border-2 px-3 py-3 text-left",
+        active ? "border-ink bg-ink text-sheet" : "border-line bg-sheet",
+      )}
+    >
+      <span lang="th" className={cn("thai-display block text-3xl", sampleClass)}>
+        สวัสดี
+      </span>
+      <span className="mt-1 block font-extrabold">{title}</span>
+      <span className={cn("block text-sm font-bold", active ? "text-sheet/80" : "text-muted")}>{hint}</span>
+    </button>
   );
 }
 

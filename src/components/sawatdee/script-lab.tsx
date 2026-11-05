@@ -12,6 +12,7 @@ import {
 } from "@/lib/script-data";
 import { shuffle } from "@/lib/shuffle";
 import { speakThai } from "@/lib/speech";
+import { ScriptStylePicker } from "./profile";
 
 const classColor = {
   mid: "text-ink",
@@ -28,6 +29,14 @@ export function ScriptLab() {
         Marks on the romanization: unmarked mid, à low, á high, â falling, ǎ rising. Long vowels are doubled.
         bp and dt are unaspirated.
       </p>
+
+      <h2 className="mt-6 text-lg font-extrabold">How the letters look</h2>
+      <p className="mt-1 text-sm text-pretty text-muted">
+        Modern drops the little loops. Traditional keeps them. The spelling does not change.
+      </p>
+      <div className="mt-3">
+        <ScriptStylePicker />
+      </div>
 
       <ToneDrill />
 

@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Check, Heart, Volume2, X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { lessonById } from "@/lib/curriculum";
@@ -15,6 +15,11 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
   const autoplay = useProgress((state) => state.autoplay);
   const recordAnswer = useProgress((state) => state.recordAnswer);
   const finishLesson = useProgress((state) => state.finishLesson);
+  const ingestWords = useProgress((state) => state.ingestWords);
+
+  useEffect(() => {
+    if (lesson) ingestWords(lesson.words);
+  }, [lesson, ingestWords]);
 
   const [phase, setPhase] = useState<"intro" | "play" | "done" | "down">("intro");
   const [index, setIndex] = useState(0);
