@@ -32,7 +32,8 @@ export function ScriptLab() {
 
       <h2 className="mt-6 text-lg font-extrabold">How the letters look</h2>
       <p className="mt-1 text-sm text-pretty text-muted">
-        Modern drops the little loops. Traditional keeps them. The spelling does not change.
+        This is the same setting as on You. It changes every Thai word in the course, not only this page. Modern
+        drops the little loops. Traditional keeps them. The spelling does not change.
       </p>
       <div className="mt-3">
         <ScriptStylePicker />
@@ -220,14 +221,14 @@ function ToneDrill() {
                   }}
                   className={cn(
                     "min-h-12 rounded-2xl border-2 px-4 text-left font-extrabold",
-                    locked && right && "border-teal bg-teal text-sheet",
-                    locked && chosen && !right && "border-chili bg-chili text-sheet",
+                    locked && right && "border-teal bg-teal text-on-accent",
+                    locked && chosen && !right && "border-chili bg-chili text-on-accent",
                     locked && !right && !chosen && "border-line opacity-50",
                     !locked && "border-line bg-sheet",
                   )}
                 >
                   {tone.label}
-                  <span className={cn("ml-2 text-sm font-bold", locked && (right || chosen) ? "text-sheet/80" : "text-muted")}>
+                  <span className={cn("ml-2 text-sm font-bold", locked && (right || chosen) ? "text-on-accent/80" : "text-muted")}>
                     {tone.hint}
                   </span>
                 </button>

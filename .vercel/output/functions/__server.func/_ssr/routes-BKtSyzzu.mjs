@@ -1,10 +1,12 @@
-import { i as __toESM } from "../_runtime.mjs";
-import { K as require_react, b as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
+import { o as __toESM } from "../_runtime.mjs";
+import { q as require_react, x as require_jsx_runtime, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { a as Star, c as Lock, d as Flame, f as ChevronRight, h as Award, l as House, m as BookOpen, n as Volume2, o as RotateCcw, p as Check, r as UserRound, s as Repeat, t as X, u as Heart } from "../_libs/lucide-react.mjs";
+import { n as hasGateSessionMarker } from "./router-5zbzp2Lk.mjs";
+import { a as useCurrentUserState, i as useCurrentUser, r as signOut } from "./use-current-user-IbbRlbZj.mjs";
 import { t as clsx } from "../_libs/clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { n as create, t as persist } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-KzOMBFDD.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-BKtSyzzu.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
@@ -1533,6 +1535,7 @@ var initial = {
 	showRoman: true,
 	autoplay: true,
 	scriptStyle: "modern",
+	theme: "light",
 	cards: {},
 	answered: 0,
 	correct: 0
@@ -1543,6 +1546,7 @@ var useProgress = create()(persist((set, get) => ({
 	setShowRoman: (showRoman) => set({ showRoman }),
 	setAutoplay: (autoplay) => set({ autoplay }),
 	setScriptStyle: (scriptStyle) => set({ scriptStyle }),
+	setTheme: (theme) => set({ theme }),
 	ingestWords: (words) => set((state) => {
 		const today = todayKey();
 		const cards = { ...state.cards };
@@ -1628,6 +1632,7 @@ var useProgress = create()(persist((set, get) => ({
 			...saved,
 			cards: saved.cards ?? {},
 			scriptStyle: saved.scriptStyle === "traditional" ? "traditional" : "modern",
+			theme: saved.theme === "dark" ? "dark" : "light",
 			completed: saved.completed ?? {}
 		};
 	}
@@ -1768,13 +1773,13 @@ function Choice({ exercise, showRoman, autoplay, result, gradeRef, onCanCheck })
 					disabled: locked,
 					"aria-pressed": isPicked,
 					onClick: () => setPicked(option.thai),
-					className: cn("min-h-14 rounded-2xl border-2 px-4 py-3 text-left transition-transform duration-150 active:not-disabled:scale-[0.96]", locked && isAnswer && "border-teal bg-teal text-sheet", locked && isPicked && !isAnswer && "border-chili bg-chili text-sheet", locked && !isAnswer && !isPicked && "border-line opacity-50", !locked && isPicked && "border-chili bg-soft", !locked && !isPicked && "border-line bg-sheet"),
+					className: cn("min-h-14 rounded-2xl border-2 px-4 py-3 text-left transition-transform duration-150 active:not-disabled:scale-[0.96]", locked && isAnswer && "border-teal bg-teal text-on-accent", locked && isPicked && !isAnswer && "border-chili bg-chili text-on-accent", locked && !isAnswer && !isPicked && "border-line opacity-50", !locked && isPicked && "border-chili bg-soft", !locked && !isPicked && "border-line bg-sheet"),
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 						lang: exercise.dir === "en-th" ? "th" : void 0,
 						className: cn("block text-lg font-extrabold", exercise.dir === "en-th" && "thai-display text-2xl"),
 						children: primary
 					}), sub && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: cn("block text-sm font-bold", filled ? "text-sheet/80" : "text-muted"),
+						className: cn("block text-sm font-bold", filled ? "text-on-accent/80" : "text-muted"),
 						children: sub
 					})]
 				}, option.thai);
@@ -1928,7 +1933,7 @@ function Pairs({ exercise, showRoman, result, gradeRef, onAnswer, onCanCheck }) 
 						type: "button",
 						disabled: done || Boolean(result),
 						onClick: () => setLeftPick(pair.en),
-						className: cn("min-h-14 rounded-2xl border-2 px-3 py-2 text-left break-words", done && "border-teal bg-teal text-sheet", !done && active && "border-chili bg-soft", !done && !active && "border-line bg-sheet"),
+						className: cn("min-h-14 rounded-2xl border-2 px-3 py-2 text-left break-words", done && "border-teal bg-teal text-on-accent", !done && active && "border-chili bg-soft", !done && !active && "border-line bg-sheet"),
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							lang: "th",
 							className: "thai-display block text-lg",
@@ -1947,7 +1952,7 @@ function Pairs({ exercise, showRoman, result, gradeRef, onAnswer, onCanCheck }) 
 						type: "button",
 						disabled: done || Boolean(result),
 						onClick: () => pickRight(pair.en),
-						className: cn("min-h-14 rounded-2xl border-2 px-3 py-2 text-left text-base font-extrabold break-words", done ? "border-teal bg-teal text-sheet" : "border-line bg-sheet"),
+						className: cn("min-h-14 rounded-2xl border-2 px-3 py-2 text-left text-base font-extrabold break-words", done ? "border-teal bg-teal text-on-accent" : "border-line bg-sheet"),
 						children: pair.en
 					}, pair.en);
 				})
@@ -2148,7 +2153,7 @@ function Lesson({ lessonId, onExit }) {
 					}, index)
 				}),
 				result ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("footer", {
-					className: cn("safe-bottom px-4 pt-4", result.ok ? "bg-teal text-sheet" : "bg-chili text-sheet"),
+					className: cn("safe-bottom px-4 pt-4", result.ok ? "bg-teal text-on-accent" : "bg-chili text-on-accent"),
 					"aria-live": "polite",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -2237,7 +2242,7 @@ function EndScreen({ title, body, sessionXp, stars, action, onAction, tone = "te
 		className: "flex flex-1 flex-col items-center justify-center px-6 text-center",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: cn("grid h-24 w-24 place-items-center rounded-full text-sheet", tone === "teal" ? "bg-teal" : "bg-chili"),
+				className: cn("grid h-24 w-24 place-items-center rounded-full text-on-accent", tone === "teal" ? "bg-teal" : "bg-chili"),
 				children: tone === "teal" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-12 w-12" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Heart, {
 					className: "h-12 w-12",
 					fill: "currentColor"
@@ -2376,7 +2381,7 @@ function Path({ onStart, onReview }) {
 					children: next.title
 				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { className: "h-6 w-6" })]
 			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mt-4 rounded-2xl bg-teal px-5 py-4 text-sheet",
+				className: "mt-4 rounded-2xl bg-teal px-5 py-4 text-on-accent",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "text-lg font-extrabold",
 					children: "Path complete."
@@ -2523,6 +2528,49 @@ function SpeakerSwitch({ speaker, onChange }) {
 		})]
 	});
 }
+var subscribeToNothing = () => () => {};
+var noGateSessionOnServer = () => false;
+/**
+* Minimal signed-in identity chip + sign-out. Restyle freely (see the
+* `design-ui` skill). Sign-out is only shown when auth is enabled (the
+* disabled-auth dev user has nothing to sign out of) and the session is not
+* gate-materialized — behind the gate the next request signs the viewer
+* straight back in, so a sign-out control there is a broken loop.
+*/
+function UserButton() {
+	const user = useCurrentUser();
+	const [signingOut, setSigningOut] = (0, import_react.useState)(false);
+	const gateSession = (0, import_react.useSyncExternalStore)(subscribeToNothing, hasGateSessionMarker, noGateSessionOnServer);
+	if (!user) return null;
+	const label = user.displayName ?? user.primaryEmail ?? "Account";
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "flex items-center gap-2",
+		children: [
+			user.profileImageUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+				src: user.profileImageUrl,
+				alt: "",
+				className: "h-8 w-8 rounded-full object-cover"
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "grid h-8 w-8 place-items-center rounded-full bg-black/10 text-sm font-medium dark:bg-white/20",
+				children: label.charAt(0).toUpperCase()
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "text-sm font-medium",
+				children: label
+			}),
+			!gateSession && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				disabled: signingOut,
+				onClick: () => {
+					setSigningOut(true);
+					signOut().catch(() => setSigningOut(false));
+				},
+				className: "cursor-pointer text-sm underline-offset-4 opacity-70 hover:underline disabled:cursor-wait disabled:no-underline",
+				children: signingOut ? "Signing out…" : "Sign out"
+			})
+		]
+	});
+}
 function Profile() {
 	const xp = useProgress((state) => state.xp);
 	const streak = useProgress((state) => state.streak);
@@ -2556,6 +2604,7 @@ function Profile() {
 				className: "mt-2 text-pretty text-muted",
 				children: "Progress stays on this device. Polite particles follow the speaker, not the person you're talking to."
 			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Account, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "mt-5 grid grid-cols-2 gap-2",
 				children: [
@@ -2583,15 +2632,27 @@ function Profile() {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 				className: "mt-8 text-lg font-extrabold",
-				children: "Script style"
+				children: "Thai letters"
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-1 text-sm text-pretty text-muted",
-				children: "Same letters. Modern is the loopless face used on signs and phones. Traditional keeps the looped heads you see in books."
+				children: "This changes every Thai word in the course, on every page. Modern is the loopless face used on signs and phones. Traditional keeps the looped heads you see in books. The spelling stays the same."
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "mt-3",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScriptStylePicker, {})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				className: "mt-8 text-lg font-extrabold",
+				children: "Appearance"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-1 text-sm text-pretty text-muted",
+				children: "Light is the paper course. Dark is the same colors at night."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-3",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThemePicker, {})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 				className: "mt-8 text-lg font-extrabold",
@@ -2659,6 +2720,64 @@ function Profile() {
 				children: armReset ? "Tap again to reset progress" : "Reset progress"
 			})
 		]
+	});
+}
+function Account() {
+	const { user, isPending } = useCurrentUserState();
+	if (isPending) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mt-5 h-24 animate-pulse rounded-2xl bg-soft" });
+	if (!user) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "mt-5 rounded-2xl bg-soft px-4 py-4",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "font-extrabold",
+				children: "Sign in"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-1 text-sm text-pretty text-muted",
+				children: "Google, or an email and password you choose."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+				to: "/login",
+				className: "btn-3d btn-chili mt-3 flex min-h-12 items-center justify-center rounded-2xl font-extrabold",
+				children: "Sign in"
+			})
+		]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "mt-5 rounded-2xl bg-soft px-4 py-4",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserButton, {})
+	});
+}
+function ThemePicker() {
+	const theme = useProgress((state) => state.theme);
+	const setTheme = useProgress((state) => state.setTheme);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "grid grid-cols-2 gap-2",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+			type: "button",
+			"aria-pressed": theme === "light",
+			onClick: () => setTheme("light"),
+			className: cn("min-h-16 rounded-2xl border-2 px-3 py-3 text-left", theme === "light" ? "border-ink bg-ink text-sheet" : "border-line bg-sheet"),
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "block font-extrabold",
+				children: "Light"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: cn("block text-sm font-bold", theme === "light" ? "text-sheet/80" : "text-muted"),
+				children: "Paper"
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+			type: "button",
+			"aria-pressed": theme === "dark",
+			onClick: () => setTheme("dark"),
+			className: cn("min-h-16 rounded-2xl border-2 px-3 py-3 text-left", theme === "dark" ? "border-ink bg-ink text-sheet" : "border-line bg-sheet"),
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "block font-extrabold",
+				children: "Dark"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: cn("block text-sm font-bold", theme === "dark" ? "text-sheet/80" : "text-muted"),
+				children: "Night"
+			})]
+		})]
 	});
 }
 function Stat$1({ label, value }) {
@@ -2932,7 +3051,7 @@ function ReviewSession({ mode, onExit }) {
 			className: "flex flex-1 flex-col items-center justify-center px-6 text-center",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "grid h-24 w-24 place-items-center rounded-full bg-teal text-sheet",
+					className: "grid h-24 w-24 place-items-center rounded-full bg-teal text-on-accent",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-12 w-12" })
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
@@ -2997,7 +3116,7 @@ function ReviewSession({ mode, onExit }) {
 				}, `${item.thai}-${index}`)
 			}),
 			result ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("footer", {
-				className: cn("safe-bottom px-4 pt-4", result.ok ? "bg-teal text-sheet" : "bg-chili text-sheet"),
+				className: cn("safe-bottom px-4 pt-4", result.ok ? "bg-teal text-on-accent" : "bg-chili text-on-accent"),
 				"aria-live": "polite",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -3467,7 +3586,7 @@ function ScriptLab() {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-1 text-sm text-pretty text-muted",
-				children: "Modern drops the little loops. Traditional keeps them. The spelling does not change."
+				children: "This is the same setting as on You. It changes every Thai word in the course, not only this page. Modern drops the little loops. Traditional keeps them. The spelling does not change."
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "mt-3",
@@ -3712,9 +3831,9 @@ function ToneDrill() {
 							setPick(tone.id);
 							if (tone.id === card.tone) setScore((value) => value + 1);
 						},
-						className: cn("min-h-12 rounded-2xl border-2 px-4 text-left font-extrabold", locked && right && "border-teal bg-teal text-sheet", locked && chosen && !right && "border-chili bg-chili text-sheet", locked && !right && !chosen && "border-line opacity-50", !locked && "border-line bg-sheet"),
+						className: cn("min-h-12 rounded-2xl border-2 px-4 text-left font-extrabold", locked && right && "border-teal bg-teal text-on-accent", locked && chosen && !right && "border-chili bg-chili text-on-accent", locked && !right && !chosen && "border-line opacity-50", !locked && "border-line bg-sheet"),
 						children: [tone.label, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: cn("ml-2 text-sm font-bold", locked && (right || chosen) ? "text-sheet/80" : "text-muted"),
+							className: cn("ml-2 text-sm font-bold", locked && (right || chosen) ? "text-on-accent/80" : "text-muted"),
 							children: tone.hint
 						})]
 					}, tone.id);
@@ -3741,7 +3860,13 @@ function SawatdeeApp() {
 	const [lessonId, setLessonId] = (0, import_react.useState)(null);
 	const [reviewMode, setReviewMode] = (0, import_react.useState)(null);
 	const scriptStyle = useProgress((state) => state.scriptStyle);
+	const theme = useProgress((state) => state.theme);
 	const due = reviewStats(useProgress((state) => state.cards), todayKey()).due;
+	(0, import_react.useLayoutEffect)(() => {
+		const root = document.documentElement;
+		root.classList.toggle("dark", theme === "dark");
+		root.classList.toggle("thai-traditional", scriptStyle === "traditional");
+	}, [theme, scriptStyle]);
 	(0, import_react.useEffect)(() => {
 		Promise.resolve(useProgress.persist.rehydrate()).then(() => {
 			const state = useProgress.getState();
@@ -3751,7 +3876,7 @@ function SawatdeeApp() {
 		warmVoices();
 	}, []);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: cn("min-h-dvh bg-paper lg:flex lg:h-dvh lg:overflow-hidden", scriptStyle === "traditional" && "thai-traditional"),
+		className: "min-h-dvh bg-paper lg:flex lg:h-dvh lg:overflow-hidden",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandPanel, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-sheet lg:mx-0 lg:shrink-0 lg:border-l lg:border-line",
 			children: lessonId ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lesson, {
@@ -3826,7 +3951,7 @@ function BrandPanel() {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex items-center gap-3",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "grid h-14 w-14 place-items-center rounded-2xl bg-chili text-3xl font-extrabold text-sheet",
+						className: "grid h-14 w-14 place-items-center rounded-2xl bg-chili text-3xl font-extrabold text-on-accent",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							lang: "th",
 							className: "thai-display",

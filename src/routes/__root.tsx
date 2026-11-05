@@ -28,6 +28,12 @@ export const Route = createRootRoute({
     <html lang="en" className="antialiased" suppressHydrationWarning>
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              '(function(){try{var s=JSON.parse(localStorage.getItem("sawatdee-v1")||"{}").state||{};if(s.theme==="dark")document.documentElement.classList.add("dark");if(s.scriptStyle==="traditional")document.documentElement.classList.add("thai-traditional");}catch(e){}})();',
+          }}
+        />
       </head>
       <body>
         <PreviewHostBridge />

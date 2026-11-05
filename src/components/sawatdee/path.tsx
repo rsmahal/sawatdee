@@ -72,7 +72,7 @@ export function Path({ onStart, onReview }: { onStart: (id: string) => void; onR
           <ChevronRight className="h-6 w-6" />
         </button>
       ) : (
-        <div className="mt-4 rounded-2xl bg-teal px-5 py-4 text-sheet">
+        <div className="mt-4 rounded-2xl bg-teal px-5 py-4 text-on-accent">
           <p className="text-lg font-extrabold">Path complete.</p>
           <p className="text-sm">Replay any lesson. Stars stay at your best.</p>
         </div>

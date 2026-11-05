@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useState, type ReactNode } from "react";
 import { BookOpen, Home, Repeat, UserRound, Volume2 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { lessons } from "@/lib/curriculum";
@@ -19,8 +19,15 @@ export function SawatdeeApp() {
   const [lessonId, setLessonId] = useState<string | null>(null);
   const [reviewMode, setReviewMode] = useState<ReviewMode | null>(null);
   const scriptStyle = useProgress((state) => state.scriptStyle);
+  const theme = useProgress((state) => state.theme);
   const cards = useProgress((state) => state.cards);
   const due = reviewStats(cards, todayKey()).due;
+
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle("dark", theme === "dark");
+    root.classList.toggle("thai-traditional", scriptStyle === "traditional");
+  }, [theme, scriptStyle]);
 
   useEffect(() => {
     void Promise.resolve(useProgress.persist.rehydrate()).then(() => {
@@ -32,12 +39,7 @@ export function SawatdeeApp() {
   }, []);
 
   return (
-    <div
-      className={cn(
-        "min-h-dvh bg-paper lg:flex lg:h-dvh lg:overflow-hidden",
-        scriptStyle === "traditional" && "thai-traditional",
-      )}
-    >
+    <div className="min-h-dvh bg-paper lg:flex lg:h-dvh lg:overflow-hidden">
       <BrandPanel />
       <div className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-sheet lg:mx-0 lg:shrink-0 lg:border-l lg:border-line">
         {lessonId ? (
@@ -110,7 +112,7 @@ function BrandPanel() {
     <aside className="relative hidden flex-1 flex-col justify-center overflow-hidden px-14 py-12 lg:flex">
       <div className="max-w-lg">
         <div className="flex items-center gap-3">
-          <span className="grid h-14 w-14 place-items-center rounded-2xl bg-chili text-3xl font-extrabold text-sheet">
+          <span className="grid h-14 w-14 place-items-center rounded-2xl bg-chili text-3xl font-extrabold text-on-accent">
             <span lang="th" className="thai-display">
               ส
             </span>

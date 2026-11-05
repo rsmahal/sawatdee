@@ -184,7 +184,7 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
     return (
       <div className="flex min-h-0 flex-1 flex-col">
         <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-          <div className="grid h-24 w-24 place-items-center rounded-full bg-teal text-sheet">
+          <div className="grid h-24 w-24 place-items-center rounded-full bg-teal text-on-accent">
             <Check className="h-12 w-12" />
           </div>
           <h2 className="mt-5 text-3xl font-extrabold">Review done</h2>
@@ -238,7 +238,7 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
       </div>
       {result ? (
         <footer
-          className={cn("safe-bottom px-4 pt-4", result.ok ? "bg-teal text-sheet" : "bg-chili text-sheet")}
+          className={cn("safe-bottom px-4 pt-4", result.ok ? "bg-teal text-on-accent" : "bg-chili text-on-accent")}
           aria-live="polite"
         >
           <p className="text-xl font-extrabold">{result.ok ? "Kept." : "Not quite."}</p>

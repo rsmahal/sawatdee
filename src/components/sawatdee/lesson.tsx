@@ -184,7 +184,7 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
           </div>
           {result ? (
             <footer
-              className={cn("safe-bottom px-4 pt-4", result.ok ? "bg-teal text-sheet" : "bg-chili text-sheet")}
+              className={cn("safe-bottom px-4 pt-4", result.ok ? "bg-teal text-on-accent" : "bg-chili text-on-accent")}
               aria-live="polite"
             >
               <p className="text-xl font-extrabold">
@@ -295,7 +295,7 @@ function EndScreen({
       <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
         <div
           className={cn(
-            "grid h-24 w-24 place-items-center rounded-full text-sheet",
+            "grid h-24 w-24 place-items-center rounded-full text-on-accent",
             tone === "teal" ? "bg-teal" : "bg-chili",
           )}
         >

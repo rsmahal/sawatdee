@@ -9,6 +9,8 @@ import {
   type SrsCard,
 } from "@/lib/srs";
 
+export type Theme = "light" | "dark";
+
 type Data = {
   xp: number;
   streak: number;
@@ -18,6 +20,7 @@ type Data = {
   showRoman: boolean;
   autoplay: boolean;
   scriptStyle: ScriptStyle;
+  theme: Theme;
   cards: Record<string, SrsCard>;
   answered: number;
   correct: number;
@@ -28,6 +31,7 @@ type Actions = {
   setShowRoman: (show: boolean) => void;
   setAutoplay: (on: boolean) => void;
   setScriptStyle: (style: ScriptStyle) => void;
+  setTheme: (theme: Theme) => void;
   ingestWords: (words: Word[]) => void;
   gradeReview: (thai: string, grade: ReviewGrade) => void;
   recordAnswer: (ok: boolean, gain: number) => void;
@@ -44,6 +48,7 @@ const initial: Data = {
   showRoman: true,
   autoplay: true,
   scriptStyle: "modern",
+  theme: "light",
   cards: {},
   answered: 0,
   correct: 0,
@@ -57,6 +62,7 @@ export const useProgress = create<Data & Actions>()(
       setShowRoman: (showRoman) => set({ showRoman }),
       setAutoplay: (autoplay) => set({ autoplay }),
       setScriptStyle: (scriptStyle) => set({ scriptStyle }),
+      setTheme: (theme) => set({ theme }),
       ingestWords: (words) =>
         set((state) => {
           const today = todayKey();
@@ -139,6 +145,7 @@ export const useProgress = create<Data & Actions>()(
           ...saved,
           cards: saved.cards ?? {},
           scriptStyle: saved.scriptStyle === "traditional" ? "traditional" : "modern",
+          theme: saved.theme === "dark" ? "dark" : "light",
           completed: saved.completed ?? {},
         };
       },

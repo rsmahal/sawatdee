@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { lessons, particleLabel, courseNote, type Speaker } from "@/lib/curriculum";
+import { UserButton } from "@/lib/auth/gates";
+import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { useProgress } from "@/lib/progress";
 import { reviewStats, todayKey } from "@/lib/srs";
 import { cn } from "@/lib/cn";
@@ -32,6 +35,8 @@ export function Profile() {
         Progress stays on this device. Polite particles follow the speaker, not the person you're talking to.
       </p>
 
+      <Account />
+
       <div className="mt-5 grid grid-cols-2 gap-2">
         <Stat label="XP" value={String(xp)} />
         <Stat label="Streak" value={String(streak)} />
@@ -44,13 +49,19 @@ export function Profile() {
           : `${accuracy}% accuracy across ${answered} answers.`}
       </p>
 
-      <h2 className="mt-8 text-lg font-extrabold">Script style</h2>
+      <h2 className="mt-8 text-lg font-extrabold">Thai letters</h2>
       <p className="mt-1 text-sm text-pretty text-muted">
-        Same letters. Modern is the loopless face used on signs and phones. Traditional keeps the looped heads
-        you see in books.
+        This changes every Thai word in the course, on every page. Modern is the loopless face used on signs and
+        phones. Traditional keeps the looped heads you see in books. The spelling stays the same.
       </p>
       <div className="mt-3">
         <ScriptStylePicker />
+      </div>
+
+      <h2 className="mt-8 text-lg font-extrabold">Appearance</h2>
+      <p className="mt-1 text-sm text-pretty text-muted">Light is the paper course. Dark is the same colors at night.</p>
+      <div className="mt-3">
+        <ThemePicker />
       </div>
 
       <h2 className="mt-8 text-lg font-extrabold">How words get in</h2>
@@ -110,6 +121,67 @@ export function Profile() {
         className="mt-8 min-h-12 w-full rounded-2xl border-2 border-line font-extrabold text-chili"
       >
         {armReset ? "Tap again to reset progress" : "Reset progress"}
+      </button>
+    </div>
+  );
+}
+
+function Account() {
+  const { user, isPending } = useCurrentUserState();
+  if (isPending) return <div className="mt-5 h-24 animate-pulse rounded-2xl bg-soft" />;
+  if (!user) {
+    return (
+      <div className="mt-5 rounded-2xl bg-soft px-4 py-4">
+        <p className="font-extrabold">Sign in</p>
+        <p className="mt-1 text-sm text-pretty text-muted">Google, or an email and password you choose.</p>
+        <Link
+          to="/login"
+          className="btn-3d btn-chili mt-3 flex min-h-12 items-center justify-center rounded-2xl font-extrabold"
+        >
+          Sign in
+        </Link>
+      </div>
+    );
+  }
+  return (
+    <div className="mt-5 rounded-2xl bg-soft px-4 py-4">
+      <UserButton />
+    </div>
+  );
+}
+
+function ThemePicker() {
+  const theme = useProgress((state) => state.theme);
+  const setTheme = useProgress((state) => state.setTheme);
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      <button
+        type="button"
+        aria-pressed={theme === "light"}
+        onClick={() => setTheme("light")}
+        className={cn(
+          "min-h-16 rounded-2xl border-2 px-3 py-3 text-left",
+          theme === "light" ? "border-ink bg-ink text-sheet" : "border-line bg-sheet",
+        )}
+      >
+        <span className="block font-extrabold">Light</span>
+        <span className={cn("block text-sm font-bold", theme === "light" ? "text-sheet/80" : "text-muted")}>
+          Paper
+        </span>
+      </button>
+      <button
+        type="button"
+        aria-pressed={theme === "dark"}
+        onClick={() => setTheme("dark")}
+        className={cn(
+          "min-h-16 rounded-2xl border-2 px-3 py-3 text-left",
+          theme === "dark" ? "border-ink bg-ink text-sheet" : "border-line bg-sheet",
+        )}
+      >
+        <span className="block font-extrabold">Dark</span>
+        <span className={cn("block text-sm font-bold", theme === "dark" ? "text-sheet/80" : "text-muted")}>
+          Night
+        </span>
       </button>
     </div>
   );

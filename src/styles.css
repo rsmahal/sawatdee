@@ -24,6 +24,7 @@
   --color-teal-deep: #0a5c52;
   --color-marigold: #e6a00a;
   --color-marigold-deep: #b87a06;
+  --color-on-accent: #fffdfb;
 }
 
 @layer base {
@@ -56,24 +57,44 @@
   }
 }
 
+html.dark {
+  --color-paper: #1c1410;
+  --color-sheet: #2a211c;
+  --color-ink: #fff6ee;
+  --color-muted: #c9b0a4;
+  --color-line: #44362f;
+  --color-soft: #342822;
+  --color-chili: #ff5c4d;
+  --color-chili-deep: #c4382e;
+  --color-teal: #2fbfa8;
+  --color-teal-deep: #148272;
+  --color-marigold: #f0b429;
+  --color-marigold-deep: #c48a12;
+  color-scheme: dark;
+}
+
+html.thai-traditional {
+  --font-sans: "Nunito", "Noto Sans Thai Looped", "Noto Sans Thai", ui-sans-serif, system-ui, sans-serif;
+}
+
 .thai-display {
   font-family: "Noto Sans Thai", "Loma", sans-serif;
   font-weight: 700;
   line-height: 1.45;
 }
 
-.thai-traditional .thai-display,
-.thai-traditional [lang="th"] {
+html.thai-traditional .thai-display,
+html.thai-traditional :lang(th) {
   font-family: "Noto Sans Thai Looped", "Noto Sans Thai", sans-serif;
 }
 
-.thai-modern-sample,
-.thai-modern-sample.thai-display {
+html .thai-modern-sample,
+html .thai-modern-sample.thai-display {
   font-family: "Noto Sans Thai", "Loma", sans-serif;
 }
 
-.thai-traditional-sample,
-.thai-traditional-sample.thai-display {
+html .thai-traditional-sample,
+html .thai-traditional-sample.thai-display {
   font-family: "Noto Sans Thai Looped", "Noto Sans Thai", sans-serif;
 }
 
@@ -98,12 +119,12 @@
 .btn-chili {
   --btn-lip: var(--color-chili-deep);
   background: var(--color-chili);
-  color: var(--color-sheet);
+  color: var(--color-on-accent);
 }
 .btn-teal {
   --btn-lip: var(--color-teal-deep);
   background: var(--color-teal);
-  color: var(--color-sheet);
+  color: var(--color-on-accent);
 }
 .btn-sheet {
   --btn-lip: color-mix(in srgb, var(--color-ink) 22%, transparent);
@@ -124,12 +145,12 @@
 .path-node-go {
   --node-lip: var(--color-chili-deep);
   background: var(--color-chili);
-  color: var(--color-sheet);
+  color: var(--color-on-accent);
 }
 .path-node-done {
   --node-lip: var(--color-teal-deep);
   background: var(--color-teal);
-  color: var(--color-sheet);
+  color: var(--color-on-accent);
 }
 .path-node-lock {
   --node-lip: var(--color-line);

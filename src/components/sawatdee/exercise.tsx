@@ -169,8 +169,8 @@ function Choice({
               onClick={() => setPicked(option.thai)}
               className={cn(
                 "min-h-14 rounded-2xl border-2 px-4 py-3 text-left transition-transform duration-150 active:not-disabled:scale-[0.96]",
-                locked && isAnswer && "border-teal bg-teal text-sheet",
-                locked && isPicked && !isAnswer && "border-chili bg-chili text-sheet",
+                locked && isAnswer && "border-teal bg-teal text-on-accent",
+                locked && isPicked && !isAnswer && "border-chili bg-chili text-on-accent",
                 locked && !isAnswer && !isPicked && "border-line opacity-50",
                 !locked && isPicked && "border-chili bg-soft",
                 !locked && !isPicked && "border-line bg-sheet",
@@ -186,7 +186,7 @@ function Choice({
                 {primary}
               </span>
               {sub && (
-                <span className={cn("block text-sm font-bold", filled ? "text-sheet/80" : "text-muted")}>
+                <span className={cn("block text-sm font-bold", filled ? "text-on-accent/80" : "text-muted")}>
                   {sub}
                 </span>
               )}
@@ -367,7 +367,7 @@ function Pairs({
                 onClick={() => setLeftPick(pair.en)}
                 className={cn(
                   "min-h-14 rounded-2xl border-2 px-3 py-2 text-left break-words",
-                  done && "border-teal bg-teal text-sheet",
+                  done && "border-teal bg-teal text-on-accent",
                   !done && active && "border-chili bg-soft",
                   !done && !active && "border-line bg-sheet",
                 )}
@@ -391,7 +391,7 @@ function Pairs({
                 onClick={() => pickRight(pair.en)}
                 className={cn(
                   "min-h-14 rounded-2xl border-2 px-3 py-2 text-left text-base font-extrabold break-words",
-                  done ? "border-teal bg-teal text-sheet" : "border-line bg-sheet",
+                  done ? "border-teal bg-teal text-on-accent" : "border-line bg-sheet",
                 )}
               >
                 {pair.en}
