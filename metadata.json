@@ -1,0 +1,8 @@
+{
+  "name": "Sawatdee - Learn Thai",
+  "description": "A pocket course in spoken Thai: script, tones, vocabulary, and polite particles.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

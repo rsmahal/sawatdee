@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { lessons, particleLabel, courseNote, type Speaker } from "@/lib/curriculum";
+import { lessons, particleLabel, courseNote } from "@/lib/curriculum";
 import { UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { useProgress } from "@/lib/progress";

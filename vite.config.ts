@@ -85,7 +85,7 @@ function authPopupPlugin(): Plugin {
           }
 
           const host = String(
-            req.headers["x-forwarded-host"] ?? req.headers.host ?? "localhost:8080",
+            req.headers["x-forwarded-host"] ?? req.headers.host ?? "localhost:3000",
           );
           const proto = String(
             req.headers["x-forwarded-proto"] ??
@@ -148,12 +148,12 @@ function authPopupPlugin(): Plugin {
 export default defineConfig(({ command, isPreview }) => ({
   server: {
     host: "0.0.0.0",
-    port: 8080,
+    port: 3000,
     strictPort: true,
   },
   preview: {
-    host: "127.0.0.1",
-    port: 8081,
+    host: "0.0.0.0",
+    port: 3000,
     strictPort: true,
   },
   resolve: { tsconfigPaths: true },

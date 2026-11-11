@@ -3,7 +3,8 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "Sawatdee";
+const APP_NAME = "Sawatdee - Learn Thai";
+const APP_DESC = "A pocket course in spoken Thai: script, tones, vocabulary, and polite particles.";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -13,8 +14,10 @@ export const Route = createRootRoute({
       { title: APP_NAME },
       {
         name: "description",
-        content: "Sawatdee is a pocket course in spoken Thai: script, tones, and polite particles.",
+        content: APP_DESC,
       },
+      { property: "og:title", content: APP_NAME },
+      { property: "og:description", content: APP_DESC },
       { name: "theme-color", content: "#E23A2F" },
     ],
     links: [
