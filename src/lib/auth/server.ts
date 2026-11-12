@@ -94,11 +94,15 @@ export const authConfigured =
 const explicitBaseURL = env("BETTER_AUTH_URL");
 // Explicit `string[]` (not a readonly tuple) — Better Auth's DynamicBaseURLConfig
 // requires a mutable `allowedHosts: string[]`.
-const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
-// Local `npm run dev` (port 8080 contract). Browsers may send Origin as any of
-// these for the same server — trusting only `localhost` rejects `127.0.0.1` and
-// breaks email/password with "Invalid origin".
+const previewAllowedHosts: string[] = [
+  ...PREVIEW_ALLOWED_HOSTS,
+  "sawatdee.lolgames.info",
+  "*.lolgames.info",
+];
+// Local and production origins
 const LOCAL_DEV_ORIGINS: string[] = [
+  "https://sawatdee.lolgames.info",
+  "http://sawatdee.lolgames.info",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://[::1]:3000",
