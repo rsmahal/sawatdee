@@ -1,22 +1,18 @@
-import { i as TSS_SERVER_FUNCTION, r as createServerFn } from "./ssr.mjs";
-import { o as parseLearning, t as authMiddleware } from "./progress-tQgoCOir.mjs";
-import { r as getSql } from "./db-OzNU2OyG.mjs";
-// node_modules/.nitro/vite/services/ssr/assets/learner-progress-Cw9L0Ae9.js
-var createServerRpc = (serverFnMeta, splitImportFn) => {
-	const url = "/_serverFn/" + serverFnMeta.id;
-	return Object.assign(splitImportFn, {
-		url,
-		serverFnMeta,
-		[TSS_SERVER_FUNCTION]: true
-	});
-};
+import { t as createServerRpc } from "./createServerRpc-CcwiDFzT.mjs";
+import { r as createServerFn } from "./ssr.mjs";
+import { o as parseLearning, t as authMiddleware } from "./progress-CfMeIEsu.mjs";
+import { ensureCurriculumSeeded } from "./curriculum-store.server-BDMa7_Kx.mjs";
+import { r as getSql } from "./db-DLXnusS7.mjs";
+// node_modules/.nitro/vite/services/ssr/assets/learner-progress-Bi07MsDA.js
 var loadProgress_createServerFn_handler = createServerRpc({
 	id: "051aa46e3ecf11264c3d7e62a6ea80618cdeb21a96aa3fb3ae85f924992207ce",
 	name: "loadProgress",
 	filename: "src/lib/learner-progress.ts"
 }, (opts) => loadProgress.__executeServer(opts));
 var loadProgress = createServerFn({ method: "GET" }).middleware([authMiddleware]).handler(loadProgress_createServerFn_handler, async ({ context }) => {
-	const payload = (await (await getSql())`
+	const sql = await getSql();
+	await ensureCurriculumSeeded(sql);
+	const payload = (await sql`
       select payload from learner_progress where user_id = ${context.userId}
     `)[0]?.payload;
 	const raw = typeof payload === "string" ? safeJson(payload) : payload;
@@ -33,6 +29,7 @@ var saveProgress = createServerFn({ method: "POST" }).validator((input) => {
 	return learning;
 }).middleware([authMiddleware]).handler(saveProgress_createServerFn_handler, async ({ context, data }) => {
 	const sql = await getSql();
+	await ensureCurriculumSeeded(sql);
 	const payload = JSON.stringify(data);
 	const cardList = Object.values(data.cards);
 	await sql`
@@ -45,10 +42,11 @@ var saveProgress = createServerFn({ method: "POST" }).validator((input) => {
 	else {
 		const cardsJson = JSON.stringify(cardList);
 		await sql.query(`insert into user_vocabulary (
-          user_id, thai, roman, en, ease, interval_days, due_date, reps, lapses, seen_date, updated_at
+          user_id, vocabulary_id, thai, roman, en, ease, interval_days, due_date, reps, lapses, seen_date, updated_at
         )
         select
           $1,
+          v.id,
           x.thai,
           x.roman,
           x.en,
@@ -70,7 +68,9 @@ var saveProgress = createServerFn({ method: "POST" }).validator((input) => {
           lapses integer,
           seen text
         )
+        left join vocabulary v on v.thai = x.thai
         on conflict (user_id, thai) do update set
+          vocabulary_id = excluded.vocabulary_id,
           roman = excluded.roman,
           en = excluded.en,
           ease = excluded.ease,

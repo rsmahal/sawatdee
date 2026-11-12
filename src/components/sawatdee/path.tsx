@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { Award, Check, ChevronRight, Flame, Lock, Star, Volume2 } from "lucide-react";
+import { useCatalog } from "@/lib/catalog-store";
 import { cn } from "@/lib/cn";
-import { dailyPhrases, courseNote, isUnlocked, lessons, levels, nextLesson, units, type Speaker } from "@/lib/curriculum";
+import { dailyPhrases, courseNote, isUnlocked, levels, nextLesson, type Speaker } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
 import { reviewStats, todayKey } from "@/lib/srs";
 import { speakThai } from "@/lib/speech";
 
 export function Path({ onStart, onReview }: { onStart: (id: string) => void; onReview: () => void }) {
+  const units = useCatalog((state) => state.units);
+  const lessons = useCatalog((state) => state.lessons);
+  const vocabulary = useCatalog((state) => state.vocabulary);
   const xp = useProgress((state) => state.xp);
   const streak = useProgress((state) => state.streak);
   const completed = useProgress((state) => state.completed);
@@ -15,7 +19,7 @@ export function Path({ onStart, onReview }: { onStart: (id: string) => void; onR
   const setSpeaker = useProgress((state) => state.setSpeaker);
   const showRoman = useProgress((state) => state.showRoman);
   const [note, setNote] = useState<string | null>(null);
-  const next = nextLesson(completed);
+  const next = nextLesson(completed, lessons, units);
   const doneCount = lessons.filter((lesson) => completed[lesson.id]).length;
   const due = reviewStats(cards, todayKey()).due;
   const phrase = dailyPhrases[Math.floor(Date.now() / 86_400_000) % dailyPhrases.length] ?? dailyPhrases[0]!;
@@ -36,7 +40,7 @@ export function Path({ onStart, onReview }: { onStart: (id: string) => void; onR
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm font-extrabold text-muted tabular-nums">
-          {xp} XP · {doneCount}/{lessons.length}
+          {xp} XP · {doneCount}/{lessons.length} lessons · {Object.keys(cards).length}/{vocabulary.length} words
         </p>
         <SpeakerSwitch speaker={speaker} onChange={setSpeaker} />
       </div>
@@ -95,16 +99,19 @@ export function Path({ onStart, onReview }: { onStart: (id: string) => void; onR
       {note && <p className="mt-3 text-sm font-bold text-chili">{note}</p>}
 
       <div className="mt-6 grid gap-8">
-        {levels.map((level) => (
-          <section key={level.id} className="grid gap-6">
-            <header>
-              <p className="text-xs font-extrabold tracking-wide text-chili uppercase">CEFR</p>
-              <h2 className="text-2xl font-extrabold">{level.title}</h2>
-              <p className="text-sm text-pretty text-muted">{level.blurb}</p>
-            </header>
-            {units
-              .filter((unit) => unit.level === level.id)
-              .map((unit) => {
+        {levels.map((level) => {
+          const levelWords = vocabulary.filter((word) => word.level === level.id).length;
+          const levelUnits = units.filter((unit) => unit.level === level.id);
+          return (
+            <section key={level.id} className="grid gap-6">
+              <header>
+                <p className="text-xs font-extrabold tracking-wide text-chili uppercase">
+                  CEFR · {levelWords} words
+                </p>
+                <h2 className="text-2xl font-extrabold">{level.title}</h2>
+                <p className="text-sm text-pretty text-muted">{level.blurb}</p>
+              </header>
+              {levelUnits.map((unit) => {
                 const unitLessons = lessons.filter((lesson) => lesson.unit === unit.id);
                 const unitDone = unitLessons.filter((lesson) => completed[lesson.id]).length;
                 return (
@@ -122,7 +129,7 @@ export function Path({ onStart, onReview }: { onStart: (id: string) => void; onR
                     <ol className="relative mt-4 grid gap-4 py-2">
                       <div className="absolute top-4 bottom-4 left-1/2 w-1 -translate-x-1/2 bg-line" aria-hidden />
                       {unitLessons.map((lesson, index) => {
-                        const open = isUnlocked(lesson.id, completed);
+                        const open = isUnlocked(lesson.id, completed, lessons, units);
                         const done = Boolean(completed[lesson.id]);
                         const stars = completed[lesson.id] ?? 0;
                         const number = lessons.findIndex((item) => item.id === lesson.id) + 1;
@@ -177,7 +184,8 @@ export function Path({ onStart, onReview }: { onStart: (id: string) => void; onR
                 );
               })}
           </section>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

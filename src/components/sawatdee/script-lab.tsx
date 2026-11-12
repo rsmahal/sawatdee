@@ -21,6 +21,9 @@ const classColor = {
 } as const;
 
 export function ScriptLab() {
+  const [showAllConsonants, setShowAllConsonants] = useState(false);
+  const shownConsonants = showAllConsonants ? consonants : consonants.filter((item) => item.core);
+
   return (
     <div className="px-5 pt-6 pb-10">
       <p className="text-sm font-extrabold text-chili">Script</p>
@@ -74,22 +77,51 @@ export function ScriptLab() {
         different pitch.
       </p>
 
-      <h2 className="mt-8 text-lg font-extrabold">Letters you'll meet first</h2>
+      <div className="mt-8 flex items-center justify-between gap-2">
+        <h2 className="text-lg font-extrabold">
+          Thai consonants ({shownConsonants.length}/{consonants.length})
+        </h2>
+        <div className="flex rounded-full bg-soft p-1 text-xs font-extrabold">
+          <button
+            type="button"
+            aria-pressed={!showAllConsonants}
+            onClick={() => setShowAllConsonants(false)}
+            className={cn(
+              "min-h-9 rounded-full px-3",
+              !showAllConsonants ? "bg-ink text-sheet" : "text-muted",
+            )}
+          >
+            Core 21
+          </button>
+          <button
+            type="button"
+            aria-pressed={showAllConsonants}
+            onClick={() => setShowAllConsonants(true)}
+            className={cn(
+              "min-h-9 rounded-full px-3",
+              showAllConsonants ? "bg-ink text-sheet" : "text-muted",
+            )}
+          >
+            All 44
+          </button>
+        </div>
+      </div>
       <p className="mt-1 text-sm text-pretty text-muted">
-        Not the full alphabet. Color is the class, and class decides the tone of a new word. Mid is ink, high is
-        chili, low is teal. Tap a letter to hear its name.
+        Color is the consonant class (mid = ink, high = chili, low = teal), which decides the tone of a syllable.
+        Tap any letter to hear its name.
       </p>
       <div className="mt-3 flex gap-3 text-xs font-extrabold tracking-wide uppercase">
-        <span className="text-ink">Mid</span>
-        <span className="text-chili">High</span>
-        <span className="text-teal">Low</span>
+        <span className="text-ink">Mid (9)</span>
+        <span className="text-chili">High (11)</span>
+        <span className="text-teal">Low (24)</span>
       </div>
       <ul className="mt-3 grid grid-cols-4 gap-2">
-        {consonants.map((letter) => (
+        {shownConsonants.map((letter) => (
           <li key={letter.ch}>
             <button
               type="button"
               onClick={() => speakThai(letter.name)}
+              title={`${letter.name} (${letter.gloss})`}
               className="flex min-h-20 w-full flex-col items-center justify-center rounded-2xl bg-soft px-1 py-2"
             >
               <span lang="th" className={cn("thai-display text-3xl", classColor[letter.cls])}>

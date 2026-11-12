@@ -3,7 +3,8 @@ import { BookOpen, Home, Repeat, UserRound, Volume2 } from "lucide-react";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { cn } from "@/lib/cn";
-import { lessons } from "@/lib/curriculum";
+import { useCatalog } from "@/lib/catalog-store";
+import { loadCurriculum } from "@/lib/curriculum-api";
 import { loadProgress, saveProgress } from "@/lib/learner-progress";
 import { learningSnapshot, useProgress } from "@/lib/progress";
 import { reviewStats, todayKey } from "@/lib/srs";
@@ -54,14 +55,15 @@ function Course({ userId }: { userId: string }) {
     ready.current = false;
     setPhase("loading");
     let cancel = false;
-    loadProgress()
-      .then((learning) => {
+    Promise.all([loadProgress(), loadCurriculum()])
+      .then(([learning, catalog]) => {
         if (cancel) return;
+        useCatalog.getState().setCatalog(catalog);
         if (learning) useProgress.getState().applyLearning(learning);
         else useProgress.getState().resetProgress();
         lastSaved.current = JSON.stringify(learningSnapshot(useProgress.getState()));
         ready.current = true;
-        const seen = lessons
+        const seen = catalog.lessons
           .filter((lesson) => useProgress.getState().completed[lesson.id])
           .flatMap((lesson) => lesson.words);
         useProgress.getState().ingestWords(seen);
@@ -189,6 +191,8 @@ function TabButton({
 }
 
 function BrandPanel() {
+  const lessons = useCatalog((state) => state.lessons);
+  const vocabulary = useCatalog((state) => state.vocabulary);
   return (
     <aside className="relative hidden flex-1 flex-col justify-center overflow-hidden px-14 py-12 lg:flex">
       <div className="max-w-lg">
@@ -207,9 +211,9 @@ function BrandPanel() {
         </div>
         <h2 className="mt-8 text-5xl font-extrabold text-balance">Speak Thai from the first lesson.</h2>
         <p className="mt-4 max-w-md text-lg text-pretty text-muted">
-          A pocket course with real script, the five tones, and the polite particle that matches your voice.{" "}
-          {lessons.length} lessons, from hello to asking someone to slow down. Review brings back only the words
-          you have already seen.
+          A full CEFR A1 course with {vocabulary.length} words across {lessons.length} lessons, real Thai script,
+          five tones, and the polite particle that matches your voice. Review brings back only the words you have
+          already seen.
         </p>
         <ul className="mt-8 grid gap-4">
           <BrandPoint
@@ -225,10 +229,10 @@ function BrandPanel() {
           <BrandPoint
             icon={<BookOpen className="h-5 w-5" />}
             title="Read the script"
-            body="A starter alphabet, vowel shapes, Thai digits, and a tone drill live under Script."
+            body="All 44 consonants, 19 vowel patterns, Thai digits, and a tone drill live under Script."
           />
         </ul>
-        <p className="mt-8 text-sm font-bold text-muted">Sign in. Lessons and review stay with your account.</p>
+        <p className="mt-8 text-sm font-bold text-muted">Sign in. Lessons, vocabulary, and review stay with your account.</p>
       </div>
       <p aria-hidden className="pointer-events-none absolute -right-2 -bottom-10 text-9xl font-extrabold text-line select-none">
         <span lang="th" className="thai-display">

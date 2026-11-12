@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Check, Heart, Volume2, X } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { useCatalog } from "@/lib/catalog-store";
 import { lessonById } from "@/lib/curriculum";
 import { useProgress, xpGain } from "@/lib/progress";
 import { speakThai } from "@/lib/speech";
@@ -9,7 +10,8 @@ import { ExerciseBody, type Grade, type GradeHandle } from "./exercise";
 const PRAISE = ["Nice.", "That's it.", "Exactly."];
 
 export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => void }) {
-  const lesson = lessonById(lessonId);
+  const catalogLessons = useCatalog((state) => state.lessons);
+  const lesson = lessonById(lessonId, catalogLessons);
   const speaker = useProgress((state) => state.speaker);
   const showRoman = useProgress((state) => state.showRoman);
   const autoplay = useProgress((state) => state.autoplay);

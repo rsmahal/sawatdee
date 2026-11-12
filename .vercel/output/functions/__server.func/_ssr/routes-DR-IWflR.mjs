@@ -1,14 +1,16 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { i as signOut } from "./client-BF-G9gzu.mjs";
-import { i as hasGateSessionMarker } from "./server-x9gxGb69.mjs";
+import { i as hasGateSessionMarker } from "./server-BK1JVJCR.mjs";
 import { n as useCurrentUserState, t as useCurrentUser } from "./use-current-user-BNWkNZYJ.mjs";
+import { a as lessonById, c as nextLesson, d as staticCurriculumCatalog, i as isUnlocked, l as particleLabel, n as courseNote, r as dailyPhrases, s as levels, u as resolveTok } from "./curriculum-BpJOvEwT.mjs";
 import { a as getServerFnById, i as TSS_SERVER_FUNCTION, r as createServerFn } from "./ssr.mjs";
-import { a as nextInterval, c as todayKey, i as learningSnapshot, l as useProgress, n as duePhrase, o as parseLearning, r as gapLabel, s as reviewStats, t as authMiddleware, u as xpGain } from "./progress-tQgoCOir.mjs";
+import { a as nextInterval, c as todayKey, i as learningSnapshot, l as useProgress, n as duePhrase, o as parseLearning, r as gapLabel, s as reviewStats, t as authMiddleware, u as xpGain } from "./progress-CfMeIEsu.mjs";
 import { Ut as require_react, v as Link, x as require_jsx_runtime, y as Navigate } from "../_libs/@tanstack/react-router+[...].mjs";
-import { a as Star, c as Lock, d as Flame, f as ChevronRight, h as Award, l as House, m as BookOpen, n as Volume2, o as RotateCcw, p as Check, r as UserRound, s as Repeat, t as X, u as Heart } from "../_libs/lucide-react.mjs";
+import { n as create } from "../_libs/zustand.mjs";
+import { a as Star, c as Repeat, d as Heart, f as Flame, g as Award, h as BookOpen, l as Lock, m as Check, n as Volume2, o as Search, p as ChevronRight, r as UserRound, s as RotateCcw, t as X, u as House } from "../_libs/lucide-react.mjs";
 import { t as clsx } from "../_libs/clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
-// node_modules/.nitro/vite/services/ssr/assets/routes-C--jdiko.js
+// node_modules/.nitro/vite/services/ssr/assets/routes-DR-IWflR.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var subscribeToNothing = () => () => {};
@@ -79,1462 +81,17 @@ function UserButton() {
 function cn(...inputs) {
 	return twMerge(clsx(inputs));
 }
-var w = (thai, roman, en) => ({
-	thai,
-	roman,
-	en
-});
-var t = (word) => ({
-	kind: "w",
-	word
-});
-var SELF = { kind: "self" };
-var OTHER = { kind: "other-self" };
-var POLITE = { kind: "polite" };
-var POLITE_Q = {
-	kind: "polite",
-	q: true
-};
-var hello = w("สวัสดี", "sà-wàt-dii", "Hello");
-var bye = w("ลาก่อน", "laa-gàwn", "Goodbye");
-var meet = w("ยินดีที่ได้รู้จัก", "yin-dii-thîi-dâai-rúu-jàk", "Nice to meet you");
-var thanks = w("ขอบคุณ", "khàawp-khun", "Thank you");
-var sorry = w("ขอโทษ", "khǎaw-thôot", "Sorry / excuse me");
-var np = w("ไม่เป็นไร", "mâi-bpen-rai", "No problem");
-var yes = w("ใช่", "châi", "Yes");
-var no = w("ไม่", "mâi", "No");
-var can = w("ได้", "dâai", "Can / okay");
-var cant = w("ไม่ได้", "mâi-dâai", "Cannot");
-var well = w("สบายดี", "sà-baai-dii", "I'm well");
-var howru = w("สบายดีไหม", "sà-baai-dii-mǎi", "How are you?");
-var iF = w("ฉัน", "chǎn", "I, for women");
-var iM = w("ผม", "phǒm", "I, for men");
-var you = w("คุณ", "khun", "You");
-var mom = w("แม่", "mâae", "Mom");
-var dad = w("พ่อ", "phâaw", "Dad");
-var older = w("พี่", "phîi", "Older sibling");
-var younger = w("น้อง", "náawng", "Younger sibling");
-var friend = w("เพื่อน", "phûean", "Friend");
-var rice = w("ข้าว", "khâao", "Rice / a meal");
-var water = w("น้ำ", "náam", "Water");
-var coffee = w("กาแฟ", "gaa-fae", "Coffee");
-var tea = w("ชา", "chaa", "Tea");
-var tasty = w("อร่อย", "à-ròi", "Delicious");
-var hungry = w("หิว", "hǐu", "Hungry");
-var eat = w("กิน", "gin", "To eat");
-var want = w("อยาก", "yàak", "To want");
-var please = w("ขอ", "khǎaw", "Please / may I have");
-var thisOne = w("อันนี้", "an-níi", "This one");
-var howMuch = w("เท่าไหร่", "thâo-rài", "How much?");
-var expensive = w("แพง", "phaeng", "Expensive");
-var cheap = w("ถูก", "thùuk", "Cheap");
-var baht = w("บาท", "bàat", "Baht");
-var one = w("หนึ่ง", "nùeng", "One");
-var two = w("สอง", "sǎawng", "Two");
-var three = w("สาม", "sǎam", "Three");
-var four = w("สี่", "sìi", "Four");
-var five = w("ห้า", "hâa", "Five");
-var six = w("หก", "hòk", "Six");
-var seven = w("เจ็ด", "jèt", "Seven");
-var eight = w("แปด", "bpàaet", "Eight");
-var nine = w("เก้า", "gâao", "Nine");
-var ten = w("สิบ", "sìp", "Ten");
-var bathroom = w("ห้องน้ำ", "hông-náam", "Bathroom");
-var where = w("ที่ไหน", "thîi-nǎi", "Where");
-var located = w("อยู่", "yûu", "Is located");
-var go = w("ไป", "bpai", "To go");
-var market = w("ตลาด", "dtà-lâat", "Market");
-var temple = w("วัด", "wát", "Temple");
-var left = w("ซ้าย", "sáai", "Left");
-var right = w("ขวา", "khwǎa", "Right");
-var straight = w("ตรงไป", "dtrong-bpai", "Straight ahead");
-var turn = w("เลี้ยว", "líiao", "To turn");
-var taxi = w("แท็กซี่", "tháek-sîi", "Taxi");
-var today = w("วันนี้", "wan-níi", "Today");
-var tomorrow = w("พรุ่งนี้", "phrûng-níi", "Tomorrow");
-var yesterday = w("เมื่อวาน", "mûea-waan", "Yesterday");
-var now = w("ตอนนี้", "dtaawn-níi", "Now");
-var morning = w("เช้า", "cháao", "Morning");
-var evening = w("เย็น", "yen", "Evening");
-var afternoon = w("บ่าย", "bàai", "Afternoon");
-var whatTime = w("กี่โมง", "gìi-moong", "What time");
-var hour = w("โมง", "moong", "Hour, in telling time");
-var minute = w("นาที", "naa-thii", "Minute");
-var clock = w("นาฬิกา", "naa-lí-gaa", "Clock");
-var red = w("สีแด่ง", "sǐi-dàaeng", "Red");
-var white = w("สีขาว", "sǐi-khǎao", "White");
-var black = w("สีด้ำ", "sǐi-dâm", "Black");
-var blue = w("สีฟ้า", "sǐi-fáa", "Blue");
-var green = w("สีเขียว", "sǐi-khǐao", "Green");
-var yellow = w("สีเหลือง", "sǐi-lǔeang", "Yellow");
-var big = w("ใหญ่", "yài", "Big");
-var small = w("เล็ก", "lék", "Small");
-var pretty = w("สวย", "sǔai", "Pretty");
-var hot = w("ร้อน", "ráawn", "Hot");
-var cold = w("หนาว", "nǎao", "Cold");
-var very = w("ม่าก", "mâak", "Very");
-var padThai = w("ผั่ดไทย", "phàt-thai", "Pad Thai");
-var somtam = w("ส่มต้ำ", "sòm-dtâm", "Papaya salad");
-var chicken = w("ไก่", "gài", "Chicken");
-var pork = w("มู", "mǔu", "Pork");
-var spicy = w("เผ็ด", "phèt", "Spicy");
-var take = w("เอา", "ao", "I'll take");
-var full = w("อิ่ม", "ìm", "Full, after eating");
-var bill = w("เช็คบิล", "chék-bin", "The bill");
-var plainWater = w("น้ำเปล่า", "náam-bplào", "Plain water");
-var twenty = w("ยี้สิบ", "yíi-sìp", "Twenty");
-var hundred = w("ร้อย", "ráawy", "Hundred");
-var thousand = w("พัน", "phan", "Thousand");
-var near = w("ใกล้", "glâi", "Near");
-var far = w("ไกล", "glai", "Far");
-var here = w("ที่นี่", "thîi-nîi", "Here");
-var there = w("ที่นั่น", "thîi-nân", "There");
-var stop = w("หยุด", "yùt", "Stop");
-var hotel = w("โรงแรม", "roong-raaem", "Hotel");
-var station = w("สถานี", "sà-thǎa-nii", "Station");
-var airport = w("สนามบิน", "sà-naam-bin", "Airport");
-var bus = w("รถเมล์", "rót-mee", "Bus");
-var train = w("รถไฟฟ้า", "rót-fai-fáa", "Skytrain");
-var nameW = w("ชื่อ", "chûue", "Name");
-var what = w("อะไร", "à-rai", "What");
-var person = w("คน", "khon", "Person");
-var thaiPerson = w("คนไทย", "khon-thai", "Thai person");
-var speak = w("พู่ด", "phûut", "To speak");
-var understand = w("เข้าใจ่", "khâo-jài", "To understand");
-var aLittle = w("นิดหน่อย", "nít-nòi", "A little");
-var slowly = w("ช้าๆ", "cháa-cháa", "Slowly");
-var thaiLang = w("ภาษาไทย", "phaa-sǎa-thai", "Thai language");
-var rain = w("ฝน", "fǒn", "Rain");
-var fall = w("ตก", "dtòk", "To fall");
-var sunshine = w("แด่ด", "dàaet", "Sunshine");
-var tired = w("เหนื่อย", "nùeai", "Tired");
-var like = w("ช่อบ", "châawp", "To like");
-var fun = w("สนุก", "sà-nùk", "Fun");
-var kha = w("ค่ะ", "khâ", "Polite particle, women");
-var khaQ = w("คะ", "khá", "Question particle, women");
-var khrap = w("ครับ", "khráp", "Polite particle, men");
-var toneCoach = "สี่ stays low. ห้า drops. Don't swap them.";
-var maiCoach = "ไหม rises, and it asks. ไม่ falls, and it means no.";
-var whiteCoach = "ขาว rises. ข้าว, rice, falls.";
-var nearCoach = "ใกล้ falls and means near. ไกล is mid and means far.";
-var twentyCoach = "Twenty is ยี้สิบ. สองสิบ is not the word people use.";
-var timeCoach = "กี่โมง asks the time. On a Thai clock, สองโมง is 8 in the morning, not 2.";
-function choice(dir, word, traps, coach) {
-	return {
-		kind: "choice",
-		dir,
-		word,
-		traps,
-		coach
-	};
-}
-function tiles(prompt, answer, extra, coach) {
-	return {
-		kind: "tiles",
-		prompt,
-		answer,
-		extra,
-		coach
-	};
-}
-function pairs(list, coach) {
-	return {
-		kind: "pairs",
-		pairs: list,
-		coach
-	};
-}
-var levels = [{
-	id: "A1",
-	title: "A1",
-	blurb: "Greet people, buy food, and ask where something is."
-}, {
-	id: "A2",
-	title: "A2",
-	blurb: "Describe what you see, order a meal, and ask someone to slow down."
-}];
-var units = [
-	{
-		id: "hello",
-		level: "A1",
-		kicker: "Unit 1",
-		title: "Say hello",
-		blurb: "Greet people, thank them, and answer yes or no."
-	},
-	{
-		id: "people",
-		level: "A1",
-		kicker: "Unit 2",
-		title: "People",
-		blurb: "Ask how someone is, and name the family."
-	},
-	{
-		id: "market",
-		level: "A1",
-		kicker: "Unit 3",
-		title: "At the market",
-		blurb: "Order food and ask what it costs."
-	},
-	{
-		id: "town",
-		level: "A1",
-		kicker: "Unit 4",
-		title: "Around town",
-		blurb: "Count, then find the bathroom."
-	},
-	{
-		id: "time",
-		level: "A1",
-		kicker: "Unit 5",
-		title: "Time",
-		blurb: "Today, tomorrow, and how to ask the time."
-	},
-	{
-		id: "describe",
-		level: "A2",
-		kicker: "Unit 1",
-		title: "Describe it",
-		blurb: "Colors, size, and how hot it is."
-	},
-	{
-		id: "meal",
-		level: "A2",
-		kicker: "Unit 2",
-		title: "A meal",
-		blurb: "Order a dish, say you're full, ask for the bill."
-	},
-	{
-		id: "going",
-		level: "A2",
-		kicker: "Unit 3",
-		title: "Getting there",
-		blurb: "Near, far, and the words for the station."
-	},
-	{
-		id: "talking",
-		level: "A2",
-		kicker: "Unit 4",
-		title: "When you're stuck",
-		blurb: "Your name, and asking someone to slow down."
-	},
-	{
-		id: "out",
-		level: "A2",
-		kicker: "Unit 5",
-		title: "Out for the day",
-		blurb: "Rain, being tired, and what you like."
-	}
-];
-var lessons = [
-	{
-		id: "hello",
-		unit: "hello",
-		title: "Hello",
-		subtitle: "Greetings that work all day",
-		tip: "สวัสดี works morning, noon, and night. There is no separate good morning. Put your polite particle on the end.",
-		words: [
-			hello,
-			bye,
-			meet
-		],
-		exercises: [
-			choice("th-en", hello, [
-				bye,
-				thanks,
-				yes
-			]),
-			choice("en-th", bye, [hello, meet]),
-			choice("listen", hello, [
-				bye,
-				meet,
-				thanks
-			]),
-			tiles("Say hello politely.", [t(hello), POLITE], [t(bye), t(meet)]),
-			tiles("Say goodbye politely.", [t(bye), POLITE], [t(hello), t(thanks)]),
-			choice("th-en", meet, [
-				hello,
-				bye,
-				thanks
-			]),
-			pairs([
-				hello,
-				bye,
-				meet
-			])
-		]
-	},
-	{
-		id: "thanks",
-		unit: "hello",
-		title: "Thanks",
-		subtitle: "Please, sorry, you're welcome",
-		tip: "ไม่เป็นไร answers thank you. It also means don't worry about it.",
-		words: [
-			thanks,
-			sorry,
-			np
-		],
-		exercises: [
-			choice("th-en", thanks, [
-				sorry,
-				np,
-				hello
-			]),
-			choice("en-th", sorry, [
-				thanks,
-				np,
-				bye
-			]),
-			choice("listen", np, [
-				thanks,
-				sorry,
-				yes
-			]),
-			tiles("Thank you.", [t(thanks), POLITE], [t(sorry), t(np)]),
-			tiles("Excuse me.", [t(sorry), POLITE], [t(thanks), t(hello)]),
-			choice("th-en", sorry, [
-				thanks,
-				np,
-				bye
-			]),
-			pairs([
-				thanks,
-				sorry,
-				np
-			])
-		]
-	},
-	{
-		id: "yes-no",
-		unit: "hello",
-		title: "Yes & no",
-		subtitle: "ใช่, ไม่, and ได้",
-		tip: "ได้ is can, or a soft okay. ไม่ได้ shuts the door: cannot.",
-		words: [
-			yes,
-			no,
-			can,
-			cant
-		],
-		exercises: [
-			choice("th-en", yes, [
-				no,
-				can,
-				thanks
-			]),
-			choice("en-th", no, [
-				yes,
-				cant,
-				np
-			]),
-			choice("listen", can, [
-				cant,
-				yes,
-				no
-			]),
-			tiles("Yes.", [t(yes), POLITE], [t(no), t(can)]),
-			tiles("I can't.", [SELF, t(cant)], [t(can), OTHER]),
-			choice("th-en", cant, [
-				can,
-				no,
-				sorry
-			]),
-			pairs([
-				yes,
-				no,
-				can
-			])
-		]
-	},
-	{
-		id: "how-are-you",
-		unit: "people",
-		title: "How are you",
-		subtitle: "Questions, and the word for I",
-		tip: "Women's questions end in คะ, not ค่ะ. Men stay with ครับ. ผม is I for men. ฉัน is the I this course uses for women.",
-		words: [
-			well,
-			howru,
-			you,
-			iF,
-			iM,
-			kha,
-			khaQ,
-			khrap
-		],
-		exercises: [
-			choice("th-en", well, [
-				howru,
-				you,
-				yes
-			]),
-			choice("en-th", howru, [
-				well,
-				you,
-				np
-			], maiCoach),
-			choice("listen", you, [
-				well,
-				iF,
-				friend
-			]),
-			tiles("How are you?", [t(howru), POLITE_Q], [
-				t(well),
-				t(no),
-				t(yes)
-			], maiCoach),
-			tiles("I'm well.", [SELF, t(well)], [OTHER, t(howru)]),
-			choice("th-en", no, [
-				howru,
-				yes,
-				can
-			], maiCoach),
-			pairs([
-				well,
-				you,
-				iF,
-				iM
-			])
-		]
-	},
-	{
-		id: "family",
-		unit: "people",
-		title: "Family",
-		subtitle: "Older, younger, and friends",
-		tip: "พี่ is someone older you feel close to. น้อง is younger. Friends use these words too, not only siblings.",
-		words: [
-			mom,
-			dad,
-			older,
-			younger,
-			friend
-		],
-		exercises: [
-			choice("th-en", mom, [
-				dad,
-				older,
-				friend
-			]),
-			choice("en-th", dad, [
-				mom,
-				younger,
-				you
-			]),
-			choice("listen", friend, [
-				older,
-				younger,
-				you
-			]),
-			choice("th-en", older, [
-				younger,
-				friend,
-				dad
-			]),
-			tiles("Mom.", [t(mom)], [
-				t(dad),
-				t(older),
-				t(friend)
-			]),
-			pairs([
-				mom,
-				dad,
-				older,
-				younger
-			]),
-			choice("en-th", friend, [
-				older,
-				you,
-				mom
-			])
-		]
-	},
-	{
-		id: "food",
-		unit: "market",
-		title: "Hungry",
-		subtitle: "Rice, water, and want",
-		tip: "ข้าว is rice, and also a meal. อยากกิน is want to eat. ขอ is how you ask for something.",
-		words: [
-			rice,
-			water,
-			coffee,
-			tasty,
-			eat,
-			want,
-			hungry
-		],
-		exercises: [
-			choice("th-en", tasty, [
-				hungry,
-				rice,
-				water
-			]),
-			choice("en-th", water, [
-				rice,
-				coffee,
-				tea
-			]),
-			choice("listen", rice, [
-				water,
-				tasty,
-				eat
-			]),
-			tiles("I want to eat.", [
-				SELF,
-				t(want),
-				t(eat)
-			], [
-				t(water),
-				t(tasty),
-				OTHER
-			]),
-			tiles("Water, please.", [
-				t(please),
-				t(water),
-				POLITE
-			], [t(coffee), t(eat)]),
-			choice("th-en", hungry, [
-				tasty,
-				eat,
-				want
-			]),
-			pairs([
-				rice,
-				water,
-				coffee,
-				tasty
-			])
-		]
-	},
-	{
-		id: "price",
-		unit: "market",
-		title: "How much",
-		subtitle: "Point, ask, pay",
-		tip: "Point and ask อันนี้เท่าไหร่. Prices come back in บาท. แพง is expensive. ถูก is cheap.",
-		words: [
-			howMuch,
-			thisOne,
-			expensive,
-			cheap,
-			baht
-		],
-		exercises: [
-			choice("th-en", howMuch, [
-				expensive,
-				cheap,
-				baht
-			]),
-			choice("en-th", expensive, [
-				cheap,
-				howMuch,
-				tasty
-			]),
-			choice("listen", cheap, [
-				expensive,
-				baht,
-				water
-			]),
-			tiles("How much is this?", [
-				t(thisOne),
-				t(howMuch),
-				POLITE_Q
-			], [
-				t(expensive),
-				t(baht),
-				t(please)
-			]),
-			tiles("This one, please.", [t(thisOne), POLITE], [t(howMuch), t(cheap)]),
-			pairs([
-				howMuch,
-				expensive,
-				cheap,
-				baht
-			]),
-			choice("th-en", baht, [
-				cheap,
-				howMuch,
-				rice
-			])
-		]
-	},
-	{
-		id: "numbers",
-		unit: "town",
-		title: "Numbers",
-		subtitle: "One through ten",
-		tip: "The tone is the number. สอง and สาม rise. สี่ stays low. ห้า falls.",
-		words: [
-			one,
-			two,
-			three,
-			four,
-			five,
-			six,
-			seven,
-			eight,
-			nine,
-			ten
-		],
-		exercises: [
-			choice("th-en", five, [
-				four,
-				nine,
-				two
-			], toneCoach),
-			choice("en-th", three, [
-				two,
-				four,
-				five
-			]),
-			choice("listen", eight, [
-				seven,
-				nine,
-				three
-			]),
-			tiles("Four.", [t(four)], [
-				t(five),
-				t(six),
-				t(nine)
-			], toneCoach),
-			tiles("Ten baht.", [t(ten), t(baht)], [
-				t(one),
-				t(five),
-				t(two)
-			]),
-			pairs([
-				one,
-				two,
-				three,
-				four
-			]),
-			choice("th-en", nine, [
-				five,
-				six,
-				ten
-			]),
-			choice("listen", two, [
-				three,
-				five,
-				one
-			])
-		]
-	},
-	{
-		id: "places",
-		unit: "town",
-		title: "Which way",
-		subtitle: "Bathroom, market, left, right",
-		tip: "อยู่ is the hinge: the place, then อยู่, then ที่ไหน. ห้องน้ำอยู่ที่ไหน is where is the bathroom.",
-		words: [
-			bathroom,
-			where,
-			located,
-			left,
-			right,
-			straight,
-			turn,
-			market,
-			temple,
-			taxi
-		],
-		exercises: [
-			choice("th-en", bathroom, [
-				market,
-				temple,
-				taxi
-			]),
-			choice("en-th", temple, [
-				market,
-				bathroom,
-				taxi
-			]),
-			choice("listen", taxi, [
-				temple,
-				market,
-				go
-			]),
-			tiles("Where is the bathroom?", [
-				t(bathroom),
-				t(located),
-				t(where),
-				POLITE_Q
-			], [t(market), t(left)]),
-			tiles("Turn left.", [t(turn), t(left)], [
-				t(right),
-				t(straight),
-				t(go)
-			]),
-			tiles("Go straight.", [t(straight)], [
-				t(turn),
-				t(left),
-				t(right)
-			]),
-			pairs([
-				bathroom,
-				market,
-				temple,
-				taxi
-			]),
-			choice("th-en", left, [
-				right,
-				straight,
-				where
-			])
-		]
-	},
-	{
-		id: "checkpoint",
-		unit: "town",
-		title: "Night market",
-		subtitle: "A mix from the whole path",
-		tip: "No new words. Same five hearts. Build the phrases the way you would say them out loud.",
-		checkpoint: true,
-		words: [],
-		exercises: [
-			choice("listen", hello, [
-				thanks,
-				bye,
-				sorry
-			]),
-			tiles("Thank you.", [t(thanks), POLITE], [
-				t(sorry),
-				t(np),
-				t(yes)
-			]),
-			tiles("How are you?", [t(howru), POLITE_Q], [t(well), t(no)], maiCoach),
-			tiles("Where is the bathroom?", [
-				t(bathroom),
-				t(located),
-				t(where),
-				POLITE_Q
-			], [t(market), t(taxi)]),
-			choice("th-en", howMuch, [
-				expensive,
-				bathroom,
-				tasty
-			]),
-			choice("en-th", tasty, [
-				hungry,
-				cheap,
-				water
-			]),
-			pairs([
-				mom,
-				friend,
-				water,
-				five
-			]),
-			tiles("I want to eat.", [
-				SELF,
-				t(want),
-				t(eat)
-			], [
-				t(water),
-				OTHER,
-				t(rice)
-			]),
-			choice("listen", sorry, [
-				thanks,
-				np,
-				bye
-			])
-		]
-	},
-	{
-		id: "today",
-		unit: "time",
-		title: "Today",
-		subtitle: "Now, yesterday, tomorrow",
-		tip: "นี้ on the end of วันนี้ and พรุ่งนี้ is the same high “this”. เมื่อวาน looks backward.",
-		words: [
-			today,
-			tomorrow,
-			yesterday,
-			now,
-			morning,
-			evening
-		],
-		exercises: [
-			choice("th-en", today, [
-				tomorrow,
-				yesterday,
-				now
-			]),
-			choice("en-th", tomorrow, [
-				today,
-				morning,
-				evening
-			]),
-			choice("listen", yesterday, [
-				today,
-				tomorrow,
-				now
-			]),
-			tiles("Today.", [t(today)], [
-				t(tomorrow),
-				t(yesterday),
-				t(now)
-			]),
-			tiles("Tomorrow morning.", [t(tomorrow), t(morning)], [
-				t(evening),
-				t(today),
-				t(now)
-			]),
-			choice("th-en", morning, [
-				evening,
-				now,
-				today
-			]),
-			pairs([
-				today,
-				tomorrow,
-				yesterday,
-				morning
-			])
-		]
-	},
-	{
-		id: "what-time",
-		unit: "time",
-		title: "What time",
-		subtitle: "Ask first. The Thai clock can wait.",
-		tip: "กี่โมง is how you ask the time. Answers use a Thai clock, where สองโมง is 8 in the morning, not 2. Learn the question before that system.",
-		words: [
-			whatTime,
-			hour,
-			minute,
-			clock,
-			afternoon
-		],
-		exercises: [
-			choice("th-en", whatTime, [
-				hour,
-				minute,
-				clock
-			], timeCoach),
-			choice("en-th", minute, [
-				hour,
-				clock,
-				afternoon
-			]),
-			choice("listen", clock, [
-				minute,
-				hour,
-				whatTime
-			]),
-			tiles("What time?", [t(whatTime), POLITE_Q], [
-				t(now),
-				t(morning),
-				t(hour)
-			], timeCoach),
-			tiles("In the afternoon.", [t(afternoon)], [
-				t(morning),
-				t(evening),
-				t(now)
-			]),
-			pairs([
-				whatTime,
-				minute,
-				clock,
-				afternoon
-			]),
-			choice("th-en", hour, [
-				minute,
-				clock,
-				afternoon
-			])
-		]
-	},
-	{
-		id: "colors",
-		unit: "describe",
-		title: "Colors",
-		subtitle: "สี sits in front",
-		tip: "สี means color and comes first: สีแดง, สีขาว. ขาว rises. ข้าว, rice, falls.",
-		words: [
-			red,
-			white,
-			black,
-			blue,
-			green,
-			yellow
-		],
-		exercises: [
-			choice("th-en", white, [
-				red,
-				black,
-				rice
-			], whiteCoach),
-			choice("en-th", red, [
-				blue,
-				green,
-				yellow
-			]),
-			choice("listen", blue, [
-				green,
-				black,
-				white
-			]),
-			tiles("Red.", [t(red)], [
-				t(white),
-				t(black),
-				t(blue)
-			]),
-			tiles("White.", [t(white)], [
-				t(rice),
-				t(black),
-				t(red)
-			], whiteCoach),
-			pairs([
-				red,
-				white,
-				black,
-				blue
-			]),
-			choice("th-en", yellow, [
-				green,
-				white,
-				red
-			])
-		]
-	},
-	{
-		id: "size",
-		unit: "describe",
-		title: "Big and hot",
-		subtitle: "Size, heat, and very",
-		tip: "มาก comes after the word it strengthens. ร้อนมาก is very hot. ใหญ่ is big. เล็ก is small.",
-		words: [
-			big,
-			small,
-			pretty,
-			hot,
-			cold,
-			very
-		],
-		exercises: [
-			choice("th-en", hot, [
-				cold,
-				big,
-				very
-			]),
-			choice("en-th", small, [
-				big,
-				pretty,
-				cold
-			]),
-			choice("listen", big, [
-				small,
-				hot,
-				pretty
-			]),
-			tiles("Very hot.", [t(hot), t(very)], [
-				t(cold),
-				t(big),
-				t(small)
-			]),
-			tiles("Small.", [t(small)], [
-				t(big),
-				t(pretty),
-				t(cold)
-			]),
-			pairs([
-				big,
-				small,
-				hot,
-				cold
-			]),
-			choice("th-en", pretty, [
-				big,
-				hot,
-				very
-			])
-		]
-	},
-	{
-		id: "dishes",
-		unit: "meal",
-		title: "Order food",
-		subtitle: "A few things you'll actually say",
-		tip: "เอา is the short way to order: เอาผัดไทย. ขอ still works. ไม่เผ็ด is how you turn the heat off.",
-		words: [
-			padThai,
-			somtam,
-			chicken,
-			pork,
-			spicy,
-			take
-		],
-		exercises: [
-			choice("th-en", padThai, [
-				somtam,
-				chicken,
-				rice
-			]),
-			choice("en-th", somtam, [
-				padThai,
-				spicy,
-				pork
-			]),
-			choice("listen", chicken, [
-				pork,
-				padThai,
-				rice
-			]),
-			tiles("I'll take Pad Thai.", [
-				t(take),
-				t(padThai),
-				POLITE
-			], [
-				t(somtam),
-				t(please),
-				t(chicken)
-			]),
-			tiles("Not spicy.", [t(no), t(spicy)], [
-				t(very),
-				t(tasty),
-				t(pork)
-			]),
-			pairs([
-				padThai,
-				somtam,
-				chicken,
-				pork
-			]),
-			choice("th-en", spicy, [
-				chicken,
-				tasty,
-				pork
-			])
-		]
-	},
-	{
-		id: "bill",
-		unit: "meal",
-		title: "The bill",
-		subtitle: "Full, water, and bigger numbers",
-		tip: "อิ่ม means you've had enough. เช็คบิล asks for the bill. Twenty is ยี้สิบ, not สองสิบ. ร้อย is a hundred. พัน is a thousand.",
-		words: [
-			full,
-			bill,
-			plainWater,
-			twenty,
-			hundred,
-			thousand
-		],
-		exercises: [
-			choice("th-en", full, [
-				bill,
-				hungry,
-				tasty
-			]),
-			choice("en-th", bill, [
-				full,
-				water,
-				hundred
-			]),
-			choice("listen", twenty, [
-				ten,
-				hundred,
-				thousand
-			], twentyCoach),
-			tiles("The bill, please.", [t(bill), POLITE], [
-				t(full),
-				t(please),
-				t(water)
-			]),
-			tiles("One hundred baht.", [
-				t(one),
-				t(hundred),
-				t(baht)
-			], [
-				t(twenty),
-				t(thousand),
-				t(ten)
-			]),
-			tiles("Twenty baht.", [t(twenty), t(baht)], [
-				t(ten),
-				t(two),
-				t(hundred)
-			], twentyCoach),
-			pairs([
-				full,
-				bill,
-				twenty,
-				hundred
-			]),
-			choice("th-en", plainWater, [
-				water,
-				tea,
-				coffee
-			])
-		]
-	},
-	{
-		id: "near-far",
-		unit: "going",
-		title: "Here and there",
-		subtitle: "Near, far, stop",
-		tip: "ใกล้ falls and means near. ไกล is mid and means far. ที่นี่ is here. ที่นั่น is there.",
-		words: [
-			near,
-			far,
-			here,
-			there,
-			stop
-		],
-		exercises: [
-			choice("th-en", near, [
-				far,
-				here,
-				there
-			], nearCoach),
-			choice("en-th", far, [
-				near,
-				stop,
-				here
-			], nearCoach),
-			choice("listen", here, [
-				there,
-				near,
-				far
-			]),
-			tiles("Stop here.", [t(stop), t(here)], [
-				t(there),
-				t(far),
-				t(go)
-			]),
-			tiles("Not far.", [t(no), t(far)], [
-				t(near),
-				t(here),
-				t(stop)
-			]),
-			pairs([
-				near,
-				far,
-				here,
-				there
-			]),
-			choice("th-en", stop, [
-				here,
-				far,
-				go
-			])
-		]
-	},
-	{
-		id: "station",
-		unit: "going",
-		title: "Station",
-		subtitle: "Hotel, airport, bus, train",
-		tip: "รถไฟฟ้า is the skytrain. รถเมล์ is the bus. อยู่ที่ไหน still asks where.",
-		words: [
-			hotel,
-			station,
-			airport,
-			bus,
-			train
-		],
-		exercises: [
-			choice("th-en", hotel, [
-				station,
-				airport,
-				temple
-			]),
-			choice("en-th", airport, [
-				station,
-				hotel,
-				bus
-			]),
-			choice("listen", train, [
-				bus,
-				taxi,
-				station
-			]),
-			tiles("Where is the station?", [
-				t(station),
-				t(located),
-				t(where),
-				POLITE_Q
-			], [t(hotel), t(airport)]),
-			tiles("Go to the hotel.", [t(go), t(hotel)], [
-				t(station),
-				t(airport),
-				t(bus)
-			]),
-			pairs([
-				hotel,
-				station,
-				airport,
-				bus
-			]),
-			choice("th-en", bus, [
-				train,
-				taxi,
-				hotel
-			])
-		]
-	},
-	{
-		id: "names",
-		unit: "talking",
-		title: "Your name",
-		subtitle: "ชื่อ and อะไร",
-		tip: "ชื่ออะไร asks the name. ฉันชื่อ or ผมชื่อ starts the answer, then your name. คนไทย is a Thai person.",
-		words: [
-			nameW,
-			what,
-			person,
-			thaiPerson
-		],
-		exercises: [
-			choice("th-en", nameW, [
-				what,
-				person,
-				you
-			]),
-			choice("en-th", what, [
-				nameW,
-				person,
-				you
-			]),
-			choice("listen", person, [
-				thaiPerson,
-				friend,
-				you
-			]),
-			tiles("What's your name?", [
-				t(nameW),
-				t(what),
-				POLITE_Q
-			], [t(person), t(you)]),
-			tiles("My name...", [SELF, t(nameW)], [
-				OTHER,
-				t(what),
-				t(person)
-			]),
-			pairs([
-				nameW,
-				what,
-				person,
-				thaiPerson
-			]),
-			choice("th-en", thaiPerson, [
-				person,
-				friend,
-				you
-			])
-		]
-	},
-	{
-		id: "slowly",
-		unit: "talking",
-		title: "Slowly",
-		subtitle: "When the sentence goes past you",
-		tip: "ไม่เข้าใจ is the most useful sentence in the course. พูดช้าๆ asks them to slow down. นิดหน่อย is a little.",
-		words: [
-			speak,
-			understand,
-			aLittle,
-			slowly,
-			thaiLang
-		],
-		exercises: [
-			choice("th-en", understand, [
-				speak,
-				slowly,
-				aLittle
-			]),
-			choice("en-th", speak, [
-				understand,
-				slowly,
-				thaiLang
-			]),
-			choice("listen", slowly, [
-				aLittle,
-				speak,
-				understand
-			]),
-			tiles("I don't understand.", [
-				SELF,
-				t(no),
-				t(understand)
-			], [
-				t(speak),
-				OTHER,
-				t(yes)
-			]),
-			tiles("Speak slowly.", [
-				t(speak),
-				t(slowly),
-				POLITE
-			], [t(aLittle), t(understand)]),
-			tiles("A little Thai.", [t(thaiLang), t(aLittle)], [
-				t(speak),
-				t(slowly),
-				t(understand)
-			]),
-			pairs([
-				speak,
-				understand,
-				slowly,
-				aLittle
-			])
-		]
-	},
-	{
-		id: "outside",
-		unit: "out",
-		title: "Rain and rest",
-		subtitle: "Weather, tired, like",
-		tip: "ฝนตก is raining. ชอบ goes before the thing you like. เหนื่อย is tired.",
-		words: [
-			rain,
-			fall,
-			sunshine,
-			tired,
-			like,
-			fun
-		],
-		exercises: [
-			choice("th-en", rain, [
-				sunshine,
-				tired,
-				fun
-			]),
-			choice("en-th", tired, [
-				fun,
-				like,
-				rain
-			]),
-			choice("listen", like, [
-				fun,
-				tired,
-				rain
-			]),
-			tiles("It's raining.", [t(rain), t(fall)], [
-				t(sunshine),
-				t(tired),
-				t(fun)
-			]),
-			tiles("I like it.", [SELF, t(like)], [
-				t(no),
-				OTHER,
-				t(tired)
-			]),
-			tiles("I'm tired.", [SELF, t(tired)], [
-				t(fun),
-				t(like),
-				OTHER
-			]),
-			pairs([
-				rain,
-				sunshine,
-				tired,
-				fun
-			])
-		]
-	},
-	{
-		id: "checkpoint-2",
-		unit: "out",
-		title: "Say it again",
-		subtitle: "A mix from the whole course",
-		tip: "No new words. Same five hearts. Build the phrases the way you would say them out loud.",
-		checkpoint: true,
-		words: [],
-		exercises: [
-			choice("listen", understand, [
-				hello,
-				thanks,
-				rain
-			]),
-			tiles("I don't understand.", [
-				SELF,
-				t(no),
-				t(understand)
-			], [
-				t(speak),
-				t(yes),
-				OTHER
-			]),
-			tiles("Where is the hotel?", [
-				t(hotel),
-				t(located),
-				t(where),
-				POLITE_Q
-			], [t(station), t(market)]),
-			tiles("Not spicy.", [t(no), t(spicy)], [t(very), t(tasty)]),
-			choice("th-en", tomorrow, [
-				today,
-				yesterday,
-				now
-			]),
-			choice("en-th", bill, [
-				full,
-				water,
-				hundred
-			]),
-			pairs([
-				near,
-				white,
-				chicken,
-				twenty
-			]),
-			tiles("Speak slowly.", [
-				t(speak),
-				t(slowly),
-				POLITE
-			], [t(aLittle), t(understand)]),
-			choice("listen", padThai, [
-				somtam,
-				rice,
-				water
-			])
-		]
-	}
-];
-var courseNote = "A first-trip list, in the order you need the words. Not a dictionary dump.";
-var dailyPhrases = [
-	hello,
-	thanks,
-	np,
-	howru,
-	tasty,
-	howMuch,
-	bathroom,
-	well,
-	left,
-	today,
-	whatTime,
-	understand,
-	padThai,
-	near
-];
-function lessonById(id) {
-	return lessons.find((lesson) => lesson.id === id) ?? null;
-}
-function isUnlocked(id, completed) {
-	const index = lessons.findIndex((lesson) => lesson.id === id);
-	if (index <= 0) return true;
-	return Boolean(completed[lessons[index - 1].id]);
-}
-function nextLesson(completed) {
-	return lessons.find((lesson) => !completed[lesson.id] && isUnlocked(lesson.id, completed)) ?? null;
-}
-function resolveTok(tok, speaker) {
-	if (tok.kind === "w") return tok.word;
-	if (tok.kind === "self") return speaker === "m" ? iM : iF;
-	if (tok.kind === "other-self") return speaker === "m" ? iF : iM;
-	if (speaker === "m") return w("ครับ", "khráp", "polite particle");
-	if (tok.q) return w("คะ", "khá", "question particle");
-	return w("ค่ะ", "khâ", "polite particle");
-}
-function particleLabel(speaker) {
-	return speaker === "m" ? "ครับ · khráp" : "ค่ะ · khâ";
-}
+var useCatalog = create((set) => ({
+	...staticCurriculumCatalog,
+	fromDatabase: false,
+	setCatalog: (catalog) => set({
+		version: catalog.version,
+		units: catalog.units,
+		lessons: catalog.lessons,
+		vocabulary: catalog.vocabulary,
+		fromDatabase: true
+	})
+}));
 var createSsrRpc = (functionId) => {
 	const url = "/_serverFn/" + functionId;
 	const serverFnMeta = { id: functionId };
@@ -1547,6 +104,7 @@ var createSsrRpc = (functionId) => {
 		[TSS_SERVER_FUNCTION]: true
 	});
 };
+var loadCurriculum = createServerFn({ method: "GET" }).handler(createSsrRpc("880f58976003d284c9c5ea0bbf786ffa13b2036ada12da19e05c1a0c50dcd649"));
 var loadProgress = createServerFn({ method: "GET" }).middleware([authMiddleware]).handler(createSsrRpc("051aa46e3ecf11264c3d7e62a6ea80618cdeb21a96aa3fb3ae85f924992207ce"));
 var saveProgress = createServerFn({ method: "POST" }).validator((input) => {
 	const learning = parseLearning(input);
@@ -1879,7 +437,8 @@ var PRAISE = [
 	"Exactly."
 ];
 function Lesson({ lessonId, onExit }) {
-	const lesson = lessonById(lessonId);
+	const catalogLessons = useCatalog((state) => state.lessons);
+	const lesson = lessonById(lessonId, catalogLessons);
 	const speaker = useProgress((state) => state.speaker);
 	const showRoman = useProgress((state) => state.showRoman);
 	const autoplay = useProgress((state) => state.autoplay);
@@ -2202,6 +761,9 @@ function IconButton$1({ label, onClick, children }) {
 	});
 }
 function Path({ onStart, onReview }) {
+	const units = useCatalog((state) => state.units);
+	const lessons = useCatalog((state) => state.lessons);
+	const vocabulary = useCatalog((state) => state.vocabulary);
 	const xp = useProgress((state) => state.xp);
 	const streak = useProgress((state) => state.streak);
 	const completed = useProgress((state) => state.completed);
@@ -2210,7 +772,7 @@ function Path({ onStart, onReview }) {
 	const setSpeaker = useProgress((state) => state.setSpeaker);
 	const showRoman = useProgress((state) => state.showRoman);
 	const [note, setNote] = (0, import_react.useState)(null);
-	const next = nextLesson(completed);
+	const next = nextLesson(completed, lessons, units);
 	const doneCount = lessons.filter((lesson) => completed[lesson.id]).length;
 	const due = reviewStats(cards, todayKey()).due;
 	const phrase = dailyPhrases[Math.floor(Date.now() / 864e5) % dailyPhrases.length] ?? dailyPhrases[0];
@@ -2252,7 +814,12 @@ function Path({ onStart, onReview }) {
 						" XP · ",
 						doneCount,
 						"/",
-						lessons.length
+						lessons.length,
+						" lessons · ",
+						Object.keys(cards).length,
+						"/",
+						vocabulary.length,
+						" words"
 					]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SpeakerSwitch, {
 					speaker,
@@ -2326,103 +893,111 @@ function Path({ onStart, onReview }) {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "mt-6 grid gap-8",
-				children: levels.map((level) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-					className: "grid gap-6",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-xs font-extrabold tracking-wide text-chili uppercase",
-							children: "CEFR"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-							className: "text-2xl font-extrabold",
-							children: level.title
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-sm text-pretty text-muted",
-							children: level.blurb
-						})
-					] }), units.filter((unit) => unit.level === level.id).map((unit) => {
-						const unitLessons = lessons.filter((lesson) => lesson.unit === unit.id);
-						const unitDone = unitLessons.filter((lesson) => completed[lesson.id]).length;
-						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "rounded-3xl bg-soft px-5 py-4",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-xs font-extrabold tracking-wide text-chili uppercase",
-									children: unit.kicker
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex items-end justify-between gap-3",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-										className: "text-xl font-extrabold",
-										children: unit.title
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-										className: "text-sm font-extrabold text-muted tabular-nums",
-										children: [
-											unitDone,
-											"/",
-											unitLessons.length
-										]
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-sm text-muted",
-									children: unit.blurb
-								})
-							]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ol", {
-							className: "relative mt-4 grid gap-4 py-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "absolute top-4 bottom-4 left-1/2 w-1 -translate-x-1/2 bg-line",
-								"aria-hidden": true
-							}), unitLessons.map((lesson, index) => {
-								const open = isUnlocked(lesson.id, completed);
-								const done = Boolean(completed[lesson.id]);
-								const stars = completed[lesson.id] ?? 0;
-								const number = lessons.findIndex((item) => item.id === lesson.id) + 1;
-								const side = index % 2 === 0 ? "justify-start pl-6" : "justify-end pr-6";
-								return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
-									className: cn("relative flex", side),
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex w-28 flex-col items-center gap-1",
-										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-												type: "button",
-												"aria-label": open ? `Start ${lesson.title}` : `${lesson.title} locked`,
-												onClick: () => {
-													if (!open) {
-														const prev = lessons[number - 2];
-														setNote(prev ? `Finish ${prev.title} first.` : "Locked.");
-														return;
-													}
-													setNote(null);
-													onStart(lesson.id);
-												},
-												className: cn("path-node grid h-20 w-20 place-items-center rounded-full", done && "path-node-done", !done && open && lesson.checkpoint && "path-node-check", !done && open && !lesson.checkpoint && "path-node-go", !open && "path-node-lock"),
-												children: done ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-8 w-8" }) : !open ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, { className: "h-6 w-6" }) : lesson.checkpoint ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Award, { className: "h-8 w-8" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: "text-2xl font-extrabold tabular-nums",
-													children: number
-												})
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-center text-sm leading-tight font-extrabold",
-												children: lesson.title
-											}),
-											done && stars > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "flex text-marigold",
-												"aria-label": `${stars} stars`,
-												children: Array.from({ length: stars }, (_, star) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, {
-													className: "h-3.5 w-3.5",
-													fill: "currentColor"
-												}, star))
-											})
-										]
+				children: levels.map((level) => {
+					const levelWords = vocabulary.filter((word) => word.level === level.id).length;
+					const levelUnits = units.filter((unit) => unit.level === level.id);
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+						className: "grid gap-6",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "text-xs font-extrabold tracking-wide text-chili uppercase",
+								children: [
+									"CEFR · ",
+									levelWords,
+									" words"
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-2xl font-extrabold",
+								children: level.title
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm text-pretty text-muted",
+								children: level.blurb
+							})
+						] }), levelUnits.map((unit) => {
+							const unitLessons = lessons.filter((lesson) => lesson.unit === unit.id);
+							const unitDone = unitLessons.filter((lesson) => completed[lesson.id]).length;
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "rounded-3xl bg-soft px-5 py-4",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs font-extrabold tracking-wide text-chili uppercase",
+										children: unit.kicker
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-end justify-between gap-3",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "text-xl font-extrabold",
+											children: unit.title
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+											className: "text-sm font-extrabold text-muted tabular-nums",
+											children: [
+												unitDone,
+												"/",
+												unitLessons.length
+											]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-sm text-muted",
+										children: unit.blurb
 									})
-								}, lesson.id);
-							})]
-						})] }, unit.id);
-					})]
-				}, level.id))
+								]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ol", {
+								className: "relative mt-4 grid gap-4 py-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "absolute top-4 bottom-4 left-1/2 w-1 -translate-x-1/2 bg-line",
+									"aria-hidden": true
+								}), unitLessons.map((lesson, index) => {
+									const open = isUnlocked(lesson.id, completed, lessons, units);
+									const done = Boolean(completed[lesson.id]);
+									const stars = completed[lesson.id] ?? 0;
+									const number = lessons.findIndex((item) => item.id === lesson.id) + 1;
+									const side = index % 2 === 0 ? "justify-start pl-6" : "justify-end pr-6";
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", {
+										className: cn("relative flex", side),
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex w-28 flex-col items-center gap-1",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+													type: "button",
+													"aria-label": open ? `Start ${lesson.title}` : `${lesson.title} locked`,
+													onClick: () => {
+														if (!open) {
+															const prev = lessons[number - 2];
+															setNote(prev ? `Finish ${prev.title} first.` : "Locked.");
+															return;
+														}
+														setNote(null);
+														onStart(lesson.id);
+													},
+													className: cn("path-node grid h-20 w-20 place-items-center rounded-full", done && "path-node-done", !done && open && lesson.checkpoint && "path-node-check", !done && open && !lesson.checkpoint && "path-node-go", !open && "path-node-lock"),
+													children: done ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "h-8 w-8" }) : !open ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, { className: "h-6 w-6" }) : lesson.checkpoint ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Award, { className: "h-8 w-8" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-2xl font-extrabold tabular-nums",
+														children: number
+													})
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-center text-sm leading-tight font-extrabold",
+													children: lesson.title
+												}),
+												done && stars > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "flex text-marigold",
+													"aria-label": `${stars} stars`,
+													children: Array.from({ length: stars }, (_, star) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, {
+														className: "h-3.5 w-3.5",
+														fill: "currentColor"
+													}, star))
+												})
+											]
+										})
+									}, lesson.id);
+								})]
+							})] }, unit.id);
+						})]
+					}, level.id);
+				})
 			})
 		]
 	});
@@ -2458,6 +1033,8 @@ function SpeakerSwitch({ speaker, onChange }) {
 	});
 }
 function Profile() {
+	const lessons = useCatalog((state) => state.lessons);
+	const vocabulary = useCatalog((state) => state.vocabulary);
 	const xp = useProgress((state) => state.xp);
 	const streak = useProgress((state) => state.streak);
 	const completed = useProgress((state) => state.completed);
@@ -2518,8 +1095,8 @@ function Profile() {
 						value: `${done}/${lessons.length}`
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stat$1, {
-						label: "Words",
-						value: String(deck.total)
+						label: "Words seen",
+						value: `${deck.total}/${vocabulary.length}`
 					})
 				]
 			}),
@@ -2765,6 +1342,7 @@ function buildQueue(cards, mode) {
 	}));
 }
 function Review({ onStart }) {
+	const vocabulary = useCatalog((state) => state.vocabulary);
 	const cards = useProgress((state) => state.cards);
 	const showRoman = useProgress((state) => state.showRoman);
 	const today = todayKey();
@@ -2834,8 +1412,160 @@ function Review({ onStart }) {
 				onClick: () => onStart("ahead"),
 				className: "mt-2 min-h-12 w-full rounded-2xl border-2 border-line font-extrabold",
 				children: "Practice ahead"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(WordBank, {
+				vocabulary,
+				cards,
+				showRoman,
+				today
 			})
 		]
+	});
+}
+function WordBank({ vocabulary, cards, showRoman, today }) {
+	const [open, setOpen] = (0, import_react.useState)(false);
+	const [query, setQuery] = (0, import_react.useState)("");
+	const [level, setLevel] = (0, import_react.useState)("ALL");
+	const [topic, setTopic] = (0, import_react.useState)("ALL");
+	const topics = (0, import_react.useMemo)(() => Array.from(new Set(vocabulary.map((word) => word.topic))), [vocabulary]);
+	const filtered = (0, import_react.useMemo)(() => {
+		const q = query.trim().toLowerCase();
+		return vocabulary.filter((word) => {
+			if (level !== "ALL" && word.level !== level) return false;
+			if (topic !== "ALL" && word.topic !== topic) return false;
+			if (!q) return true;
+			return word.thai.includes(q) || word.roman.toLowerCase().includes(q) || word.en.toLowerCase().includes(q) || word.topic.toLowerCase().includes(q);
+		});
+	}, [
+		vocabulary,
+		level,
+		topic,
+		query
+	]);
+	const a1Count = vocabulary.filter((w) => w.level === "A1").length;
+	const a2Count = vocabulary.filter((w) => w.level === "A2").length;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "mt-8 border-t border-line pt-6",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex items-center justify-between gap-3",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-xs font-extrabold tracking-wide text-chili uppercase",
+					children: "Word bank"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+					className: "text-xl font-extrabold",
+					children: [
+						"All ",
+						vocabulary.length,
+						" course words"
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "text-xs font-bold text-muted",
+					children: [
+						a1Count,
+						" CEFR A1 · ",
+						a2Count,
+						" CEFR A2"
+					]
+				})
+			] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				onClick: () => setOpen((value) => !value),
+				className: "min-h-10 rounded-2xl border-2 border-line px-3 text-sm font-extrabold",
+				children: open ? "Hide" : "Browse"
+			})]
+		}), open && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mt-4 grid gap-3",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "relative",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						type: "search",
+						value: query,
+						onChange: (event) => setQuery(event.target.value),
+						placeholder: "Search Thai, romanization, or English",
+						className: "min-h-11 w-full rounded-2xl border-2 border-line bg-paper pr-3 pl-9 text-sm font-bold"
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-wrap items-center gap-2",
+					children: [[
+						"ALL",
+						"A1",
+						"A2"
+					].map((lv) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						"aria-pressed": level === lv,
+						onClick: () => setLevel(lv),
+						className: cn("min-h-9 rounded-full px-3 text-xs font-extrabold", level === lv ? "bg-ink text-sheet" : "bg-soft text-muted"),
+						children: lv === "ALL" ? `All (${vocabulary.length})` : `${lv} (${lv === "A1" ? a1Count : a2Count})`
+					}, lv)), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+						"aria-label": "Filter by topic",
+						value: topic,
+						onChange: (event) => setTopic(event.target.value),
+						className: "min-h-9 rounded-full bg-soft px-3 text-xs font-extrabold text-ink",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+							value: "ALL",
+							children: "All topics"
+						}), topics.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+							value: item,
+							children: item
+						}, item))]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "text-xs font-bold text-muted",
+					children: [
+						"Showing ",
+						filtered.length,
+						" words. Tap any card to listen."
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+					className: "grid max-h-96 gap-2 overflow-y-auto pr-1",
+					children: filtered.map((word) => {
+						const card = cards[word.thai];
+						return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: () => speakThai(word.thai),
+							className: "flex w-full items-center justify-between gap-3 rounded-2xl bg-soft px-4 py-3 text-left",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "flex min-w-0 items-center gap-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "h-4 w-4 shrink-0 text-chili" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "min-w-0",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											lang: "th",
+											className: "thai-display block text-lg",
+											children: word.thai
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "block text-sm font-bold text-muted",
+											children: [showRoman ? `${word.roman} · ` : "", word.en]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "block text-xs font-bold text-muted/80",
+											children: [
+												word.level,
+												" · ",
+												word.pos,
+												" · ",
+												word.topic
+											]
+										})
+									]
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "shrink-0 text-xs font-extrabold text-chili",
+								children: card ? duePhrase(card.due, today) : "New"
+							})]
+						}) }, word.id);
+					})
+				})
+			]
+		})]
 	});
 }
 function ReviewSession({ mode, onExit }) {
@@ -3191,13 +1921,22 @@ var consonants = [
 		ch: "ก",
 		name: "กอ ไก่",
 		gloss: "chicken",
-		sound: "g",
-		cls: "mid"
+		sound: "g / k",
+		cls: "mid",
+		core: true
 	},
 	{
 		ch: "ข",
 		name: "ขอ ไข่",
 		gloss: "egg",
+		sound: "kh / k",
+		cls: "high",
+		core: true
+	},
+	{
+		ch: "ฃ",
+		name: "ฃอ ขวด",
+		gloss: "bottle (obsolete)",
 		sound: "kh",
 		cls: "high"
 	},
@@ -3205,7 +1944,22 @@ var consonants = [
 		ch: "ค",
 		name: "คอ ควาย",
 		gloss: "buffalo",
+		sound: "kh / k",
+		cls: "low",
+		core: true
+	},
+	{
+		ch: "ฅ",
+		name: "ฅอ คน",
+		gloss: "person (obsolete)",
 		sound: "kh",
+		cls: "low"
+	},
+	{
+		ch: "ฆ",
+		name: "ฆอ ระฆัง",
+		gloss: "bell",
+		sound: "kh / k",
 		cls: "low"
 	},
 	{
@@ -3213,41 +1967,131 @@ var consonants = [
 		name: "งอ งู",
 		gloss: "snake",
 		sound: "ng",
-		cls: "low"
+		cls: "low",
+		core: true
 	},
 	{
 		ch: "จ",
 		name: "จอ จาน",
 		gloss: "plate",
-		sound: "j",
-		cls: "mid"
+		sound: "j / t",
+		cls: "mid",
+		core: true
+	},
+	{
+		ch: "ฉ",
+		name: "ฉอ ฉิ่ง",
+		gloss: "cymbals",
+		sound: "ch",
+		cls: "high"
 	},
 	{
 		ch: "ช",
 		name: "ชอ ช้าง",
 		gloss: "elephant",
+		sound: "ch / t",
+		cls: "low",
+		core: true
+	},
+	{
+		ch: "ซ",
+		name: "ซอ โซ่",
+		gloss: "chain",
+		sound: "s / t",
+		cls: "low"
+	},
+	{
+		ch: "ฌ",
+		name: "ฌอ เฌอ",
+		gloss: "tree",
 		sound: "ch",
+		cls: "low"
+	},
+	{
+		ch: "ญ",
+		name: "ญอ หญิง",
+		gloss: "woman",
+		sound: "y / n",
+		cls: "low"
+	},
+	{
+		ch: "ฎ",
+		name: "ฎอ ชฎา",
+		gloss: "headdress",
+		sound: "d / t",
+		cls: "mid"
+	},
+	{
+		ch: "ฏ",
+		name: "ฏอ ปฏัก",
+		gloss: "goad",
+		sound: "dt / t",
+		cls: "mid"
+	},
+	{
+		ch: "ฐ",
+		name: "ฐอ ฐาน",
+		gloss: "pedestal",
+		sound: "th / t",
+		cls: "high"
+	},
+	{
+		ch: "ฑ",
+		name: "ฑอ มณโฑ",
+		gloss: "Montho",
+		sound: "th / t",
+		cls: "low"
+	},
+	{
+		ch: "ฒ",
+		name: "ฒอ ผู้เฒ่า",
+		gloss: "elder",
+		sound: "th / t",
+		cls: "low"
+	},
+	{
+		ch: "ณ",
+		name: "ณอ เณร",
+		gloss: "novice monk",
+		sound: "n",
 		cls: "low"
 	},
 	{
 		ch: "ด",
 		name: "ดอ เด็ก",
 		gloss: "child",
-		sound: "d",
-		cls: "mid"
+		sound: "d / t",
+		cls: "mid",
+		core: true
 	},
 	{
 		ch: "ต",
 		name: "ตอ เต่า",
 		gloss: "turtle",
-		sound: "dt",
-		cls: "mid"
+		sound: "dt / t",
+		cls: "mid",
+		core: true
+	},
+	{
+		ch: "ถ",
+		name: "ถอ ถุง",
+		gloss: "bag",
+		sound: "th / t",
+		cls: "high"
 	},
 	{
 		ch: "ท",
 		name: "ทอ ทหาร",
 		gloss: "soldier",
-		sound: "th",
+		sound: "th / t",
+		cls: "low",
+		core: true
+	},
+	{
+		ch: "ธ",
+		name: "ธอ ธง",
+		gloss: "flag",
+		sound: "th / t",
 		cls: "low"
 	},
 	{
@@ -3255,27 +2099,59 @@ var consonants = [
 		name: "นอ หนู",
 		gloss: "mouse",
 		sound: "n",
-		cls: "low"
+		cls: "low",
+		core: true
 	},
 	{
 		ch: "บ",
 		name: "บอ ใบไม้",
 		gloss: "leaf",
-		sound: "b",
-		cls: "mid"
+		sound: "b / p",
+		cls: "mid",
+		core: true
 	},
 	{
 		ch: "ป",
 		name: "ปอ ปลา",
 		gloss: "fish",
-		sound: "bp",
-		cls: "mid"
+		sound: "bp / p",
+		cls: "mid",
+		core: true
+	},
+	{
+		ch: "ผ",
+		name: "ผอ ผึ้ง",
+		gloss: "bee",
+		sound: "ph",
+		cls: "high"
+	},
+	{
+		ch: "ฝ",
+		name: "ฝอ ฝา",
+		gloss: "lid",
+		sound: "f",
+		cls: "high"
 	},
 	{
 		ch: "พ",
 		name: "พอ พาน",
-		gloss: "phan tray",
-		sound: "ph",
+		gloss: "tray",
+		sound: "ph / p",
+		cls: "low",
+		core: true
+	},
+	{
+		ch: "ฟ",
+		name: "ฟอ ฟัน",
+		gloss: "tooth",
+		sound: "f / p",
+		cls: "low"
+	},
+	{
+		ch: "ภ",
+		name: "ภอ สำเภา",
+		gloss: "junk boat",
+		sound: "ph / p",
 		cls: "low"
 	},
 	{
@@ -3283,118 +2159,243 @@ var consonants = [
 		name: "มอ ม้า",
 		gloss: "horse",
 		sound: "m",
-		cls: "low"
+		cls: "low",
+		core: true
 	},
 	{
 		ch: "ย",
 		name: "ยอ ยักษ์",
 		gloss: "giant",
 		sound: "y",
-		cls: "low"
+		cls: "low",
+		core: true
 	},
 	{
 		ch: "ร",
 		name: "รอ เรือ",
 		gloss: "boat",
-		sound: "r",
-		cls: "low"
+		sound: "r / n",
+		cls: "low",
+		core: true
 	},
 	{
 		ch: "ล",
 		name: "ลอ ลิง",
 		gloss: "monkey",
-		sound: "l",
-		cls: "low"
+		sound: "l / n",
+		cls: "low",
+		core: true
 	},
 	{
 		ch: "ว",
 		name: "วอ แหวน",
 		gloss: "ring",
 		sound: "w",
-		cls: "low"
+		cls: "low",
+		core: true
+	},
+	{
+		ch: "ศ",
+		name: "ศอ ศาลา",
+		gloss: "pavilion",
+		sound: "s / t",
+		cls: "high"
+	},
+	{
+		ch: "ษ",
+		name: "ษอ ฤๅษี",
+		gloss: "hermit",
+		sound: "s / t",
+		cls: "high"
 	},
 	{
 		ch: "ส",
 		name: "สอ เสือ",
 		gloss: "tiger",
-		sound: "s",
-		cls: "high"
+		sound: "s / t",
+		cls: "high",
+		core: true
 	},
 	{
 		ch: "ห",
 		name: "หอ หีบ",
 		gloss: "chest",
 		sound: "h",
-		cls: "high"
+		cls: "high",
+		core: true
+	},
+	{
+		ch: "ฬ",
+		name: "ฬอ จุฬา",
+		gloss: "kite",
+		sound: "l / n",
+		cls: "low"
 	},
 	{
 		ch: "อ",
 		name: "ออ อ่าง",
 		gloss: "basin",
-		sound: "silent / a",
-		cls: "mid"
+		sound: "silent / aaw",
+		cls: "mid",
+		core: true
+	},
+	{
+		ch: "ฮ",
+		name: "ฮอ นกฮูก",
+		gloss: "owl",
+		sound: "h",
+		cls: "low"
 	}
 ];
 var vowels = [
 	{
-		mark: "า",
-		sound: "aa",
+		mark: "–ะ",
+		sound: "a (short)",
+		length: "short",
+		thai: "มะม่วง",
+		roman: "má-mûang",
+		en: "mango"
+	},
+	{
+		mark: "–า",
+		sound: "aa (long)",
+		length: "long",
 		thai: "ข้าว",
 		roman: "khâao",
 		en: "rice"
 	},
 	{
-		mark: "ิ",
-		sound: "i",
+		mark: "–ิ",
+		sound: "i (short)",
+		length: "short",
 		thai: "กิน",
 		roman: "gin",
 		en: "eat"
 	},
 	{
-		mark: "ี",
-		sound: "ii",
+		mark: "–ี",
+		sound: "ii (long)",
+		length: "long",
 		thai: "ดี",
 		roman: "dii",
 		en: "good"
 	},
 	{
-		mark: "ุ",
-		sound: "u",
+		mark: "–ึ",
+		sound: "ue (short)",
+		length: "short",
+		thai: "หนึ่ง",
+		roman: "nùeng",
+		en: "one"
+	},
+	{
+		mark: "–ือ",
+		sound: "uue (long)",
+		length: "long",
+		thai: "มือ",
+		roman: "muue",
+		en: "hand"
+	},
+	{
+		mark: "–ุ",
+		sound: "u (short)",
+		length: "short",
 		thai: "คุณ",
 		roman: "khun",
 		en: "you"
 	},
 	{
-		mark: "ู",
-		sound: "uu",
+		mark: "–ู",
+		sound: "uu (long)",
+		length: "long",
 		thai: "อยู่",
-		roman: "yûu",
+		roman: "yùu",
 		en: "located"
 	},
 	{
-		mark: "เ",
-		sound: "e",
-		thai: "เจ็ด",
-		roman: "jèt",
-		en: "seven"
+		mark: "เ–",
+		sound: "ee (long)",
+		length: "long",
+		thai: "เลข",
+		roman: "lêek",
+		en: "number"
 	},
 	{
-		mark: "แ",
-		sound: "ae",
+		mark: "แ–",
+		sound: "aae (long)",
+		length: "long",
 		thai: "แม่",
 		roman: "mâae",
 		en: "mom"
 	},
 	{
-		mark: "ไ",
+		mark: "โ–",
+		sound: "oo (long)",
+		length: "long",
+		thai: "โรงแรม",
+		roman: "roong-raaem",
+		en: "hotel"
+	},
+	{
+		mark: "–อ",
+		sound: "aaw (long)",
+		length: "long",
+		thai: "ขอ",
+		roman: "khǎaw",
+		en: "please"
+	},
+	{
+		mark: "เ–อ",
+		sound: "oe (long)",
+		length: "long",
+		thai: "เปิด",
+		roman: "bpòet",
+		en: "open"
+	},
+	{
+		mark: "เ–ีย",
+		sound: "iia",
+		length: "combo",
+		thai: "เรียน",
+		roman: "riian",
+		en: "study"
+	},
+	{
+		mark: "เ–ือ",
+		sound: "uea",
+		length: "combo",
+		thai: "เพื่อน",
+		roman: "phûean",
+		en: "friend"
+	},
+	{
+		mark: "–ัว",
+		sound: "ua",
+		length: "combo",
+		thai: "หัว",
+		roman: "hǔa",
+		en: "head"
+	},
+	{
+		mark: "ไ– / ใ–",
 		sound: "ai",
+		length: "combo",
 		thai: "ไป",
 		roman: "bpai",
 		en: "go"
 	},
 	{
-		mark: "ำ",
+		mark: "เ–า",
+		sound: "ao",
+		length: "combo",
+		thai: "เช้า",
+		roman: "cháao",
+		en: "morning"
+	},
+	{
+		mark: "–ำ",
 		sound: "am",
+		length: "combo",
 		thai: "น้ำ",
 		roman: "náam",
 		en: "water"
@@ -3418,6 +2419,8 @@ var classColor = {
 	low: "text-teal"
 };
 function ScriptLab() {
+	const [showAllConsonants, setShowAllConsonants] = (0, import_react.useState)(false);
+	const shownConsonants = showAllConsonants ? consonants : consonants.filter((item) => item.core);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "px-5 pt-6 pb-10",
 		children: [
@@ -3491,36 +2494,61 @@ function ScriptLab() {
 				className: "mt-3 text-sm text-pretty text-muted",
 				children: "ไม่ (mâi, falling) means no. ไหม (mǎi, rising) turns a statement into a question. Same shape on the page, different pitch."
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-				className: "mt-8 text-lg font-extrabold",
-				children: "Letters you'll meet first"
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-8 flex items-center justify-between gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
+					className: "text-lg font-extrabold",
+					children: [
+						"Thai consonants (",
+						shownConsonants.length,
+						"/",
+						consonants.length,
+						")"
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex rounded-full bg-soft p-1 text-xs font-extrabold",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						"aria-pressed": !showAllConsonants,
+						onClick: () => setShowAllConsonants(false),
+						className: cn("min-h-9 rounded-full px-3", !showAllConsonants ? "bg-ink text-sheet" : "text-muted"),
+						children: "Core 21"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						"aria-pressed": showAllConsonants,
+						onClick: () => setShowAllConsonants(true),
+						className: cn("min-h-9 rounded-full px-3", showAllConsonants ? "bg-ink text-sheet" : "text-muted"),
+						children: "All 44"
+					})]
+				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-1 text-sm text-pretty text-muted",
-				children: "Not the full alphabet. Color is the class, and class decides the tone of a new word. Mid is ink, high is chili, low is teal. Tap a letter to hear its name."
+				children: "Color is the consonant class (mid = ink, high = chili, low = teal), which decides the tone of a syllable. Tap any letter to hear its name."
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "mt-3 flex gap-3 text-xs font-extrabold tracking-wide uppercase",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 						className: "text-ink",
-						children: "Mid"
+						children: "Mid (9)"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 						className: "text-chili",
-						children: "High"
+						children: "High (11)"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 						className: "text-teal",
-						children: "Low"
+						children: "Low (24)"
 					})
 				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
 				className: "mt-3 grid grid-cols-4 gap-2",
-				children: consonants.map((letter) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+				children: shownConsonants.map((letter) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 					type: "button",
 					onClick: () => speakThai(letter.name),
+					title: `${letter.name} (${letter.gloss})`,
 					className: "flex min-h-20 w-full flex-col items-center justify-center rounded-2xl bg-soft px-1 py-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 						lang: "th",
@@ -3740,13 +2768,14 @@ function Course({ userId }) {
 		ready.current = false;
 		setPhase("loading");
 		let cancel = false;
-		loadProgress().then((learning) => {
+		Promise.all([loadProgress(), loadCurriculum()]).then(([learning, catalog]) => {
 			if (cancel) return;
+			useCatalog.getState().setCatalog(catalog);
 			if (learning) useProgress.getState().applyLearning(learning);
 			else useProgress.getState().resetProgress();
 			lastSaved.current = JSON.stringify(learningSnapshot(useProgress.getState()));
 			ready.current = true;
-			const seen = lessons.filter((lesson) => useProgress.getState().completed[lesson.id]).flatMap((lesson) => lesson.words);
+			const seen = catalog.lessons.filter((lesson) => useProgress.getState().completed[lesson.id]).flatMap((lesson) => lesson.words);
 			useProgress.getState().ingestWords(seen);
 			setPhase("ready");
 		}).catch(() => {
@@ -3866,6 +2895,8 @@ function TabButton({ active, label, onClick, dot, children }) {
 	});
 }
 function BrandPanel() {
+	const lessons = useCatalog((state) => state.lessons);
+	const vocabulary = useCatalog((state) => state.vocabulary);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("aside", {
 		className: "relative hidden flex-1 flex-col justify-center overflow-hidden px-14 py-12 lg:flex",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -3896,10 +2927,11 @@ function BrandPanel() {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 					className: "mt-4 max-w-md text-lg text-pretty text-muted",
 					children: [
-						"A pocket course with real script, the five tones, and the polite particle that matches your voice.",
-						" ",
+						"A full CEFR A1 course with ",
+						vocabulary.length,
+						" words across ",
 						lessons.length,
-						" lessons, from hello to asking someone to slow down. Review brings back only the words you have already seen."
+						" lessons, real Thai script, five tones, and the polite particle that matches your voice. Review brings back only the words you have already seen."
 					]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", {
@@ -3918,13 +2950,13 @@ function BrandPanel() {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrandPoint, {
 							icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BookOpen, { className: "h-5 w-5" }),
 							title: "Read the script",
-							body: "A starter alphabet, vowel shapes, Thai digits, and a tone drill live under Script."
+							body: "All 44 consonants, 19 vowel patterns, Thai digits, and a tone drill live under Script."
 						})
 					]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-8 text-sm font-bold text-muted",
-					children: "Sign in. Lessons and review stay with your account."
+					children: "Sign in. Lessons, vocabulary, and review stay with your account."
 				})
 			]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {

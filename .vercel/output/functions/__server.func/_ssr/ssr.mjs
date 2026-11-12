@@ -533,7 +533,7 @@ var HEADERS = { TSS_SHELL: "X-TSS_SHELL" };
 * the dev styles URL for route-scoped CSS collection.
 */
 async function getStartManifest(matchedRoutes) {
-	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-C72hzesw.mjs");
+	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-60nKNBxy.mjs");
 	const startManifest = tsrStartManifest();
 	let routes = startManifest.routes;
 	routes[rootRouteId];
@@ -555,11 +555,15 @@ async function getStartManifest(matchedRoutes) {
 var manifest = {
 	"051aa46e3ecf11264c3d7e62a6ea80618cdeb21a96aa3fb3ae85f924992207ce": {
 		functionName: "loadProgress_createServerFn_handler",
-		importer: () => import("./learner-progress-Cw9L0Ae9.mjs")
+		importer: () => import("./learner-progress-Bi07MsDA.mjs")
+	},
+	"880f58976003d284c9c5ea0bbf786ffa13b2036ada12da19e05c1a0c50dcd649": {
+		functionName: "loadCurriculum_createServerFn_handler",
+		importer: () => import("./curriculum-api-qZDvlluN.mjs")
 	},
 	"89a9b707bb1464d1fa4a04be9382ae4c7fb2a8b57950e23a3285a2f8f31d52a8": {
 		functionName: "saveProgress_createServerFn_handler",
-		importer: () => import("./learner-progress-Cw9L0Ae9.mjs")
+		importer: () => import("./learner-progress-Bi07MsDA.mjs")
 	}
 };
 async function getServerFnById(id, access) {
@@ -2045,7 +2049,7 @@ var getBaseManifest = getProdBaseManifest;
 var createEarlyHintsForRequest = createEarlyHintsCollector;
 async function loadEntries() {
 	const [routerEntry, startEntry, pluginAdapters] = await Promise.all([
-		import("./router-mFNvqWkC.mjs").then((n) => n.t),
+		import("./router-BsNeKVys.mjs").then((n) => n.t),
 		import("./start-COmmreO7.mjs"),
 		import("./empty-plugin-adapters-CeyhLWeJ.mjs")
 	]);

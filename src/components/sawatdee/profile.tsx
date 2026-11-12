@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { lessons, particleLabel, courseNote } from "@/lib/curriculum";
+import { useCatalog } from "@/lib/catalog-store";
+import { particleLabel, courseNote } from "@/lib/curriculum";
 import { UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { useProgress } from "@/lib/progress";
@@ -8,6 +9,8 @@ import { reviewStats, todayKey } from "@/lib/srs";
 import { cn } from "@/lib/cn";
 
 export function Profile() {
+  const lessons = useCatalog((state) => state.lessons);
+  const vocabulary = useCatalog((state) => state.vocabulary);
   const xp = useProgress((state) => state.xp);
   const streak = useProgress((state) => state.streak);
   const completed = useProgress((state) => state.completed);
@@ -53,7 +56,7 @@ export function Profile() {
         <Stat label="XP" value={String(xp)} />
         <Stat label="Streak" value={String(streak)} />
         <Stat label="Lessons" value={`${done}/${lessons.length}`} />
-        <Stat label="Words" value={String(deck.total)} />
+        <Stat label="Words seen" value={`${deck.total}/${vocabulary.length}`} />
       </div>
       <p className="mt-3 text-sm font-bold text-muted">
         {accuracy === null

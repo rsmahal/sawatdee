@@ -19,11 +19,12 @@ This configuration runs **Sawatdee** (`sawatdee-app`) with its own **PostgreSQL 
 - **Authentication (`migrations/0001_auth.sql`)**:
   - Uses Better Auth (`user`, `session`, `account`, `verification` tables in PostgreSQL) with email & password sign-up/sign-in.
   - Sessions are persisted in PostgreSQL and secured via `__Host-` HTTP-only cookies over HTTPS (`https://sawatdee.lolgames.info`).
-- **Course Curriculum (`src/lib/curriculum.ts`)**:
-  - Contains the structured Thai lessons, script, romanization, tones, and exercises.
+- **Course Curriculum & Vocabulary Catalog (`migrations/0004_curriculum.sql` & `src/lib/curriculum-*.ts`)**:
+  - Normalized PostgreSQL tables (`vocabulary`, `course_units`, `course_lessons`, `lesson_vocabulary`, `curriculum_meta`) are idempotently seeded on server startup and queried by `loadCurriculum()`.
+  - Covers a full **CEFR A1** track (12 units, 37 lessons, 321 words) plus an **A2** track (4 units, 8 lessons, 54 words), and all 44 Thai consonants.
 - **Learner Progress & Vocabulary SRS (`migrations/0002_progress.sql` & `migrations/0003_vocabulary.sql`)**:
   - **`learner_progress`**: Stores each user's XP, streak, completed lessons, preferences, and full card snapshot (`payload jsonb`) keyed by `user_id`.
-  - **`user_vocabulary`**: Stores a normalized row per learned Thai word per user (`user_id`, `thai`, `roman`, `en`, `ease`, `interval_days`, `due_date`, `reps`, `lapses`, `seen_date`) for spaced-repetition review scheduling.
+  - **`user_vocabulary`**: Stores a normalized row per learned Thai word per user (`user_id`, `vocabulary_id`, `thai`, `roman`, `en`, `ease`, `interval_days`, `due_date`, `reps`, `lapses`, `seen_date`) linked to canonical `vocabulary(id)` rows.
 - **Automatic Migrations**:
   - Every time `sawatdee-app` starts (`docker-entrypoint.sh`), it waits for PostgreSQL to be healthy and runs `node scripts/migrate.mjs` automatically.
 

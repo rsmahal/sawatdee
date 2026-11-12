@@ -1,10 +1,12 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
-import { Check, RotateCcw, X } from "lucide-react";
+import { Check, RotateCcw, Search, Volume2, X } from "lucide-react";
+import { useCatalog } from "@/lib/catalog-store";
 import { cn } from "@/lib/cn";
-import type { Exercise, Word } from "@/lib/curriculum";
+import type { CefrLevel, Exercise, VocabularyEntry, Word } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
 import { gapLabel, nextInterval, reviewStats, todayKey, duePhrase, type ReviewGrade, type SrsCard } from "@/lib/srs";
 import { shuffle } from "@/lib/shuffle";
+import { speakThai } from "@/lib/speech";
 import { ExerciseBody, type Grade, type GradeHandle } from "./exercise";
 
 const COACH: Record<string, string> = {
@@ -44,6 +46,7 @@ function buildQueue(cards: Record<string, SrsCard>, mode: "due" | "ahead"): Item
 }
 
 export function Review({ onStart }: { onStart: (mode: "due" | "ahead") => void }) {
+  const vocabulary = useCatalog((state) => state.vocabulary);
   const cards = useProgress((state) => state.cards);
   const showRoman = useProgress((state) => state.showRoman);
   const today = todayKey();
@@ -106,7 +109,151 @@ export function Review({ onStart }: { onStart: (mode: "due" | "ahead") => void }
           Practice ahead
         </button>
       )}
+
+      <WordBank vocabulary={vocabulary} cards={cards} showRoman={showRoman} today={today} />
     </div>
+  );
+}
+
+function WordBank({
+  vocabulary,
+  cards,
+  showRoman,
+  today,
+}: {
+  vocabulary: VocabularyEntry[];
+  cards: Record<string, SrsCard>;
+  showRoman: boolean;
+  today: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [level, setLevel] = useState<"ALL" | CefrLevel>("ALL");
+  const [topic, setTopic] = useState<string>("ALL");
+
+  const topics = useMemo(
+    () => Array.from(new Set(vocabulary.map((word) => word.topic))),
+    [vocabulary],
+  );
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return vocabulary.filter((word) => {
+      if (level !== "ALL" && word.level !== level) return false;
+      if (topic !== "ALL" && word.topic !== topic) return false;
+      if (!q) return true;
+      return (
+        word.thai.includes(q) ||
+        word.roman.toLowerCase().includes(q) ||
+        word.en.toLowerCase().includes(q) ||
+        word.topic.toLowerCase().includes(q)
+      );
+    });
+  }, [vocabulary, level, topic, query]);
+
+  const a1Count = vocabulary.filter((w) => w.level === "A1").length;
+  const a2Count = vocabulary.filter((w) => w.level === "A2").length;
+
+  return (
+    <section className="mt-8 border-t border-line pt-6">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-extrabold tracking-wide text-chili uppercase">Word bank</p>
+          <h2 className="text-xl font-extrabold">All {vocabulary.length} course words</h2>
+          <p className="text-xs font-bold text-muted">
+            {a1Count} CEFR A1 · {a2Count} CEFR A2
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          className="min-h-10 rounded-2xl border-2 border-line px-3 text-sm font-extrabold"
+        >
+          {open ? "Hide" : "Browse"}
+        </button>
+      </div>
+
+      {open && (
+        <div className="mt-4 grid gap-3">
+          <div className="relative">
+            <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted" />
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search Thai, romanization, or English"
+              className="min-h-11 w-full rounded-2xl border-2 border-line bg-paper pr-3 pl-9 text-sm font-bold"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {(["ALL", "A1", "A2"] as const).map((lv) => (
+              <button
+                key={lv}
+                type="button"
+                aria-pressed={level === lv}
+                onClick={() => setLevel(lv)}
+                className={cn(
+                  "min-h-9 rounded-full px-3 text-xs font-extrabold",
+                  level === lv ? "bg-ink text-sheet" : "bg-soft text-muted",
+                )}
+              >
+                {lv === "ALL" ? `All (${vocabulary.length})` : `${lv} (${lv === "A1" ? a1Count : a2Count})`}
+              </button>
+            ))}
+            <select
+              aria-label="Filter by topic"
+              value={topic}
+              onChange={(event) => setTopic(event.target.value)}
+              className="min-h-9 rounded-full bg-soft px-3 text-xs font-extrabold text-ink"
+            >
+              <option value="ALL">All topics</option>
+              {topics.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <p className="text-xs font-bold text-muted">Showing {filtered.length} words. Tap any card to listen.</p>
+
+          <ul className="grid max-h-96 gap-2 overflow-y-auto pr-1">
+            {filtered.map((word) => {
+              const card = cards[word.thai];
+              return (
+                <li key={word.id}>
+                  <button
+                    type="button"
+                    onClick={() => speakThai(word.thai)}
+                    className="flex w-full items-center justify-between gap-3 rounded-2xl bg-soft px-4 py-3 text-left"
+                  >
+                    <span className="flex min-w-0 items-center gap-3">
+                      <Volume2 className="h-4 w-4 shrink-0 text-chili" />
+                      <span className="min-w-0">
+                        <span lang="th" className="thai-display block text-lg">
+                          {word.thai}
+                        </span>
+                        <span className="block text-sm font-bold text-muted">
+                          {showRoman ? `${word.roman} · ` : ""}
+                          {word.en}
+                        </span>
+                        <span className="block text-xs font-bold text-muted/80">
+                          {word.level} · {word.pos} · {word.topic}
+                        </span>
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-xs font-extrabold text-chili">
+                      {card ? duePhrase(card.due, today) : "New"}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </section>
   );
 }
 

@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { authMiddleware } from "@/lib/auth/middleware";
+import { ensureCurriculumSeeded } from "@/lib/curriculum-store.server";
 import { getSql } from "@/lib/db";
 import { parseLearning, type Learning } from "@/lib/progress";
 
@@ -7,6 +8,7 @@ export const loadProgress = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context }): Promise<Learning | null> => {
     const sql = await getSql();
+    await ensureCurriculumSeeded(sql);
     const rows = await sql<{ payload: unknown }>`
       select payload from learner_progress where user_id = ${context.userId}
     `;
@@ -24,6 +26,7 @@ export const saveProgress = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .handler(async ({ context, data }) => {
     const sql = await getSql();
+    await ensureCurriculumSeeded(sql);
     const payload = JSON.stringify(data);
     const cardList = Object.values(data.cards);
     await sql`
@@ -38,10 +41,11 @@ export const saveProgress = createServerFn({ method: "POST" })
       const cardsJson = JSON.stringify(cardList);
       await sql.query(
         `insert into user_vocabulary (
-          user_id, thai, roman, en, ease, interval_days, due_date, reps, lapses, seen_date, updated_at
+          user_id, vocabulary_id, thai, roman, en, ease, interval_days, due_date, reps, lapses, seen_date, updated_at
         )
         select
           $1,
+          v.id,
           x.thai,
           x.roman,
           x.en,
@@ -63,7 +67,9 @@ export const saveProgress = createServerFn({ method: "POST" })
           lapses integer,
           seen text
         )
+        left join vocabulary v on v.thai = x.thai
         on conflict (user_id, thai) do update set
+          vocabulary_id = excluded.vocabulary_id,
           roman = excluded.roman,
           en = excluded.en,
           ease = excluded.ease,

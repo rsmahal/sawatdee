@@ -1,14 +1,12 @@
 import { o as __toESM, r as __exportAll } from "../_runtime.mjs";
 import { L as string, N as number, P as object, R as union, j as literal } from "../_libs/@better-auth/core+[...].mjs";
-import { t as auth } from "./server-BzNa5Kx7.mjs";
-import { Ht as require_react, _ as createRootRoute, d as HeadContent, g as createFileRoute, h as lazyRouteComponent, m as Outlet, p as createRouter, u as Scripts, y as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
+import { t as auth } from "./server-BK1JVJCR.mjs";
+import { Ut as require_react, _ as createRootRoute, b as useRouter, d as HeadContent, g as createFileRoute, h as lazyRouteComponent, m as Outlet, p as createRouter, u as Scripts, x as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
 import { i as TriangleAlert } from "../_libs/lucide-react.mjs";
-import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
-// node_modules/.nitro/vite/services/ssr/assets/router-8R6VgfGQ.js
-var router_8R6VgfGQ_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
+// node_modules/.nitro/vite/services/ssr/assets/router-BsNeKVys.js
+var router_BsNeKVys_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 var import_react = /* @__PURE__ */ __toESM(require_react());
-var import_jsx_dev_runtime = require_jsx_dev_runtime();
-var _jsxFileName$2 = "/app/applet/src/lib/error-component.tsx";
+var import_jsx_runtime = require_jsx_runtime();
 var FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
 function errorMessage(error) {
 	if (error instanceof Error && error.message) return error.message;
@@ -16,47 +14,27 @@ function errorMessage(error) {
 	return FALLBACK_MESSAGE;
 }
 function AppErrorComponent({ error }) {
-	return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("main", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
 		className: "flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50",
 		children: [
-			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 				className: "text-red-500",
 				"aria-hidden": "true",
-				children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(TriangleAlert, {
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, {
 					className: "size-10",
 					strokeWidth: 2
-				}, void 0, false, {
-					fileName: _jsxFileName$2,
-					lineNumber: 21,
-					columnNumber: 9
-				}, this)
-			}, void 0, false, {
-				fileName: _jsxFileName$2,
-				lineNumber: 20,
-				columnNumber: 7
-			}, this),
-			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h1", {
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 				className: "text-lg font-semibold",
 				children: "Something went wrong"
-			}, void 0, false, {
-				fileName: _jsxFileName$2,
-				lineNumber: 23,
-				columnNumber: 7
-			}, this),
-			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "max-w-md text-sm break-words text-zinc-500 dark:text-zinc-400",
 				children: errorMessage(error)
-			}, void 0, false, {
-				fileName: _jsxFileName$2,
-				lineNumber: 24,
-				columnNumber: 7
-			}, this)
+			})
 		]
-	}, void 0, true, {
-		fileName: _jsxFileName$2,
-		lineNumber: 14,
-		columnNumber: 5
-	}, this);
+	});
 }
 /**
 * Path-based preview hosts serve the dev server under `/{port_id}/` and strip
@@ -92,7 +70,6 @@ function previewPathRewrite() {
 	const prefix = previewPathPrefix(window.location.hostname, window.location.pathname);
 	return prefix ? prefixRewrite(prefix) : void 0;
 }
-var _jsxFileName$1 = "/app/applet/src/lib/auth/provider.tsx";
 /**
 * App-wide client provider mounted once near the root (in `src/routes/__root.tsx`):
 *
@@ -104,11 +81,7 @@ var _jsxFileName$1 = "/app/applet/src/lib/auth/provider.tsx";
 * (e.g. a toast or theme provider) without churning the root shell.
 */
 function AuthProvider({ children }) {
-	return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(import_jsx_dev_runtime.Fragment, { children }, void 0, false, {
-		fileName: _jsxFileName$1,
-		lineNumber: 14,
-		columnNumber: 10
-	}, this);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children });
 }
 var CONNECTOR_TOKEN_READY_EVENT = "grok:connector-token-ready";
 function isGrokEmbedderOrigin(origin) {
@@ -359,8 +332,7 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-var styles_default = "/assets/styles-C-YcMv6h.css";
-var _jsxFileName = "/app/applet/src/routes/__root.tsx";
+var styles_default = "/assets/styles-DAg6Ul1q.css";
 var APP_NAME = "Sawatdee - Learn Thai";
 var APP_DESC = "A pocket course in spoken Thai: script, tones, vocabulary, and polite particles.";
 var Route$3 = createRootRoute({
@@ -409,56 +381,20 @@ var Route$3 = createRootRoute({
 			}
 		]
 	}),
-	component: () => /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("html", {
+	component: () => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("html", {
 		lang: "en",
 		className: "antialiased",
 		suppressHydrationWarning: true,
-		children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("head", { children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(HeadContent, {}, void 0, false, {
-			fileName: _jsxFileName,
-			lineNumber: 33,
-			columnNumber: 9
-		}, void 0), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("script", { dangerouslySetInnerHTML: { __html: "(function(){try{var s=JSON.parse(localStorage.getItem(\"sawatdee-v1\")||\"{}\").state||{};if(s.theme===\"dark\")document.documentElement.classList.add(\"dark\");if(s.scriptStyle===\"traditional\")document.documentElement.classList.add(\"thai-traditional\");}catch(e){}})();" } }, void 0, false, {
-			fileName: _jsxFileName,
-			lineNumber: 34,
-			columnNumber: 9
-		}, void 0)] }, void 0, true, {
-			fileName: _jsxFileName,
-			lineNumber: 32,
-			columnNumber: 7
-		}, void 0), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("body", { children: [
-			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(PreviewHostBridge, {}, void 0, false, {
-				fileName: _jsxFileName,
-				lineNumber: 42,
-				columnNumber: 9
-			}, void 0),
-			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Outlet, {}, void 0, false, {
-				fileName: _jsxFileName,
-				lineNumber: 44,
-				columnNumber: 11
-			}, void 0) }, void 0, false, {
-				fileName: _jsxFileName,
-				lineNumber: 43,
-				columnNumber: 9
-			}, void 0),
-			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Scripts, {}, void 0, false, {
-				fileName: _jsxFileName,
-				lineNumber: 46,
-				columnNumber: 9
-			}, void 0)
-		] }, void 0, true, {
-			fileName: _jsxFileName,
-			lineNumber: 41,
-			columnNumber: 7
-		}, void 0)]
-	}, void 0, true, {
-		fileName: _jsxFileName,
-		lineNumber: 31,
-		columnNumber: 5
-	}, void 0)
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("head", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(HeadContent, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("script", { dangerouslySetInnerHTML: { __html: "(function(){try{var s=JSON.parse(localStorage.getItem(\"sawatdee-v1\")||\"{}\").state||{};if(s.theme===\"dark\")document.documentElement.classList.add(\"dark\");if(s.scriptStyle===\"traditional\")document.documentElement.classList.add(\"thai-traditional\");}catch(e){}})();" } })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("body", { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PreviewHostBridge, {}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AuthProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {}) }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Scripts, {})
+		] })]
+	})
 });
-var $$splitComponentImporter$1 = () => import("./routes-CBwzoyLS.mjs");
+var $$splitComponentImporter$1 = () => import("./routes-DR-IWflR.mjs");
 var Route$2 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./login-D6KygpO4.mjs");
+var $$splitComponentImporter = () => import("./login-DBWwrRdi.mjs");
 var Route$1 = createFileRoute("/login")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var Route = createFileRoute("/api/auth/$")({ server: { handlers: {
 	GET: ({ request }) => auth.handler(request),
@@ -489,4 +425,4 @@ function getRouter() {
 		defaultErrorComponent: AppErrorComponent
 	});
 }
-export { getRouter, router_8R6VgfGQ_exports as t };
+export { getRouter, router_BsNeKVys_exports as t };
