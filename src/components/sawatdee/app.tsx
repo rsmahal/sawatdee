@@ -211,8 +211,8 @@ function BrandPanel() {
         </div>
         <h2 className="mt-8 text-5xl font-extrabold text-balance">Speak Thai from the first lesson.</h2>
         <p className="mt-4 max-w-md text-lg text-pretty text-muted">
-          A full CEFR A1 course with {vocabulary.length} words across {lessons.length} lessons, real Thai script,
-          five tones, and the polite particle that matches your voice. Review brings back only the words you have
+          A full CEFR A1 &amp; A2 course with {vocabulary.length} words across {lessons.length} lessons, real Thai
+          script, five tones, and the polite particle that matches your voice. Review brings back only the words you have
           already seen.
         </p>
         <ul className="mt-8 grid gap-4">

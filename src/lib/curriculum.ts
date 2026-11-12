@@ -35,7 +35,7 @@ export const levels: readonly LevelInfo[] = [
   {
     id: "A2",
     title: "A2 · Elementary",
-    blurb: "Customize meals, navigate transit, introduce yourself, and handle conversations when stuck.",
+    blurb: "Full CEFR A2 progression: cooking, travel, comparisons, work & tech, errands, banking, pharmacy, opinions, and storytelling.",
   },
 ];
 
@@ -71,7 +71,7 @@ export const vocabularyCatalog: VocabularyEntry[] = (() => {
   return entries;
 })();
 
-export const CURRICULUM_VERSION = `cefr-a1-v2-u${units.length}-l${lessons.length}-w${vocabularyCatalog.length}`;
+export const CURRICULUM_VERSION = `cefr-a1-a2-v3-u${units.length}-l${lessons.length}-w${vocabularyCatalog.length}`;
 
 export const staticCurriculumCatalog: CurriculumCatalog = {
   version: CURRICULUM_VERSION,
@@ -80,8 +80,11 @@ export const staticCurriculumCatalog: CurriculumCatalog = {
   vocabulary: vocabularyCatalog,
 };
 
+const a1Total = vocabularyCatalog.filter((v) => v.level === "A1").length;
+const a2Total = vocabularyCatalog.filter((v) => v.level === "A2").length;
+
 export const courseNote =
-  `Full CEFR A1 (${vocabularyCatalog.filter((v) => v.level === "A1").length} words) + A2 starter track, stored in PostgreSQL.`;
+  `Full CEFR A1 (${a1Total} words) & A2 (${a2Total} words), stored in PostgreSQL.`;
 
 export const dailyPhrases: Word[] = [
   a1Vocab.hello,

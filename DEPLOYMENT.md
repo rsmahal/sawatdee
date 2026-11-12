@@ -21,7 +21,7 @@ This configuration runs **Sawatdee** (`sawatdee-app`) with its own **PostgreSQL 
   - Sessions are persisted in PostgreSQL and secured via `__Host-` HTTP-only cookies over HTTPS (`https://sawatdee.lolgames.info`).
 - **Course Curriculum & Vocabulary Catalog (`migrations/0004_curriculum.sql` & `src/lib/curriculum-*.ts`)**:
   - Normalized PostgreSQL tables (`vocabulary`, `course_units`, `course_lessons`, `lesson_vocabulary`, `curriculum_meta`) are idempotently seeded on server startup and queried by `loadCurriculum()`.
-  - Covers a full **CEFR A1** track (12 units, 37 lessons, 321 words) plus an **A2** track (4 units, 8 lessons, 54 words), and all 44 Thai consonants.
+  - Covers full **CEFR A1** (12 units, 37 lessons, 321 words) and **CEFR A2** (12 units, 35 lessons, 331 words) — **652 words** total across **72 lessons** — plus all 44 Thai consonants and 19 vowel patterns.
 - **Learner Progress & Vocabulary SRS (`migrations/0002_progress.sql` & `migrations/0003_vocabulary.sql`)**:
   - **`learner_progress`**: Stores each user's XP, streak, completed lessons, preferences, and full card snapshot (`payload jsonb`) keyed by `user_id`.
   - **`user_vocabulary`**: Stores a normalized row per learned Thai word per user (`user_id`, `vocabulary_id`, `thai`, `roman`, `en`, `ease`, `interval_days`, `due_date`, `reps`, `lapses`, `seen_date`) linked to canonical `vocabulary(id)` rows.
