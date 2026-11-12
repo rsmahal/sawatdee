@@ -1,5 +1,5 @@
 import { o as getRequest } from "./ssr.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/isolation.server-CGNg1r0B.js
+// node_modules/.nitro/vite/services/ssr/assets/isolation.server-z4c_3uw8.js
 /**
 * Fetch-Metadata sibling isolation — **server-only** (`.server.ts` suffix).
 *
@@ -40,5 +40,4 @@ function assertSameSiteRequest() {
 	if (h.get("sec-fetch-mode") === "navigate" && request.method === "GET" && dest !== "object" && dest !== "embed") return;
 	throw new CrossSiteRequestError();
 }
-//#endregion
 export { assertSameSiteRequest };

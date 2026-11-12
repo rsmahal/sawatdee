@@ -1,7 +1,7 @@
 import { i as TSS_SERVER_FUNCTION, r as createServerFn } from "./ssr.mjs";
-import { r as getSql } from "./db-yRfUMXAR.mjs";
-import { o as parseLearning, t as authMiddleware } from "./progress-BpyYwz8Y.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/learner-progress-CTTTghU6.js
+import { o as parseLearning, t as authMiddleware } from "./progress-cl4r0bOY.mjs";
+import { r as getSql } from "./db-hAOvG2zk.mjs";
+// node_modules/.nitro/vite/services/ssr/assets/learner-progress-8Iz4tYA8.js
 var createServerRpc = (serverFnMeta, splitImportFn) => {
 	const url = "/_serverFn/" + serverFnMeta.id;
 	return Object.assign(splitImportFn, {
@@ -49,5 +49,4 @@ function safeJson(value) {
 		return null;
 	}
 }
-//#endregion
 export { loadProgress_createServerFn_handler, saveProgress_createServerFn_handler };

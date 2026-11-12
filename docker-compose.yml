@@ -1,0 +1,19 @@
+services:
+  sawatdee:
+    image: ${DOCKER_IMAGE:-ghcr.io/rsmahal/sawatdee:latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sawatdee-app
+    restart: unless-stopped
+    ports:
+      # Maps host port 3001 to container port 3000 (leaves port 3000 for mario-kart-app)
+      - "${HOST_PORT:-3001}:3000"
+    environment:
+      - PORT=3000
+      - HOST=0.0.0.0
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL:-}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}

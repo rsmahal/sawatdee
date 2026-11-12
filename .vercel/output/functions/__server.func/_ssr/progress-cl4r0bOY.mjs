@@ -1,6 +1,6 @@
 import { n as createMiddleware } from "./ssr.mjs";
 import { n as create, t as persist } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/progress-BpyYwz8Y.js
+// node_modules/.nitro/vite/services/ssr/assets/progress-cl4r0bOY.js
 /**
 * Auth middleware for server functions — the standard way to get the caller's
 * verified user id. When deployed the session cookie is same-origin and rides
@@ -27,11 +27,11 @@ import { n as create, t as persist } from "../_libs/zustand.mjs";
 * per-user data and scope every query by `context.userId`.
 */
 var authMiddleware = createMiddleware({ type: "function" }).client(async ({ next }) => {
-	const { getBearerToken } = await import("./client-1vAx-gM_.mjs").then((n) => n.n);
+	const { getBearerToken } = await import("./client-BF-G9gzu.mjs").then((n) => n.n);
 	return next({ sendContext: { bearerToken: getBearerToken() ?? void 0 } });
 }).server(async ({ next, context }) => {
-	const { assertSameSiteRequest } = await import("./isolation.server-CGNg1r0B.mjs");
-	const { requireUserId } = await import("./verify.server-j7Xah3eO.mjs");
+	const { assertSameSiteRequest } = await import("./isolation.server-z4c_3uw8.mjs");
+	const { requireUserId } = await import("./verify.server-Cbe9Q4hv.mjs");
 	assertSameSiteRequest();
 	return next({ context: { userId: await requireUserId(context.bearerToken) } });
 });
@@ -282,5 +282,4 @@ function parseLearning(raw) {
 		correct: Math.max(0, Math.round(num(row.correct, 0)))
 	};
 }
-//#endregion
 export { nextInterval as a, todayKey as c, learningSnapshot as i, useProgress as l, duePhrase as n, parseLearning as o, gapLabel as r, reviewStats as s, authMiddleware as t, xpGain as u };

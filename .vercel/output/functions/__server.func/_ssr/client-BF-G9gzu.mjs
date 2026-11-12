@@ -1,11 +1,11 @@
 import { o as __toESM } from "../_runtime.mjs";
-import { Y as require_react } from "../_libs/@tanstack/react-router+[...].mjs";
-import { s as __exportAll } from "./ssr.mjs";
-import { an as isSafeUrlScheme, in as createFetch, nn as toKebabCase, tn as capitalizeFirstLetter } from "../_libs/@better-auth/core+[...].mjs";
-import { n as PACKAGE_VERSION, r as getBaseURL, t as GENERIC_OAUTH_ERROR_CODES } from "./url-BE6YaD7r.mjs";
+import { t as __exportAll } from "./rolldown-runtime-D8jQpDG7.mjs";
+import { n as PACKAGE_VERSION, r as getBaseURL, t as GENERIC_OAUTH_ERROR_CODES } from "./url-CtjE_NaK.mjs";
+import { Ut as require_react } from "../_libs/@tanstack/react-router+[...].mjs";
+import { in as toKebabCase, on as createFetch, rn as capitalizeFirstLetter, sn as isSafeUrlScheme } from "../_libs/@better-auth/core+[...].mjs";
 import { a as atom, i as onSet, n as STORE_UNMOUNT_DELAY, r as onMount, t as listenKeys } from "../_libs/nanostores.mjs";
 import { n as defu } from "../_libs/defu.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/client-1vAx-gM_.js
+// node_modules/.nitro/vite/services/ssr/assets/client-BF-G9gzu.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var genericOAuthClient = () => {
 	return {
@@ -863,13 +863,7 @@ async function runPreSignInSignOut({ livePreview, hasBearer, requestSignOut, cle
 	if (hasBearer || !livePreview) await settleWithin(requestSignOut, timeoutMs ?? signOutTimeoutMs(livePreview));
 	clearToken();
 }
-var client_exports = /* @__PURE__ */ __exportAll({
-	authClient: () => authClient,
-	authEnabled: () => true,
-	getBearerToken: () => getBearerToken,
-	signIn: () => signIn,
-	signOut: () => signOut
-});
+var client_exports = /* @__PURE__ */ __exportAll({ getBearerToken: () => getBearerToken });
 /**
 * Better Auth client for this React SPA (browser-side).
 *
@@ -1038,5 +1032,4 @@ async function signOut(redirectTo = "/") {
 		}
 	});
 }
-//#endregion
 export { signOut as i, client_exports as n, signIn as r, authClient as t };
