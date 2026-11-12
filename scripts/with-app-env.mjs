@@ -110,7 +110,10 @@ function main(argv) {
     console.error("usage: node scripts/with-app-env.mjs <command> [args…]");
     process.exit(2);
   }
-  const env = mergeAppEnv(readAppEnv(projectRoot()), process.env);
+  const binDir = join(projectRoot(), "node_modules/.bin");
+  const currentPath = process.env.PATH || "";
+  const PATH = currentPath.includes(binDir) ? currentPath : `${binDir}:${currentPath}`;
+  const env = mergeAppEnv(readAppEnv(projectRoot()), { ...process.env, PATH });
   const child = spawn(command, args, { stdio: "inherit", env });
   // The dev server is long-running and is stopped by signalling this wrapper.
   for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) {
