@@ -3,6 +3,7 @@ import { a2Lessons, a2Units, a2Vocab } from "./curriculum-a2";
 import type {
   CefrLevel,
   CurriculumCatalog,
+  Exercise,
   Lesson,
   LevelInfo,
   Speaker,
@@ -40,9 +41,93 @@ export const levels: readonly LevelInfo[] = [
 ];
 
 export const units: Unit[] = [...a1Units, ...a2Units];
-export const lessons: Lesson[] = [...a1Lessons, ...a2Lessons];
-
 const unitLevelById = new Map<string, CefrLevel>(units.map((u) => [u.id, u.level]));
+
+const CHOICE_DIRS: readonly ("th-en" | "listen" | "en-th")[] = ["th-en", "listen", "en-th"];
+
+function pickDistinctTraps(target: Word, candidates: Word[], offset: number): Word[] {
+  const traps: Word[] = [];
+  const usedThai = new Set<string>([target.thai]);
+  const usedEn = new Set<string>([target.en]);
+  const total = candidates.length;
+  for (let i = 0; i < total && traps.length < 3; i++) {
+    const candidate = candidates[(offset + i) % total]!;
+    if (usedThai.has(candidate.thai) || usedEn.has(candidate.en)) continue;
+    usedThai.add(candidate.thai);
+    usedEn.add(candidate.en);
+    traps.push(candidate);
+  }
+  return traps;
+}
+
+function withFullWordCoverage(rawLessons: Lesson[]): Lesson[] {
+  const unitWords = new Map<string, Word[]>();
+  const levelWords: Record<CefrLevel, Word[]> = { A1: [], A2: [] };
+  for (const lesson of rawLessons) {
+    const level = unitLevelById.get(lesson.unit) ?? "A1";
+    const uList = unitWords.get(lesson.unit) ?? [];
+    for (const w of lesson.words) {
+      uList.push(w);
+      levelWords[level].push(w);
+    }
+    unitWords.set(lesson.unit, uList);
+  }
+
+  return rawLessons.map((lesson, lessonIdx) => {
+    if (lesson.words.length === 0) return lesson;
+
+    const coveredThai = new Set<string>();
+    for (const ex of lesson.exercises) {
+      if (ex.kind === "choice") {
+        coveredThai.add(ex.word.thai);
+      } else if (ex.kind === "pairs") {
+        for (const p of ex.pairs) coveredThai.add(p.thai);
+      } else if (ex.kind === "tiles") {
+        for (const tok of ex.answer) {
+          if (tok.kind === "w") coveredThai.add(tok.word.thai);
+        }
+      }
+    }
+
+    const missing: Word[] = [];
+    const seenMissing = new Set<string>();
+    for (const w of lesson.words) {
+      if (!coveredThai.has(w.thai) && !seenMissing.has(w.thai)) {
+        seenMissing.add(w.thai);
+        missing.push(w);
+      }
+    }
+
+    if (missing.length === 0) return lesson;
+
+    const level = unitLevelById.get(lesson.unit) ?? "A1";
+    const candidatePool = [
+      ...lesson.words,
+      ...(unitWords.get(lesson.unit) ?? []),
+      ...levelWords[level],
+      ...levelWords.A1,
+    ];
+
+    const added: Exercise[] = missing.map((word, mIdx) => {
+      const dir = CHOICE_DIRS[(lessonIdx + mIdx) % CHOICE_DIRS.length]!;
+      const traps = pickDistinctTraps(word, candidatePool, lessonIdx * 3 + mIdx * 2 + 1);
+      return { kind: "choice", dir, word, traps };
+    });
+
+    const lastIdx = lesson.exercises.length - 1;
+    const insertAt =
+      lastIdx >= 0 && lesson.exercises[lastIdx]?.kind === "tiles" ? lastIdx : lesson.exercises.length;
+    const exercises = [
+      ...lesson.exercises.slice(0, insertAt),
+      ...added,
+      ...lesson.exercises.slice(insertAt),
+    ];
+
+    return { ...lesson, exercises };
+  });
+}
+
+export const lessons: Lesson[] = withFullWordCoverage([...a1Lessons, ...a2Lessons]);
 
 export const vocabularyCatalog: VocabularyEntry[] = (() => {
   const entries: VocabularyEntry[] = [];
@@ -71,7 +156,7 @@ export const vocabularyCatalog: VocabularyEntry[] = (() => {
   return entries;
 })();
 
-export const CURRICULUM_VERSION = `cefr-a1-a2-v3-u${units.length}-l${lessons.length}-w${vocabularyCatalog.length}`;
+export const CURRICULUM_VERSION = `cefr-a1-a2-v4-u${units.length}-l${lessons.length}-w${vocabularyCatalog.length}`;
 
 export const staticCurriculumCatalog: CurriculumCatalog = {
   version: CURRICULUM_VERSION,

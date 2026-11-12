@@ -200,7 +200,7 @@ export function parseLearning(raw: unknown): Learning | null {
   }
   const cards: Record<string, SrsCard> = {};
   if (row.cards && typeof row.cards === "object") {
-    for (const [key, value] of Object.entries(row.cards).slice(0, 400)) {
+    for (const [key, value] of Object.entries(row.cards).slice(0, 2000)) {
       if (!value || typeof value !== "object") continue;
       const card = value as Partial<SrsCard>;
       if (typeof card.thai !== "string" || typeof card.due !== "string") continue;
