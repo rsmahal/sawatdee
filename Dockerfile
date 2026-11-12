@@ -10,6 +10,7 @@ COPY package.json package-lock.json* ./
 RUN npm ci
 
 COPY . .
+ENV NODE_ENV=production
 RUN npm run build
 
 # Stage 2: Production runner
@@ -32,7 +33,10 @@ COPY --from=builder /app/migrations ./migrations
 COPY --from=builder /app/vite.config.ts ./
 COPY --from=builder /app/tsconfig.json ./
 COPY --from=builder /app/.vercel ./.vercel
+COPY --from=builder /app/docker-entrypoint.sh ./docker-entrypoint.sh
+
+RUN chmod +x /app/docker-entrypoint.sh
 
 EXPOSE 3000
 
-CMD ["node", "scripts/with-app-env.mjs", "vite", "preview", "--host", "0.0.0.0", "--port", "3000"]
+ENTRYPOINT ["./docker-entrypoint.sh"]

@@ -74,7 +74,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Deploy via SSH
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ensure target directory exists on droplet
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DO_HOST }}
@@ -83,47 +86,70 @@ jobs:
           passphrase: ${{ secrets.DO_SSH_PASSPHRASE || '' }}
           port: ${{ secrets.DO_PORT || 22 }}
           script_stop: true
-          envs: REGISTRY,IMAGE_NAME,GITHUB_ACTOR
           script: |
-            TARGET_IMAGE="ghcr.io/${{ github.repository }}:latest"
-            CONTAINER_NAME="sawatdee-app"
-            HOST_PORT="${{ secrets.DO_APP_PORT || '3001' }}"
+            APP_DIR="${{ secrets.DO_APP_DIR || '/var/www/sawatdee' }}"
+            mkdir -p "$APP_DIR"
 
-            echo "==> Deploying $TARGET_IMAGE in parallel..."
-            echo "==> Target container: $CONTAINER_NAME on host port $HOST_PORT"
+      - name: Copy docker-compose.yml to droplet
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME || secrets.DO_USER || 'root' }}
+          key: ${{ secrets.DO_SSH_KEY || secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.DO_SSH_PASSPHRASE || '' }}
+          port: ${{ secrets.DO_PORT || 22 }}
+          source: "docker-compose.yml"
+          target: "${{ secrets.DO_APP_DIR || '/var/www/sawatdee' }}"
 
-            # Authenticate with GHCR if deploy token provided, or fallback to docker pull
+      - name: Deploy Sawatdee + PostgreSQL via Docker Compose
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME || secrets.DO_USER || 'root' }}
+          key: ${{ secrets.DO_SSH_KEY || secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.DO_SSH_PASSPHRASE || '' }}
+          port: ${{ secrets.DO_PORT || 22 }}
+          script_stop: true
+          script: |
+            APP_DIR="${{ secrets.DO_APP_DIR || '/var/www/sawatdee' }}"
+            cd "$APP_DIR"
+
+            # Generate persistent secrets on first deploy (never overwritten on future deploys)
+            if [ ! -f .env ]; then
+              echo "==> Creating initial .env with persistent database & auth secrets..."
+              PG_PASS=$(openssl rand -hex 24)
+              AUTH_SECRET=$(openssl rand -hex 32)
+              cat << EOF > .env
+            POSTGRES_USER=sawatdee
+            POSTGRES_PASSWORD=${PG_PASS}
+            POSTGRES_DB=sawatdee
+            BETTER_AUTH_SECRET=${AUTH_SECRET}
+            BETTER_AUTH_URL=${{ secrets.DO_APP_URL || 'https://sawatdee.lolgames.info' }}
+            HOST_PORT=${{ secrets.DO_APP_PORT || '3001' }}
+            DOCKER_IMAGE=ghcr.io/${{ github.repository }}:latest
+            EOF
+              chmod 600 .env
+            fi
+
+            # Authenticate with GHCR if deploy token provided
             if [ -n "${{ secrets.CR_PAT }}" ]; then
               echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
             elif [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
               echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
             fi
 
-            # Pull the prebuilt image from GHCR
-            echo "==> Pulling latest image: $TARGET_IMAGE..."
-            docker pull "$TARGET_IMAGE"
-
-            # Safely stop and replace only the sawatdee container
-            # (mario-kart-app on port 3000 is left running untouched)
-            if [ "$(docker ps -aq -f name=^/${CONTAINER_NAME}$)" ]; then
-              echo "==> Stopping and removing old $CONTAINER_NAME container..."
-              docker stop "$CONTAINER_NAME" || true
-              docker rm "$CONTAINER_NAME" || true
+            # Remove legacy standalone sawatdee-app container if present (never touches mario-kart-app)
+            if [ "$(docker ps -aq -f name=^/sawatdee-app$)" ] && [ -z "$(docker inspect --format '{{ index .Config.Labels "com.docker.compose.project" }}' sawatdee-app 2>/dev/null || true)" ]; then
+              echo "==> Migrating standalone sawatdee-app to Docker Compose..."
+              docker rm -f sawatdee-app || true
             fi
 
-            # Run sawatdee container on host port 3001
-            echo "==> Starting new $CONTAINER_NAME container on 0.0.0.0:$HOST_PORT -> 3000..."
-            docker run -d \
-              --name "$CONTAINER_NAME" \
-              --restart unless-stopped \
-              -p "${HOST_PORT}:3000" \
-              "$TARGET_IMAGE"
+            echo "==> Pulling latest sawatdee image and starting stack..."
+            docker compose pull sawatdee
+            docker compose up -d --remove-orphans
 
-            # Clean up old unused images to save disk space on 10GB droplet
             echo "==> Cleaning up dangling images..."
             docker image prune -f
 
-            echo "==> Status of running containers:"
+            echo "==> Running containers:"
             docker ps
-
-            echo "==> Sawatdee successfully deployed alongside existing containers!"

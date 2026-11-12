@@ -1,4 +1,29 @@
 services:
+  sawatdee-db:
+    image: postgres:16-alpine
+    container_name: sawatdee-db
+    restart: unless-stopped
+    # Tuned for a 512MB RAM droplet alongside existing containers
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=32MB"
+      - "-c"
+      - "max_connections=20"
+      - "-c"
+      - "work_mem=2MB"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sawatdee}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-sawatdee}
+    volumes:
+      - sawatdee_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sawatdee} -d ${POSTGRES_DB:-sawatdee}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   sawatdee:
     image: ${DOCKER_IMAGE:-ghcr.io/rsmahal/sawatdee:latest}
     build:
@@ -6,6 +31,9 @@ services:
       dockerfile: Dockerfile
     container_name: sawatdee-app
     restart: unless-stopped
+    depends_on:
+      sawatdee-db:
+        condition: service_healthy
     ports:
       # Maps host port 3001 to container port 3000 (leaves port 3000 for mario-kart-app)
       - "${HOST_PORT:-3001}:3000"
@@ -13,7 +41,11 @@ services:
       - PORT=3000
       - HOST=0.0.0.0
       - NODE_ENV=production
-      - DATABASE_URL=${DATABASE_URL:-}
-      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-}
-      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-}
+      - VITE_AUTH_ENABLED=true
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-sawatdee}:${POSTGRES_PASSWORD}@sawatdee-db:5432/${POSTGRES_DB:-sawatdee}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set in .env}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-https://sawatdee.lolgames.info}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+
+volumes:
+  sawatdee_pgdata:

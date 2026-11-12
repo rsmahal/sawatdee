@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { authClient, authEnabled, signIn } from "@/lib/auth/client";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
@@ -13,6 +13,17 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [showGoogleOAuth, setShowGoogleOAuth] = useState(false);
+
+  useEffect(() => {
+    const host = window.location.hostname;
+    if (
+      host.endsWith(".grok-sandbox.com") ||
+      import.meta.env.VITE_GROK_OAUTH === "true"
+    ) {
+      setShowGoogleOAuth(true);
+    }
+  }, []);
 
   async function onEmail(event: FormEvent) {
     event.preventDefault();
@@ -63,7 +74,7 @@ function Login() {
           </span>
         </h1>
         <p className="mt-2 text-pretty text-muted">
-          Create an account or sign in. Google, or an email and password. Your lessons are saved to you.
+          Create an account or sign in to save your Thai vocabulary, review schedule, and XP.
         </p>
 
         {isPending ? (
@@ -80,14 +91,18 @@ function Login() {
           </div>
         ) : authEnabled ? (
           <div className="mt-6 grid gap-4">
-            <button
-              type="button"
-              onClick={() => void signIn("grok-google", { callbackURL: "/" })}
-              className="btn-3d btn-chili flex min-h-14 w-full items-center justify-center rounded-2xl font-extrabold"
-            >
-              Continue with Google
-            </button>
-            <p className="text-center text-sm font-extrabold text-muted">or use email</p>
+            {showGoogleOAuth && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => void signIn("grok-google", { callbackURL: "/" })}
+                  className="btn-3d btn-chili flex min-h-14 w-full items-center justify-center rounded-2xl font-extrabold"
+                >
+                  Continue with Google
+                </button>
+                <p className="text-center text-sm font-extrabold text-muted">or use email</p>
+              </>
+            )}
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"

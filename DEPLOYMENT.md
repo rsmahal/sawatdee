@@ -1,116 +1,72 @@
 # Parallel Multi-Container Deployment Guide (DigitalOcean)
 
-This configuration enables **Sawatdee** (`sawatdee-app`) to run in parallel with your existing container (`mario-kart-app`) on your DigitalOcean droplet without downtime or port collisions.
+This configuration runs **Sawatdee** (`sawatdee-app`) with its own **PostgreSQL 16** database (`sawatdee-db`) in parallel with your existing container (`mario-kart-app`) on your DigitalOcean droplet.
 
 ---
 
 ## 1. Container Architecture on Your Droplet
 
-| Container Name | Image Source | Host Port Mapping | Purpose |
-|----------------|--------------|-------------------|---------|
-| `mario-kart-app` | `ghcr.io/rsmahal/leagueoflegendsv2:latest` | `127.0.0.1:3000 -> 3000` | Existing app |
-| `sawatdee-app` | `ghcr.io/rsmahal/sawatdee:latest` | `0.0.0.0:3001 -> 3000` | Sawatdee Thai Learning |
-
-- **No Port Conflict**: `mario-kart-app` continues running on port `3000`, while `sawatdee-app` binds to host port `3001`.
-- **Zero droplet compilation overhead**: The Docker image is built on GitHub's free runners and pushed to GitHub Container Registry (`ghcr.io`), so your 512MB RAM Droplet simply pulls the image and runs it without risking memory exhaustion.
+| Container Name | Image Source | Port / Volume | Purpose |
+|----------------|--------------|---------------|---------|
+| `mario-kart-app` | `ghcr.io/rsmahal/leagueoflegendsv2:latest` | `127.0.0.1:3000 -> 3000` | Existing app (untouched) |
+| `sawatdee-app` | `ghcr.io/rsmahal/sawatdee:latest` | `0.0.0.0:3001 -> 3000` | Sawatdee web app + Better Auth API |
+| `sawatdee-db` | `postgres:16-alpine` | `sawatdee_pgdata` volume | Persistent PostgreSQL database |
 
 ---
 
-## 2. Linking from the Existing Container to Sawatdee
+## 2. How Login, Progress, and Vocabulary Are Stored
 
-To open Sawatdee from a link or button inside your other container (`mario-kart-app`), use either of the approaches below:
-
-### Approach A: Direct Port Link (Simplest)
-Add an anchor link or button pointing to port `3001`:
-
-```html
-<!-- In HTML/JSX -->
-<a
-  href="http://YOUR_SERVER_IP:3001"
-  target="_blank"
-  rel="noopener noreferrer"
-  class="your-button-class"
->
-  Learn Thai (Sawatdee) →
-</a>
-```
-Or dynamically using the current hostname:
-```javascript
-// Opens Sawatdee on port 3001 relative to the current host
-window.open(`${window.location.protocol}//${window.location.hostname}:3001`, '_blank');
-```
+- **Authentication (`migrations/0001_auth.sql`)**:
+  - Uses Better Auth (`user`, `session`, `account`, `verification` tables in PostgreSQL) with email & password sign-up/sign-in.
+  - Sessions are persisted in PostgreSQL and secured via `__Host-` HTTP-only cookies over HTTPS (`https://sawatdee.lolgames.info`).
+- **Course Curriculum (`src/lib/curriculum.ts`)**:
+  - Contains the structured Thai lessons, script, romanization, tones, and exercises.
+- **Learner Progress & Vocabulary SRS (`migrations/0002_progress.sql` & `migrations/0003_vocabulary.sql`)**:
+  - **`learner_progress`**: Stores each user's XP, streak, completed lessons, preferences, and full card snapshot (`payload jsonb`) keyed by `user_id`.
+  - **`user_vocabulary`**: Stores a normalized row per learned Thai word per user (`user_id`, `thai`, `roman`, `en`, `ease`, `interval_days`, `due_date`, `reps`, `lapses`, `seen_date`) for spaced-repetition review scheduling.
+- **Automatic Migrations**:
+  - Every time `sawatdee-app` starts (`docker-entrypoint.sh`), it waits for PostgreSQL to be healthy and runs `node scripts/migrate.mjs` automatically.
 
 ---
 
-### Approach B: Nginx Reverse Proxy (Domain or Subpath)
-If you are using Nginx on your droplet to handle domain names or SSL:
+## 3. Automated Deployment (`.github/workflows/deploy.yml`)
 
-#### Option 1: Subpath (e.g. `yourdomain.com/sawatdee`)
-```nginx
-# Existing app on port 3000
-location / {
-    proxy_pass http://127.0.0.1:3000;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-}
+Pushing to `main` automatically:
+1. Lints, type-checks, builds the production Docker image, and pushes it to `ghcr.io/rsmahal/sawatdee:latest`.
+2. Copies `docker-compose.yml` to `$DO_APP_DIR` (default `/var/www/sawatdee`).
+3. On the first deploy, generates a `.env` file on the droplet containing random persistent `POSTGRES_PASSWORD` and `BETTER_AUTH_SECRET` values (subsequent deploys preserve `.env` so user accounts and sessions stay intact).
+4. Pulls the new `sawatdee` image and runs `docker compose up -d --remove-orphans`, leaving `mario-kart-app` untouched.
 
-# Sawatdee on port 3001
-location /sawatdee/ {
-    proxy_pass http://127.0.0.1:3001/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-}
-```
-
-#### Option 2: Subdomain (e.g. `sawatdee.yourdomain.com`)
-```nginx
-server {
-    server_name sawatdee.yourdomain.com;
-
-    location / {
-        proxy_pass http://127.0.0.1:3001;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
-```
-
----
-
-## 3. GitHub Actions Setup
-
-The workflow at `.github/workflows/deploy.yml` runs automatically whenever changes are pushed to `main`.
-
-### Repository Secrets Checklist
-In your GitHub repository (**Settings → Secrets and variables → Actions**):
+### Required GitHub Repository Secrets
+In **Settings → Secrets and variables → Actions**:
 
 | Secret | Value |
 |---|---|
-| `DO_HOST` | Your droplet IP (`ubuntu-s-1vcpu-512mb-10gb-lon1`) |
+| `DO_HOST` | `159.65.23.199` |
 | `DO_USERNAME` | `root` |
-| `DO_SSH_KEY` | Private SSH key that connects to `root@your-droplet` |
-| `DO_APP_PORT` | *(Optional, default: 3001)* Port to expose on the host |
-| `CR_PAT` | *(Optional)* GitHub Personal Access Token with `read:packages` if the GHCR package is private |
+| `DO_SSH_KEY` | Private SSH key authorized on your droplet |
+| `DO_APP_URL` | *(Optional, default `https://sawatdee.lolgames.info`)* Public HTTPS URL |
+| `DO_APP_PORT` | *(Optional, default `3001`)* Host port mapped to container port `3000` |
+| `CR_PAT` | *(Optional)* GitHub PAT with `read:packages` if your GHCR package is private |
 
 ---
 
-## 4. Manual Verification on Your Droplet
+## 4. Verifying on Your Droplet
 
-After the workflow runs, you can verify both containers are running in parallel by executing:
-
+Check running containers:
 ```bash
 docker ps
 ```
+You should see `sawatdee-app`, `sawatdee-db`, and `mario-kart-app`.
 
-You will see:
-```text
-CONTAINER ID   IMAGE                                      STATUS       PORTS                      NAMES
-<hash>         ghcr.io/rsmahal/sawatdee:latest            Up           0.0.0.0:3001->3000/tcp     sawatdee-app
-7e8d9c8cf55c   ghcr.io/rsmahal/leagueoflegendsv2:latest   Up 7 weeks   127.0.0.1:3000->3000/tcp   mario-kart-app
+Inspect the stored users or vocabulary in PostgreSQL:
+```bash
+docker exec -it sawatdee-db psql -U sawatdee -d sawatdee -c "select id, email, name from \"user\";"
+docker exec -it sawatdee-db psql -U sawatdee -d sawatdee -c "select user_id, thai, en, interval_days, due_date from user_vocabulary;"
 ```
+
+Check memory headroom on your 512MB droplet:
+```bash
+free -h
+```
+*(If your droplet does not have swap enabled yet, adding a 1GB swapfile provides extra safety headroom for running multiple containers.)*

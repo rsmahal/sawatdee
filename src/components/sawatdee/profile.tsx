@@ -139,7 +139,7 @@ function Account() {
     return (
       <div className="mt-5 rounded-2xl bg-soft px-4 py-4">
         <p className="font-extrabold">Sign in</p>
-        <p className="mt-1 text-sm text-pretty text-muted">Google, or an email and password you choose.</p>
+        <p className="mt-1 text-sm text-pretty text-muted">Sign in or create an account with your email and password.</p>
         <Link
           to="/login"
           className="btn-3d btn-chili mt-3 flex min-h-12 items-center justify-center rounded-2xl font-extrabold"
