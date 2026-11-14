@@ -45,6 +45,33 @@ export function canSpeak() {
   return typeof window !== "undefined";
 }
 
+export type SpeechAvailability = {
+  edge: boolean;
+  google: boolean;
+};
+
+export function getCachedSpeechAvailability(): SpeechAvailability {
+  const fCount = manifestCache.f ? Object.keys(manifestCache.f).length : 0;
+  const mCount = manifestCache.m ? Object.keys(manifestCache.m).length : 0;
+  const baseCount = manifestCache.base ? Object.keys(manifestCache.base).length : 0;
+  return {
+    edge: fCount > 0 || mCount > 0,
+    google: baseCount > 0,
+  };
+}
+
+export async function checkSpeechAvailability(): Promise<SpeechAvailability> {
+  const [fMap, mMap, baseMap] = await Promise.all([
+    loadManifest("f"),
+    loadManifest("m"),
+    loadManifest("base"),
+  ]);
+  return {
+    edge: Object.keys(fMap).length > 0 || Object.keys(mMap).length > 0,
+    google: Object.keys(baseMap).length > 0,
+  };
+}
+
 export function warmVoices() {
   if (typeof window === "undefined") return;
   void loadManifest("f");

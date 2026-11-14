@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useCatalog } from "@/lib/catalog-store";
 import { particleLabel, courseNote } from "@/lib/curriculum";
 import { UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { useProgress, type SpeechMethod } from "@/lib/progress";
-import { speakThai } from "@/lib/speech";
+import { checkSpeechAvailability, getCachedSpeechAvailability, speakThai } from "@/lib/speech";
 import { reviewStats, todayKey } from "@/lib/srs";
 import { cn } from "@/lib/cn";
 
@@ -86,8 +86,7 @@ export function Profile() {
             </div>
             <p className="mt-3 text-sm text-pretty text-muted">
               Now set to {particleLabel(speaker)}. Questions from a woman use คะ (khá) instead of ค่ะ. Men keep ครับ.
-              Tiles for “I” use {speaker === "m" ? "ผม (phǒm)" : "ฉัน (chǎn)"}. Audio matches the selected voice when
-              dual voice packs are installed.
+              Tiles for “I” use {speaker === "m" ? "ผม (phǒm)" : "ฉัน (chǎn)"}.
             </p>
           </div>
 
@@ -220,33 +219,57 @@ export function ScriptStylePicker() {
   );
 }
 
-const SPEECH_METHODS: Array<{ id: SpeechMethod; title: string; hint: string }> = [
-  {
-    id: "auto",
-    title: "Auto (Neural + Studio)",
-    hint: "Uses Woman/Man neural packs when available, with studio MP3 fallback.",
-  },
-  {
-    id: "google",
-    title: "Studio MP3",
-    hint: "Bundled 24 kHz Thai audio clips, consistent across every browser.",
-  },
-  {
-    id: "browser",
-    title: "Device voice",
-    hint: "Uses your device or browser's built-in Thai speech engine.",
-  },
-];
+const EDGE_SPEECH_METHOD: { id: SpeechMethod; title: string; hint: string } = {
+  id: "auto",
+  title: "Edge Neural",
+  hint: "Woman (Premwadee) and Man (Niwat) neural voices, with studio MP3 fallback.",
+};
+
+const STUDIO_SPEECH_METHOD: { id: SpeechMethod; title: string; hint: string } = {
+  id: "google",
+  title: "Studio MP3",
+  hint: "Bundled 24 kHz Thai audio clips, consistent across every browser.",
+};
+
+const BROWSER_SPEECH_METHOD: { id: SpeechMethod; title: string; hint: string } = {
+  id: "browser",
+  title: "Device voice",
+  hint: "Uses your device or browser's built-in Thai speech engine.",
+};
 
 function SpeechMethodPicker() {
   const speechMethod = useProgress((state) => state.speechMethod);
   const speaker = useProgress((state) => state.speaker);
   const setSpeechMethod = useProgress((state) => state.setSpeechMethod);
+  const [availability, setAvailability] = useState(() => getCachedSpeechAvailability());
+
+  useEffect(() => {
+    let active = true;
+    void checkSpeechAvailability().then((next) => {
+      if (active) setAvailability(next);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const options = [
+    ...(availability.edge ? [EDGE_SPEECH_METHOD] : []),
+    ...(availability.google ? [STUDIO_SPEECH_METHOD] : []),
+    BROWSER_SPEECH_METHOD,
+  ];
+
+  let activeMethod: SpeechMethod = speechMethod;
+  if (speechMethod === "auto" && !availability.edge) {
+    activeMethod = availability.google ? "google" : "browser";
+  } else if (speechMethod === "google" && !availability.google) {
+    activeMethod = "browser";
+  }
 
   return (
     <div className="grid gap-2">
-      {SPEECH_METHODS.map((item) => {
-        const active = speechMethod === item.id;
+      {options.map((item) => {
+        const active = activeMethod === item.id;
         return (
           <button
             key={item.id}
