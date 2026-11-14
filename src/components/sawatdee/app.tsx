@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { BookOpen, Home, Repeat, UserRound, Volume2 } from "lucide-react";
+import { BookOpen, Home, Repeat, UserRound } from "lucide-react";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { cn } from "@/lib/cn";
@@ -49,7 +49,12 @@ function Course({ userId }: { userId: string }) {
   const [lessonId, setLessonId] = useState<string | null>(null);
   const [reviewMode, setReviewMode] = useState<ReviewMode | null>(null);
   const cards = useProgress((state) => state.cards);
+  const xp = useProgress((state) => state.xp);
+  const streak = useProgress((state) => state.streak);
+  const vocabulary = useCatalog((state) => state.vocabulary);
   const due = reviewStats(cards, todayKey()).due;
+  const seenWords = Object.keys(cards).length;
+  const inSession = Boolean(lessonId || reviewMode);
 
   useEffect(() => {
     ready.current = false;
@@ -115,8 +120,25 @@ function Course({ userId }: { userId: string }) {
 
   return (
     <div className="min-h-dvh bg-paper lg:flex lg:h-dvh lg:overflow-hidden">
-      <BrandPanel />
-      <div className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-sheet lg:mx-0 lg:shrink-0 lg:border-l lg:border-line">
+      {!inSession && (
+        <DesktopSidebar
+          tab={tab}
+          due={due}
+          xp={xp}
+          streak={streak}
+          seenWords={seenWords}
+          totalWords={vocabulary.length}
+          onTab={setTab}
+        />
+      )}
+      <main
+        className={cn(
+          "mx-auto flex h-dvh w-full flex-col overflow-hidden",
+          inSession
+            ? "max-w-md bg-sheet lg:my-6 lg:h-[calc(100dvh-3rem)] lg:max-w-2xl lg:rounded-3xl lg:border lg:border-line"
+            : "max-w-md bg-sheet lg:h-full lg:max-w-none lg:flex-1 lg:bg-paper",
+        )}
+      >
         {lessonId ? (
           <Lesson key={lessonId} lessonId={lessonId} onExit={() => setLessonId(null)} />
         ) : reviewMode ? (
@@ -129,7 +151,10 @@ function Course({ userId }: { userId: string }) {
               {tab === "script" && <ScriptLab />}
               {tab === "me" && <Profile />}
             </div>
-            <nav className="safe-bottom grid shrink-0 grid-cols-4 gap-1 border-t border-line px-2 pt-2" aria-label="Sections">
+            <nav
+              className="safe-bottom grid shrink-0 grid-cols-4 gap-1 border-t border-line bg-sheet px-2 pt-2 lg:hidden"
+              aria-label="Sections"
+            >
               <TabButton active={tab === "learn"} label="Learn" onClick={() => setTab("learn")}>
                 <Home className="h-5 w-5" />
               </TabButton>
@@ -145,7 +170,7 @@ function Course({ userId }: { userId: string }) {
             </nav>
           </>
         )}
-      </div>
+      </main>
     </div>
   );
 }
@@ -190,67 +215,93 @@ function TabButton({
   );
 }
 
-function BrandPanel() {
-  const lessons = useCatalog((state) => state.lessons);
-  const vocabulary = useCatalog((state) => state.vocabulary);
+function DesktopSidebar({
+  tab,
+  due,
+  xp,
+  streak,
+  seenWords,
+  totalWords,
+  onTab,
+}: {
+  tab: Tab;
+  due: number;
+  xp: number;
+  streak: number;
+  seenWords: number;
+  totalWords: number;
+  onTab: (tab: Tab) => void;
+}) {
+  const navItems: { id: Tab; label: string; icon: ReactNode; badge?: number }[] = [
+    { id: "learn", label: "Learn", icon: <Home className="h-5 w-5 shrink-0" /> },
+    { id: "review", label: "Review", icon: <Repeat className="h-5 w-5 shrink-0" />, badge: due },
+    { id: "script", label: "Script", icon: <BookOpen className="h-5 w-5 shrink-0" /> },
+    { id: "me", label: "Profile", icon: <UserRound className="h-5 w-5 shrink-0" /> },
+  ];
+
   return (
-    <aside className="relative hidden flex-1 flex-col justify-center overflow-hidden px-14 py-12 lg:flex">
-      <div className="max-w-lg">
-        <div className="flex items-center gap-3">
-          <span className="grid h-14 w-14 place-items-center rounded-2xl bg-chili text-3xl font-extrabold text-on-accent">
+    <aside className="hidden lg:flex lg:w-64 lg:shrink-0 lg:flex-col lg:justify-between lg:border-r lg:border-line lg:bg-sheet lg:px-4 lg:py-6">
+      <div>
+        <div className="flex items-center gap-3 px-2">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-chili text-2xl font-extrabold text-on-accent">
             <span lang="th" className="thai-display">
               ส
             </span>
           </span>
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-extrabold tracking-wide text-chili uppercase">Sawatdee</p>
-            <p lang="th" className="thai-display text-2xl">
+            <p lang="th" className="thai-display text-lg leading-tight">
               สวัสดี
             </p>
           </div>
         </div>
-        <h2 className="mt-8 text-5xl font-extrabold text-balance">Speak Thai from the first lesson.</h2>
-        <p className="mt-4 max-w-md text-lg text-pretty text-muted">
-          A full CEFR A1 &amp; A2 course with {vocabulary.length} words across {lessons.length} lessons, real Thai
-          script, five tones, and the polite particle that matches your voice. Review brings back only the words you have
-          already seen.
-        </p>
-        <ul className="mt-8 grid gap-4">
-          <BrandPoint
-            icon={<Volume2 className="h-5 w-5" />}
-            title="Listen, then answer"
-            body="Every new word can be spoken aloud. Tap the speaker if you want it again."
-          />
-          <BrandPoint
-            icon={<Home className="h-5 w-5" />}
-            title="Build the phrase"
-            body="Tap Thai tiles into order, including ครับ or ค่ะ, depending on how you speak."
-          />
-          <BrandPoint
-            icon={<BookOpen className="h-5 w-5" />}
-            title="Read the script"
-            body="All 44 consonants, 19 vowel patterns, Thai digits, and a tone drill live under Script."
-          />
-        </ul>
-        <p className="mt-8 text-sm font-bold text-muted">Sign in. Lessons, vocabulary, and review stay with your account.</p>
-      </div>
-      <p aria-hidden className="pointer-events-none absolute -right-2 -bottom-10 text-9xl font-extrabold text-line select-none">
-        <span lang="th" className="thai-display">
-          ส
-        </span>
-      </p>
-    </aside>
-  );
-}
 
-function BrandPoint({ icon, title, body }: { icon: ReactNode; title: string; body: string }) {
-  return (
-    <li className="flex items-start gap-3">
-      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-soft text-chili">{icon}</span>
-      <span>
-        <span className="block font-extrabold">{title}</span>
-        <span className="block text-sm text-pretty text-muted">{body}</span>
-      </span>
-    </li>
+        <nav className="mt-8 grid gap-1.5" aria-label="Course sections">
+          {navItems.map((item) => {
+            const active = tab === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                aria-current={active ? "page" : undefined}
+                onClick={() => onTab(item.id)}
+                className={cn(
+                  "flex min-h-12 w-full items-center justify-between gap-3 rounded-2xl px-4 text-left text-sm font-extrabold whitespace-nowrap transition-colors duration-150",
+                  active ? "bg-soft text-chili" : "text-muted hover:bg-soft/60 hover:text-ink",
+                )}
+              >
+                <span className="flex items-center gap-3">
+                  {item.icon}
+                  {item.label}
+                </span>
+                {item.badge && item.badge > 0 ? (
+                  <span className="text-xs font-extrabold text-chili tabular-nums">{item.badge} due</span>
+                ) : null}
+              </button>
+            );
+          })}
+        </nav>
+      </div>
+
+      <div className="rounded-2xl bg-soft p-4">
+        <p className="text-xs font-extrabold tracking-wide text-muted uppercase">Your pace</p>
+        <dl className="mt-3 grid grid-cols-2 gap-3 text-sm tabular-nums">
+          <div>
+            <dt className="text-xs font-bold text-muted">XP</dt>
+            <dd className="text-lg font-extrabold">{xp}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-bold text-muted">Streak</dt>
+            <dd className="text-lg font-extrabold">{streak}d</dd>
+          </div>
+          <div className="col-span-2 border-t border-line pt-2">
+            <dt className="text-xs font-bold text-muted">Vocabulary seen</dt>
+            <dd className="text-base font-extrabold">
+              {seenWords} / {totalWords}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </aside>
   );
 }

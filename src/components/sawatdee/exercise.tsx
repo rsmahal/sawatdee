@@ -159,7 +159,7 @@ function Choice({
           )}
         </div>
       </div>
-      <div className="grid gap-2">
+      <div className="grid gap-2.5 sm:grid-cols-2">
         {options.map((option) => {
           const primary = exercise.dir === "en-th" ? option.thai : option.en;
           const sub = exercise.dir === "en-th" && showRoman ? option.roman : undefined;

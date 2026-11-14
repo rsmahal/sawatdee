@@ -25,59 +25,63 @@ export function ScriptLab() {
   const shownConsonants = showAllConsonants ? consonants : consonants.filter((item) => item.core);
 
   return (
-    <div className="px-5 pt-6 pb-10">
+    <div className="mx-auto w-full max-w-5xl px-5 pt-6 pb-10 lg:px-8 lg:py-8">
       <p className="text-sm font-extrabold text-chili">Script</p>
       <h1 className="text-3xl font-extrabold text-balance">Read the tones</h1>
-      <p className="mt-2 text-pretty text-muted">
+      <p className="mt-2 max-w-2xl text-pretty text-muted">
         Marks on the romanization: unmarked mid, à low, á high, â falling, ǎ rising. Long vowels are doubled.
         bp and dt are unaspirated.
       </p>
 
-      <h2 className="mt-6 text-lg font-extrabold">How the letters look</h2>
-      <p className="mt-1 text-sm text-pretty text-muted">
-        This is the same setting as on You. It changes every Thai word in the course, not only this page. Modern
-        drops the little loops. Traditional keeps them. The spelling does not change.
-      </p>
-      <div className="mt-3">
-        <ScriptStylePicker />
+      <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:items-start">
+        <div>
+          <h2 className="text-lg font-extrabold">How the letters look</h2>
+          <p className="mt-1 text-sm text-pretty text-muted">
+            This is the same setting as on Profile. It changes every Thai word in the course, not only this page. Modern
+            drops the little loops. Traditional keeps them. The spelling does not change.
+          </p>
+          <div className="mt-3">
+            <ScriptStylePicker />
+          </div>
+
+          <h2 className="mt-8 text-lg font-extrabold">Five tones</h2>
+          <ul className="mt-3 grid gap-2">
+            {toneExamples.map((example) => {
+              const tone = tones.find((item) => item.id === example.tone);
+              return (
+                <li key={example.thai}>
+                  <button
+                    type="button"
+                    onClick={() => speakThai(example.thai)}
+                    className="flex w-full items-center gap-3 rounded-2xl border border-line bg-sheet px-4 py-3 text-left transition-colors hover:bg-soft lg:bg-sheet"
+                  >
+                    <Volume2 className="h-5 w-5 shrink-0 text-chili" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-xs font-extrabold tracking-wide text-muted uppercase">
+                        {tone?.label} · {tone?.hint}
+                      </span>
+                      <span lang="th" className="thai-display text-2xl">
+                        {example.thai}
+                      </span>
+                      <span className="block text-sm font-bold text-muted">
+                        {example.roman} · {example.en}
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="mt-3 text-sm text-pretty text-muted">
+            ไม่ (mâi, falling) means no. ไหม (mǎi, rising) turns a statement into a question. Same shape on the page,
+            different pitch.
+          </p>
+        </div>
+
+        <ToneDrill />
       </div>
 
-      <ToneDrill />
-
-      <h2 className="mt-8 text-lg font-extrabold">Five tones</h2>
-      <ul className="mt-3 grid gap-2">
-        {toneExamples.map((example) => {
-          const tone = tones.find((item) => item.id === example.tone);
-          return (
-            <li key={example.thai}>
-              <button
-                type="button"
-                onClick={() => speakThai(example.thai)}
-                className="flex w-full items-center gap-3 rounded-2xl bg-soft px-4 py-3 text-left"
-              >
-                <Volume2 className="h-5 w-5 shrink-0 text-chili" />
-                <span className="min-w-0 flex-1">
-                  <span className="block text-xs font-extrabold tracking-wide text-muted uppercase">
-                    {tone?.label} · {tone?.hint}
-                  </span>
-                  <span lang="th" className="thai-display text-2xl">
-                    {example.thai}
-                  </span>
-                  <span className="block text-sm font-bold text-muted">
-                    {example.roman} · {example.en}
-                  </span>
-                </span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-      <p className="mt-3 text-sm text-pretty text-muted">
-        ไม่ (mâi, falling) means no. ไหม (mǎi, rising) turns a statement into a question. Same shape on the page,
-        different pitch.
-      </p>
-
-      <div className="mt-8 flex items-center justify-between gap-2">
+      <div className="mt-10 flex items-center justify-between gap-2">
         <h2 className="text-lg font-extrabold">
           Thai consonants ({shownConsonants.length}/{consonants.length})
         </h2>
@@ -115,14 +119,14 @@ export function ScriptLab() {
         <span className="text-chili">High (11)</span>
         <span className="text-teal">Low (24)</span>
       </div>
-      <ul className="mt-3 grid grid-cols-4 gap-2">
+      <ul className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-6 lg:grid-cols-8">
         {shownConsonants.map((letter) => (
           <li key={letter.ch}>
             <button
               type="button"
               onClick={() => speakThai(letter.name)}
               title={`${letter.name} (${letter.gloss})`}
-              className="flex min-h-20 w-full flex-col items-center justify-center rounded-2xl bg-soft px-1 py-2"
+              className="flex min-h-20 w-full flex-col items-center justify-center rounded-2xl border border-line bg-sheet px-1 py-2 transition-colors hover:bg-soft"
             >
               <span lang="th" className={cn("thai-display text-3xl", classColor[letter.cls])}>
                 {letter.ch}
@@ -133,14 +137,14 @@ export function ScriptLab() {
         ))}
       </ul>
 
-      <h2 className="mt-8 text-lg font-extrabold">Vowel shapes</h2>
-      <ul className="mt-3 grid gap-2">
+      <h2 className="mt-10 text-lg font-extrabold">Vowel shapes</h2>
+      <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {vowels.map((vowel) => (
           <li key={vowel.mark}>
             <button
               type="button"
               onClick={() => speakThai(vowel.thai)}
-              className="flex w-full items-center gap-3 rounded-2xl border border-line px-4 py-3 text-left"
+              className="flex h-full w-full items-center gap-3 rounded-2xl border border-line bg-sheet px-4 py-3 text-left transition-colors hover:bg-soft"
             >
               <span lang="th" className="thai-display w-10 text-center text-2xl text-chili">
                 {vowel.mark}
@@ -159,11 +163,11 @@ export function ScriptLab() {
         ))}
       </ul>
 
-      <h2 className="mt-8 text-lg font-extrabold">Thai digits</h2>
+      <h2 className="mt-10 text-lg font-extrabold">Thai digits</h2>
       <p className="mt-1 text-sm text-muted">Prices and dates sometimes use these instead of 0–9.</p>
-      <ul className="mt-3 grid grid-cols-5 gap-2">
+      <ul className="mt-3 grid grid-cols-5 gap-2 sm:grid-cols-10">
         {thaiDigits.map(([thai, arabic]) => (
-          <li key={thai} className="rounded-2xl bg-soft py-2 text-center">
+          <li key={thai} className="rounded-2xl border border-line bg-sheet py-2 text-center">
             <span lang="th" className="thai-display block text-2xl">
               {thai}
             </span>

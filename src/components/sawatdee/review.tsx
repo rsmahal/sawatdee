@@ -60,57 +60,61 @@ export function Review({ onStart }: { onStart: (mode: "due" | "ahead") => void }
   const session = Math.min(stats.due, 12);
 
   return (
-    <div className="px-5 pt-6 pb-10">
+    <div className="mx-auto w-full max-w-5xl px-5 pt-6 pb-10 lg:px-8 lg:py-8">
       <p className="text-sm font-extrabold text-chili">Review</p>
       <h1 className="text-3xl font-extrabold text-balance">Words you've seen</h1>
-      <p className="mt-2 text-pretty text-muted">
+      <p className="mt-2 max-w-2xl text-pretty text-muted">
         Opening a lesson adds its words here. A miss stays due and comes back later in the round. A correct
         answer waits 1 day, then 3, then longer, up to 90 days.
       </p>
 
-      <div className="mt-5 grid grid-cols-3 gap-2">
-        <Stat label="Deck" value={String(stats.total)} />
-        <Stat label="Due" value={String(stats.due)} />
-        <Stat label="Mastered" value={String(stats.mastered)} />
+      <div className="mt-6 grid gap-8 lg:grid-cols-[360px_1fr] lg:items-start">
+        <div>
+          <div className="grid grid-cols-3 gap-2">
+            <Stat label="Deck" value={String(stats.total)} />
+            <Stat label="Due" value={String(stats.due)} />
+            <Stat label="Mastered" value={String(stats.mastered)} />
+          </div>
+          <p className="mt-3 text-sm text-pretty text-muted">
+            Mastered means three weeks between reviews.
+            {stats.total === 0
+              ? " Open a lesson and its word list lands here, ready to review."
+              : stats.due === 0
+                ? stats.nextDue
+                  ? ` Next review ${stats.nextDue}.`
+                  : " Nothing is waiting."
+                : ""}
+          </p>
+
+          {dueList.length > 0 && (
+            <DeckList title="Due" cards={dueList.slice(0, 8)} extra={Math.max(0, dueList.length - 8)} today={today} showRoman={showRoman} />
+          )}
+          {later.length > 0 && (
+            <DeckList title="Coming up" cards={later.slice(0, 5)} extra={Math.max(0, later.length - 5)} today={today} showRoman={showRoman} />
+          )}
+
+          <button
+            type="button"
+            disabled={session === 0}
+            onClick={() => onStart("due")}
+            className="btn-3d btn-chili mt-5 flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl font-extrabold"
+          >
+            <RotateCcw className="h-5 w-5" />
+            {session === 0 ? "Nothing due" : session === stats.due ? `Review ${stats.due}` : `Review ${session} of ${stats.due}`}
+          </button>
+          {stats.total >= 2 && stats.due < stats.total && (
+            <button
+              type="button"
+              onClick={() => onStart("ahead")}
+              className="mt-2 min-h-12 w-full rounded-2xl border-2 border-line font-extrabold"
+            >
+              Practice ahead
+            </button>
+          )}
+        </div>
+
+        <WordBank vocabulary={vocabulary} cards={cards} showRoman={showRoman} today={today} />
       </div>
-      <p className="mt-3 text-sm text-pretty text-muted">
-        Mastered means three weeks between reviews.
-        {stats.total === 0
-          ? " Open a lesson and its word list lands here, ready to review."
-          : stats.due === 0
-            ? stats.nextDue
-              ? ` Next review ${stats.nextDue}.`
-              : " Nothing is waiting."
-            : ""}
-      </p>
-
-      {dueList.length > 0 && (
-        <DeckList title="Due" cards={dueList.slice(0, 8)} extra={Math.max(0, dueList.length - 8)} today={today} showRoman={showRoman} />
-      )}
-      {later.length > 0 && (
-        <DeckList title="Coming up" cards={later.slice(0, 5)} extra={Math.max(0, later.length - 5)} today={today} showRoman={showRoman} />
-      )}
-
-      <button
-        type="button"
-        disabled={session === 0}
-        onClick={() => onStart("due")}
-        className="btn-3d btn-chili mt-5 flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl font-extrabold"
-      >
-        <RotateCcw className="h-5 w-5" />
-        {session === 0 ? "Nothing due" : session === stats.due ? `Review ${stats.due}` : `Review ${session} of ${stats.due}`}
-      </button>
-      {stats.total >= 2 && stats.due < stats.total && (
-        <button
-          type="button"
-          onClick={() => onStart("ahead")}
-          className="mt-2 min-h-12 w-full rounded-2xl border-2 border-line font-extrabold"
-        >
-          Practice ahead
-        </button>
-      )}
-
-      <WordBank vocabulary={vocabulary} cards={cards} showRoman={showRoman} today={today} />
     </div>
   );
 }
@@ -155,7 +159,7 @@ function WordBank({
   const a2Count = vocabulary.filter((w) => w.level === "A2").length;
 
   return (
-    <section className="mt-8 border-t border-line pt-6">
+    <section className="mt-4 border-t border-line pt-6 lg:mt-0 lg:rounded-3xl lg:border lg:border-line lg:bg-sheet lg:p-6">
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-xs font-extrabold tracking-wide text-chili uppercase">Word bank</p>
@@ -218,7 +222,7 @@ function WordBank({
 
           <p className="text-xs font-bold text-muted">Showing {filtered.length} words. Tap any card to listen.</p>
 
-          <ul className="grid max-h-96 gap-2 overflow-y-auto pr-1">
+          <ul className="grid max-h-[30rem] gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
             {filtered.map((word) => {
               const card = cards[word.thai];
               return (
@@ -226,7 +230,7 @@ function WordBank({
                   <button
                     type="button"
                     onClick={() => speakThai(word.thai)}
-                    className="flex w-full items-center justify-between gap-3 rounded-2xl bg-soft px-4 py-3 text-left"
+                    className="flex h-full w-full items-center justify-between gap-3 rounded-2xl bg-soft px-4 py-3 text-left"
                   >
                     <span className="flex min-w-0 items-center gap-3">
                       <Volume2 className="h-4 w-4 shrink-0 text-chili" />
@@ -341,7 +345,7 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
               : `${remembered} remembered first try. ${missed} ${missed === 1 ? "comes" : "come"} back sooner.`}
           </p>
         </div>
-        <footer className="safe-bottom px-4 pt-2">
+        <footer className="safe-bottom px-4 pt-2 lg:px-8 lg:pb-6">
           <button
             type="button"
             onClick={onExit}
@@ -356,7 +360,7 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
-      <header className="flex items-center gap-3 px-3 pt-3">
+      <header className="flex items-center gap-3 px-3 pt-3 lg:px-6 lg:pt-5">
         <IconButton label="Leave review" onClick={onExit}>
           <X className="h-5 w-5" />
         </IconButton>
@@ -370,7 +374,7 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
           {index + 1}/{queue.length}
         </p>
       </header>
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-4">
+      <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-4 lg:px-8 lg:pt-6">
         <ExerciseBody
           key={`${item.thai}-${index}`}
           exercise={exercise}
@@ -385,7 +389,7 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
       </div>
       {result ? (
         <footer
-          className={cn("safe-bottom px-4 pt-4", result.ok ? "bg-teal text-on-accent" : "bg-chili text-on-accent")}
+          className={cn("safe-bottom px-4 pt-4 lg:px-8 lg:pb-6", result.ok ? "bg-teal text-on-accent" : "bg-chili text-on-accent")}
           aria-live="polite"
         >
           <p className="text-xl font-extrabold">{result.ok ? "Kept." : "Not quite."}</p>
@@ -404,7 +408,7 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
           </button>
         </footer>
       ) : (
-        <footer className="safe-bottom px-4 pt-2">
+        <footer className="safe-bottom px-4 pt-2 lg:px-8 lg:pb-6">
           <button
             type="button"
             disabled={!canCheck}

@@ -33,104 +33,115 @@ export function Profile() {
   const deck = reviewStats(cards, todayKey());
 
   return (
-    <div className="px-5 pt-6 pb-10">
+    <div className="mx-auto w-full max-w-5xl px-5 pt-6 pb-10 lg:px-8 lg:py-8">
       <p className="text-sm font-extrabold text-chili">You</p>
       <h1 className="text-3xl font-extrabold">Profile</h1>
-      <p className="mt-2 text-pretty text-muted">
+      <p className="mt-2 max-w-2xl text-pretty text-muted">
         Lessons, review, and XP are saved to this account. Polite particles follow the speaker, not the person
         you're talking to.
       </p>
 
-      <Account />
+      <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:items-start">
+        <div className="grid gap-6">
+          <Account />
 
-      <div className="mt-4">
-        <Toggle
-          on={theme === "dark"}
-          label="Dark mode"
-          hint="Night colors for the whole course."
-          onToggle={() => setTheme(theme === "dark" ? "light" : "dark")}
-        />
+          <div>
+            <div className="grid grid-cols-2 gap-2">
+              <Stat label="XP" value={String(xp)} />
+              <Stat label="Streak" value={String(streak)} />
+              <Stat label="Lessons" value={`${done}/${lessons.length}`} />
+              <Stat label="Words seen" value={`${deck.total}/${vocabulary.length}`} />
+            </div>
+            <p className="mt-3 text-sm font-bold text-muted">
+              {accuracy === null
+                ? "Accuracy shows up after you check an answer."
+                : `${accuracy}% accuracy across ${answered} answers.`}
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-extrabold">How you speak</h2>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <SpeakerCard
+                active={speaker === "f"}
+                thai="ค่ะ"
+                roman="khâ"
+                label="Woman"
+                onClick={() => setSpeaker("f")}
+              />
+              <SpeakerCard
+                active={speaker === "m"}
+                thai="ครับ"
+                roman="khráp"
+                label="Man"
+                onClick={() => setSpeaker("m")}
+              />
+            </div>
+            <p className="mt-3 text-sm text-pretty text-muted">
+              Now set to {particleLabel(speaker)}. Questions from a woman use คะ (khá) instead of ค่ะ. Men keep ครับ.
+              Tiles for “I” use {speaker === "m" ? "ผม (phǒm)" : "ฉัน (chǎn)"}.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-extrabold">How words get in</h2>
+            <p className="mt-1 text-sm text-pretty text-muted">
+              {courseNote} Greetings, food, money, and directions come first, then time, describing things, and what to
+              say when you get stuck. A word has to be something you would say out loud. No royal vocabulary, no slang.
+              Later lessons reuse earlier words, and Review only schedules words from lessons you have opened.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-6">
+          <div>
+            <h2 className="text-lg font-extrabold">Thai letters</h2>
+            <p className="mt-1 text-sm text-pretty text-muted">
+              This changes every Thai word in the course, on every page. Modern is the loopless face used on signs and
+              phones. Traditional keeps the looped heads you see in books. The spelling stays the same.
+            </p>
+            <div className="mt-3">
+              <ScriptStylePicker />
+            </div>
+          </div>
+
+          <div className="grid gap-2">
+            <Toggle
+              on={theme === "dark"}
+              label="Dark mode"
+              hint="Night colors for the whole course."
+              onToggle={() => setTheme(theme === "dark" ? "light" : "dark")}
+            />
+            <Toggle
+              on={showRoman}
+              label="Romanization"
+              hint="Show the pronunciation under the Thai script."
+              onToggle={() => setShowRoman(!showRoman)}
+            />
+            <Toggle
+              on={autoplay}
+              label="Play audio automatically"
+              hint="Speak the prompt when a new exercise opens. The speaker button always works."
+              onToggle={() => setAutoplay(!autoplay)}
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              if (!armReset) {
+                setArmReset(true);
+                return;
+              }
+              resetProgress();
+              setArmReset(false);
+            }}
+            className="min-h-12 w-full rounded-2xl border-2 border-line font-extrabold text-chili"
+          >
+            {armReset ? "Tap again to reset progress" : "Reset progress"}
+          </button>
+        </div>
       </div>
-
-      <div className="mt-5 grid grid-cols-2 gap-2">
-        <Stat label="XP" value={String(xp)} />
-        <Stat label="Streak" value={String(streak)} />
-        <Stat label="Lessons" value={`${done}/${lessons.length}`} />
-        <Stat label="Words seen" value={`${deck.total}/${vocabulary.length}`} />
-      </div>
-      <p className="mt-3 text-sm font-bold text-muted">
-        {accuracy === null
-          ? "Accuracy shows up after you check an answer."
-          : `${accuracy}% accuracy across ${answered} answers.`}
-      </p>
-
-      <h2 className="mt-8 text-lg font-extrabold">Thai letters</h2>
-      <p className="mt-1 text-sm text-pretty text-muted">
-        This changes every Thai word in the course, on every page. Modern is the loopless face used on signs and
-        phones. Traditional keeps the looped heads you see in books. The spelling stays the same.
-      </p>
-      <div className="mt-3">
-        <ScriptStylePicker />
-      </div>
-
-      <h2 className="mt-8 text-lg font-extrabold">How words get in</h2>
-      <p className="mt-1 text-sm text-pretty text-muted">
-        {courseNote} Greetings, food, money, and directions come first, then time, describing things, and what to
-        say when you get stuck. A word has to be something you would say out loud. No royal vocabulary, no slang.
-        Later lessons reuse earlier words, and Review only schedules words from lessons you have opened.
-      </p>
-
-      <h2 className="mt-8 text-lg font-extrabold">How you speak</h2>
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <SpeakerCard
-          active={speaker === "f"}
-          thai="ค่ะ"
-          roman="khâ"
-          label="Woman"
-          onClick={() => setSpeaker("f")}
-        />
-        <SpeakerCard
-          active={speaker === "m"}
-          thai="ครับ"
-          roman="khráp"
-          label="Man"
-          onClick={() => setSpeaker("m")}
-        />
-      </div>
-      <p className="mt-3 text-sm text-pretty text-muted">
-        Now set to {particleLabel(speaker)}. Questions from a woman use คะ (khá) instead of ค่ะ. Men keep ครับ.
-        Tiles for “I” use {speaker === "m" ? "ผม (phǒm)" : "ฉัน (chǎn)"}.
-      </p>
-
-      <div className="mt-6 grid gap-2">
-        <Toggle
-          on={showRoman}
-          label="Romanization"
-          hint="Show the pronunciation under the Thai script."
-          onToggle={() => setShowRoman(!showRoman)}
-        />
-        <Toggle
-          on={autoplay}
-          label="Play audio automatically"
-          hint="Speak the prompt when a new exercise opens. The speaker button always works."
-          onToggle={() => setAutoplay(!autoplay)}
-        />
-      </div>
-
-      <button
-        type="button"
-        onClick={() => {
-          if (!armReset) {
-            setArmReset(true);
-            return;
-          }
-          resetProgress();
-          setArmReset(false);
-        }}
-        className="mt-8 min-h-12 w-full rounded-2xl border-2 border-line font-extrabold text-chili"
-      >
-        {armReset ? "Tap again to reset progress" : "Reset progress"}
-      </button>
     </div>
   );
 }

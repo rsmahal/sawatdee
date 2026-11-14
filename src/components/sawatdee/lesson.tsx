@@ -99,11 +99,11 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
             </IconButton>
             <p className="text-sm font-extrabold text-muted">{lesson.subtitle}</p>
           </header>
-          <div className="min-h-0 flex-1 overflow-y-auto px-5 pt-4 pb-4">
+          <div className="min-h-0 flex-1 overflow-y-auto px-5 pt-4 pb-4 lg:px-8">
             <h1 className="text-3xl font-extrabold text-balance">{lesson.title}</h1>
             <p className="mt-2 text-pretty text-muted">{lesson.tip}</p>
             {lesson.words.length > 0 && (
-              <ul className="mt-5 grid gap-2">
+              <ul className="mt-5 grid gap-2 sm:grid-cols-2">
                 {lesson.words.map((word) => (
                   <li
                     key={word.thai}
@@ -132,7 +132,7 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
               Five hearts. A miss costs one. You can replay.
             </p>
           </div>
-          <footer className="safe-bottom px-4 pt-2">
+          <footer className="safe-bottom px-4 pt-2 lg:px-8 lg:pb-6">
             <button
               type="button"
               onClick={() => setPhase("play")}
@@ -146,7 +146,7 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
 
       {phase === "play" && exercise && (
         <>
-          <header className="flex items-center gap-3 px-3 pt-3">
+          <header className="flex items-center gap-3 px-3 pt-3 lg:px-6 lg:pt-5">
             <IconButton label="Leave lesson" onClick={() => setConfirmExit(true)}>
               <X className="h-5 w-5" />
             </IconButton>
@@ -171,7 +171,7 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
               Combo ×{combo}
             </p>
           )}
-          <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-4">
+          <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-4 pb-4 lg:px-8 lg:pt-6">
             <ExerciseBody
               key={index}
               exercise={exercise}
@@ -186,7 +186,7 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
           </div>
           {result ? (
             <footer
-              className={cn("safe-bottom px-4 pt-4", result.ok ? "bg-teal text-on-accent" : "bg-chili text-on-accent")}
+              className={cn("safe-bottom px-4 pt-4 lg:px-8 lg:pb-6", result.ok ? "bg-teal text-on-accent" : "bg-chili text-on-accent")}
               aria-live="polite"
             >
               <p className="text-xl font-extrabold">
@@ -207,11 +207,11 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
               </button>
             </footer>
           ) : exercise.kind === "pairs" ? (
-            <footer className="safe-bottom px-4 pt-4 text-center text-sm font-extrabold text-muted">
+            <footer className="safe-bottom px-4 pt-4 text-center text-sm font-extrabold text-muted lg:px-8 lg:pb-6">
               Match each pair
             </footer>
           ) : (
-            <footer className="safe-bottom px-4 pt-2">
+            <footer className="safe-bottom px-4 pt-2 lg:px-8 lg:pb-6">
               <button
                 type="button"
                 disabled={!canCheck}
@@ -248,8 +248,8 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
       )}
 
       {confirmExit && (
-        <div className="absolute inset-0 z-20 flex items-end bg-ink/40 p-4">
-          <div className="w-full rounded-3xl bg-sheet p-5">
+        <div className="absolute inset-0 z-20 flex items-end justify-center bg-ink/40 p-4 sm:items-center">
+          <div className="w-full max-w-sm rounded-3xl bg-sheet p-5">
             <h2 className="text-xl font-extrabold">Leave this lesson?</h2>
             <p className="mt-1 text-sm text-pretty text-muted">
               XP you already earned stays. The lesson will not count as finished.
@@ -312,7 +312,7 @@ function EndScreen({
         ) : null}
         <p className="mt-2 text-2xl font-extrabold text-chili tabular-nums">+{sessionXp} XP</p>
       </div>
-      <footer className="safe-bottom px-4 pt-2">
+      <footer className="safe-bottom px-4 pt-2 lg:px-8 lg:pb-6">
         <button
           type="button"
           onClick={onAction}
