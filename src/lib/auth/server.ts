@@ -98,7 +98,7 @@ const extraTrustedOrigins = (env("TRUSTED_ORIGINS") ?? "")
   .split(",")
   .map((item) => item.trim())
   .filter(Boolean);
-const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
+const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS, "*.run.app"];
 // Local dev origins
 const LOCAL_DEV_ORIGINS: string[] = [
   "http://localhost:3000",

@@ -7,6 +7,7 @@ export function getRouter() {
   return createRouter({
     routeTree,
     rewrite: previewPathRewrite(),
+    defaultPreload: "intent",
     defaultErrorComponent: AppErrorComponent,
     defaultNotFoundComponent: AppNotFoundComponent,
   });

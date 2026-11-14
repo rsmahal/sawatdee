@@ -24,6 +24,13 @@ export function AppErrorComponent({ error }: ErrorComponentProps) {
       <p className="max-w-md text-sm break-words text-zinc-500 dark:text-zinc-400">
         {errorMessage(error)}
       </p>
+      <button
+        type="button"
+        onClick={() => window.location.reload()}
+        className="mt-2 inline-flex min-h-10 items-center justify-center rounded-xl bg-chili px-4 text-sm font-bold text-white"
+      >
+        Reload page
+      </button>
     </main>
   );
 }

@@ -65,10 +65,10 @@ export function useCurrentUserState(): CurrentUserState {
 
 function useSessionUserState(): CurrentUserState {
   const { data, isPending } = authClient.useSession();
-  const id = data?.user.id;
-  const displayName = data?.user.name ?? null;
-  const primaryEmail = data?.user.email ?? null;
-  const profileImageUrl = data?.user.image ?? null;
+  const id = data?.user?.id;
+  const displayName = data?.user?.name ?? null;
+  const primaryEmail = data?.user?.email ?? null;
+  const profileImageUrl = data?.user?.image ?? null;
   const user = useMemo<AppUser | null>(
     () => (id ? { id, displayName, primaryEmail, profileImageUrl, isDevFallback: false } : null),
     [id, displayName, primaryEmail, profileImageUrl],
