@@ -516,12 +516,18 @@ async function generatePack({ texts, outDir, concurrency, fetchFn }) {
 }
 
 async function probeEdgeNeural() {
-  try {
-    const sample = await fetchEdgeNeuralMp3Once("สวัสดี", EDGE_VOICES.f);
-    return sample.length >= 256;
-  } catch {
-    return false;
+  let lastReason = "endpoint unreachable";
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const sample = await fetchEdgeNeuralMp3Once("สวัสดี", EDGE_VOICES.f);
+      if (sample.length >= 256) return { ok: true, reason: null };
+      lastReason = `empty payload (${sample.length} bytes)`;
+    } catch (err) {
+      lastReason = err instanceof Error ? err.message : String(err);
+    }
+    if (attempt < 2) await new Promise((r) => setTimeout(r, 400));
   }
+  return { ok: false, reason: lastReason };
 }
 
 async function main() {
@@ -540,10 +546,10 @@ async function main() {
     console.log(JSON.stringify({ pack: "fallback", ...baseStats }));
   }
 
-  const edgeAvailable = await probeEdgeNeural();
-  if (!edgeAvailable) {
+  const edgeProbe = await probeEdgeNeural();
+  if (!edgeProbe.ok) {
     const msg =
-      "Edge Neural TTS (speech.platform.bing.com) blocked or unreachable; " +
+      `Edge Neural TTS (speech.platform.bing.com) blocked or unreachable (${edgeProbe.reason}); ` +
       "keeping existing/fallback manifests.";
     if (edgeOnly) {
       console.error(msg);
@@ -557,7 +563,7 @@ async function main() {
         writeFileSync(spManifest, "{}", "utf8");
       }
     }
-    console.log(JSON.stringify({ pack: "edge", skipped: true, reason: "endpoint unreachable" }));
+    console.log(JSON.stringify({ pack: "edge", skipped: true, reason: edgeProbe.reason }));
     return;
   }
 

@@ -8,6 +8,8 @@ let playToken = 0;
 
 const manifestCache: Partial<Record<AudioScope, Record<string, string>>> = {};
 const manifestPromises: Partial<Record<AudioScope, Promise<Record<string, string>>>> = {};
+let edgeLiveCache: { value: boolean; at: number } | null = null;
+let edgeLivePromise: Promise<boolean> | null = null;
 
 function hasSynthesis() {
   return typeof window !== "undefined" && "speechSynthesis" in window;
@@ -19,6 +21,10 @@ function manifestUrl(scope: AudioScope) {
 
 function clipUrl(scope: AudioScope, clipId: string) {
   return scope === "base" ? `/audio/th/${clipId}.mp3` : `/audio/th/${scope}/${clipId}.mp3`;
+}
+
+function liveEdgeUrl(speaker: Speaker, text: string) {
+  return `/api/tts?speaker=${encodeURIComponent(speaker)}&text=${encodeURIComponent(text)}`;
 }
 
 function loadManifest(scope: AudioScope): Promise<Record<string, string>> {
@@ -41,6 +47,28 @@ function loadManifest(scope: AudioScope): Promise<Record<string, string>> {
   return manifestPromises[scope]!;
 }
 
+function loadEdgeLiveAvailability(): Promise<boolean> {
+  if (edgeLiveCache && (edgeLiveCache.value || Date.now() - edgeLiveCache.at < 60_000)) {
+    return Promise.resolve(edgeLiveCache.value);
+  }
+  if (!edgeLivePromise) {
+    edgeLivePromise = fetch("/api/tts?probe=1")
+      .then(async (res) => {
+        const contentType = res.headers.get("content-type") ?? "";
+        if (!res.ok || !contentType.includes("json")) return false;
+        const data = (await res.json()) as { edge?: boolean };
+        return Boolean(data?.edge);
+      })
+      .catch(() => false)
+      .then((value) => {
+        edgeLiveCache = { value, at: Date.now() };
+        edgeLivePromise = null;
+        return value;
+      });
+  }
+  return edgeLivePromise;
+}
+
 export function canSpeak() {
   return typeof window !== "undefined";
 }
@@ -55,19 +83,20 @@ export function getCachedSpeechAvailability(): SpeechAvailability {
   const mCount = manifestCache.m ? Object.keys(manifestCache.m).length : 0;
   const baseCount = manifestCache.base ? Object.keys(manifestCache.base).length : 0;
   return {
-    edge: fCount > 0 || mCount > 0,
+    edge: fCount > 0 || mCount > 0 || edgeLiveCache?.value === true,
     google: baseCount > 0,
   };
 }
 
 export async function checkSpeechAvailability(): Promise<SpeechAvailability> {
-  const [fMap, mMap, baseMap] = await Promise.all([
+  const [fMap, mMap, baseMap, liveEdge] = await Promise.all([
     loadManifest("f"),
     loadManifest("m"),
     loadManifest("base"),
+    loadEdgeLiveAvailability(),
   ]);
   return {
-    edge: Object.keys(fMap).length > 0 || Object.keys(mMap).length > 0,
+    edge: Object.keys(fMap).length > 0 || Object.keys(mMap).length > 0 || liveEdge,
     google: Object.keys(baseMap).length > 0,
   };
 }
@@ -77,6 +106,7 @@ export function warmVoices() {
   void loadManifest("f");
   void loadManifest("m");
   void loadManifest("base");
+  void loadEdgeLiveAvailability();
   if (!hasSynthesis()) return;
   window.speechSynthesis.getVoices();
   window.speechSynthesis.addEventListener("voiceschanged", () => {
@@ -116,20 +146,15 @@ export function stopSpeech() {
   }
 }
 
-function playCandidates(
-  candidates: Array<{ scope: AudioScope; clipId: string }>,
-  fallbackText: string,
-  speaker: Speaker,
-  token: number,
-) {
+function playCandidates(urls: string[], fallbackText: string, speaker: Speaker, token: number) {
   if (token !== playToken) return;
-  const [next, ...rest] = candidates;
-  if (!next) {
+  const [nextUrl, ...rest] = urls;
+  if (!nextUrl) {
     speakWithSynthesis(fallbackText, speaker);
     return;
   }
 
-  const audio = new Audio(clipUrl(next.scope, next.clipId));
+  const audio = new Audio(nextUrl);
   audio.preload = "auto";
   activeAudio = audio;
 
@@ -160,15 +185,20 @@ function resolveCandidates(
   method: SpeechMethod,
   speakerMap: Record<string, string>,
   baseMap: Record<string, string>,
+  allowLiveEdge: boolean,
 ) {
-  const candidates: Array<{ scope: AudioScope; clipId: string }> = [];
+  const urls: string[] = [];
   if (method === "auto") {
     const speakerId = speakerMap[text];
-    if (speakerId) candidates.push({ scope: speaker, clipId: speakerId });
+    if (speakerId) {
+      urls.push(clipUrl(speaker, speakerId));
+    } else if (allowLiveEdge) {
+      urls.push(liveEdgeUrl(speaker, text));
+    }
   }
   const baseId = baseMap[text];
-  if (baseId) candidates.push({ scope: "base", clipId: baseId });
-  return candidates;
+  if (baseId) urls.push(clipUrl("base", baseId));
+  return urls;
 }
 
 export function speakThai(text: string, speakerOverride?: Speaker, methodOverride?: SpeechMethod) {
@@ -187,27 +217,29 @@ export function speakThai(text: string, speakerOverride?: Speaker, methodOverrid
   if (method === "google") {
     const baseCached = manifestCache.base;
     if (baseCached) {
-      playCandidates(resolveCandidates(text, speaker, method, {}, baseCached), text, speaker, token);
+      playCandidates(resolveCandidates(text, speaker, method, {}, baseCached, false), text, speaker, token);
       return;
     }
     void loadManifest("base").then((baseMap) => {
       if (token !== playToken) return;
-      playCandidates(resolveCandidates(text, speaker, method, {}, baseMap), text, speaker, token);
+      playCandidates(resolveCandidates(text, speaker, method, {}, baseMap, false), text, speaker, token);
     });
     return;
   }
 
   const speakerCached = manifestCache[speaker];
   const baseCached = manifestCache.base;
-  if (speakerCached && baseCached) {
-    const candidates = resolveCandidates(text, speaker, method, speakerCached, baseCached);
+  if (speakerCached && baseCached && edgeLiveCache !== null) {
+    const candidates = resolveCandidates(text, speaker, method, speakerCached, baseCached, edgeLiveCache.value);
     playCandidates(candidates, text, speaker, token);
     return;
   }
 
-  void Promise.all([loadManifest(speaker), loadManifest("base")]).then(([speakerMap, baseMap]) => {
-    if (token !== playToken) return;
-    const candidates = resolveCandidates(text, speaker, method, speakerMap, baseMap);
-    playCandidates(candidates, text, speaker, token);
-  });
+  void Promise.all([loadManifest(speaker), loadManifest("base"), loadEdgeLiveAvailability()]).then(
+    ([speakerMap, baseMap, liveEdge]) => {
+      if (token !== playToken) return;
+      const candidates = resolveCandidates(text, speaker, method, speakerMap, baseMap, liveEdge);
+      playCandidates(candidates, text, speaker, token);
+    },
+  );
 }
