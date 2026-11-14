@@ -25,7 +25,7 @@ services:
       retries: 10
 
   sawatdee:
-    image: ${DOCKER_IMAGE:-ghcr.io/rsmahal/sawatdee:latest}
+    image: ${DOCKER_IMAGE:-sawatdee:latest}
     build:
       context: .
       dockerfile: Dockerfile
@@ -35,7 +35,7 @@ services:
       sawatdee-db:
         condition: service_healthy
     ports:
-      # Maps host port 3001 to container port 3000 (leaves port 3000 for mario-kart-app)
+      # Maps host port 3001 to container port 3000 by default
       - "${HOST_PORT:-3001}:3000"
     environment:
       - PORT=3000
@@ -44,7 +44,7 @@ services:
       - VITE_AUTH_ENABLED=true
       - DATABASE_URL=postgresql://${POSTGRES_USER:-sawatdee}:${POSTGRES_PASSWORD}@sawatdee-db:5432/${POSTGRES_DB:-sawatdee}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set in .env}
-      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-https://sawatdee.lolgames.info}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:3001}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
 
 volumes:

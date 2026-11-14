@@ -94,18 +94,18 @@ export const authConfigured =
 const explicitBaseURL = env("BETTER_AUTH_URL");
 // Explicit `string[]` (not a readonly tuple) — Better Auth's DynamicBaseURLConfig
 // requires a mutable `allowedHosts: string[]`.
-const previewAllowedHosts: string[] = [
-  ...PREVIEW_ALLOWED_HOSTS,
-  "sawatdee.lolgames.info",
-  "*.lolgames.info",
-];
-// Local and production origins
+const extraTrustedOrigins = (env("TRUSTED_ORIGINS") ?? "")
+  .split(",")
+  .map((item) => item.trim())
+  .filter(Boolean);
+const previewAllowedHosts: string[] = [...PREVIEW_ALLOWED_HOSTS];
+// Local dev origins
 const LOCAL_DEV_ORIGINS: string[] = [
-  "https://sawatdee.lolgames.info",
-  "http://sawatdee.lolgames.info",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://[::1]:3000",
+  "http://localhost:3001",
+  "http://127.0.0.1:3001",
   "http://localhost:8080",
   "http://127.0.0.1:8080",
   "http://[::1]:8080",
@@ -123,12 +123,13 @@ const baseURL = explicitBaseURL ?? {
 // Origins Better Auth accepts on credentialed POSTs (sign-up/sign-in, etc.).
 // Missing entries here surface as FORBIDDEN "Invalid origin".
 const trustedOrigins: string[] = explicitBaseURL
-  ? [explicitBaseURL, ...LOCAL_DEV_ORIGINS]
+  ? [explicitBaseURL, ...extraTrustedOrigins, ...LOCAL_DEV_ORIGINS]
   : [
       // Host wildcards (matched against Origin's host)
       ...previewAllowedHosts,
       // Full-origin wildcards (matched against Origin)
       ...previewAllowedHosts.flatMap((host) => [`https://${host}`, `http://${host}`]),
+      ...extraTrustedOrigins,
       ...LOCAL_DEV_ORIGINS,
     ];
 

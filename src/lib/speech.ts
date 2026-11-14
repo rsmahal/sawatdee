@@ -1,17 +1,25 @@
-export function canSpeak() {
+import { THAI_AUDIO_FILES } from "./audio-manifest";
+
+let activeAudio: HTMLAudioElement | null = null;
+
+function hasSynthesis() {
   return typeof window !== "undefined" && "speechSynthesis" in window;
 }
 
+export function canSpeak() {
+  return typeof window !== "undefined";
+}
+
 export function warmVoices() {
-  if (!canSpeak()) return;
+  if (!hasSynthesis()) return;
   window.speechSynthesis.getVoices();
   window.speechSynthesis.addEventListener("voiceschanged", () => {
     window.speechSynthesis.getVoices();
   });
 }
 
-export function speakThai(text: string) {
-  if (!canSpeak() || !text) return;
+function speakWithSynthesis(text: string) {
+  if (!hasSynthesis() || !text) return;
   const synth = window.speechSynthesis;
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang = "th-TH";
@@ -23,6 +31,44 @@ export function speakThai(text: string) {
 }
 
 export function stopSpeech() {
-  if (!canSpeak()) return;
-  window.speechSynthesis.cancel();
+  if (activeAudio) {
+    activeAudio.pause();
+    activeAudio.currentTime = 0;
+    activeAudio = null;
+  }
+  if (hasSynthesis()) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+export function speakThai(text: string) {
+  if (typeof window === "undefined" || !text) return;
+  stopSpeech();
+
+  const clipId = THAI_AUDIO_FILES[text];
+  if (clipId) {
+    const audio = new Audio(`/audio/th/${clipId}.mp3`);
+    audio.preload = "auto";
+    activeAudio = audio;
+    audio.addEventListener("ended", () => {
+      if (activeAudio === audio) activeAudio = null;
+    });
+    audio.addEventListener("error", () => {
+      if (activeAudio === audio) {
+        activeAudio = null;
+        speakWithSynthesis(text);
+      }
+    });
+    void audio.play().catch((err: unknown) => {
+      if (activeAudio !== audio) return;
+      activeAudio = null;
+      const name = err instanceof Error ? err.name : "";
+      if (name !== "NotAllowedError" && name !== "AbortError") {
+        speakWithSynthesis(text);
+      }
+    });
+    return;
+  }
+
+  speakWithSynthesis(text);
 }
