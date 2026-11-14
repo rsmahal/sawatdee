@@ -11,6 +11,7 @@ RUN npm ci
 
 COPY . .
 ENV NODE_ENV=production
+RUN npm run audio:generate || true
 RUN npm run build
 
 # Stage 2: Production runner
