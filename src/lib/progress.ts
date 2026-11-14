@@ -10,6 +10,7 @@ import {
 } from "@/lib/srs";
 
 export type Theme = "light" | "dark";
+export type SpeechMethod = "auto" | "google" | "browser";
 
 type Data = {
   xp: number;
@@ -17,6 +18,7 @@ type Data = {
   lastDay: string | null;
   completed: Record<string, number>;
   speaker: Speaker;
+  speechMethod: SpeechMethod;
   showRoman: boolean;
   autoplay: boolean;
   scriptStyle: ScriptStyle;
@@ -28,6 +30,7 @@ type Data = {
 
 type Actions = {
   setSpeaker: (speaker: Speaker) => void;
+  setSpeechMethod: (method: SpeechMethod) => void;
   setShowRoman: (show: boolean) => void;
   setAutoplay: (on: boolean) => void;
   setScriptStyle: (style: ScriptStyle) => void;
@@ -46,6 +49,7 @@ const initial: Data = {
   lastDay: null,
   completed: {},
   speaker: "f",
+  speechMethod: "auto",
   showRoman: true,
   autoplay: true,
   scriptStyle: "modern",
@@ -60,6 +64,7 @@ export const useProgress = create<Data & Actions>()(
     (set, get) => ({
       ...initial,
       setSpeaker: (speaker) => set({ speaker }),
+      setSpeechMethod: (speechMethod) => set({ speechMethod }),
       setShowRoman: (showRoman) => set({ showRoman }),
       setAutoplay: (autoplay) => set({ autoplay }),
       setScriptStyle: (scriptStyle) => set({ scriptStyle }),
@@ -146,9 +151,15 @@ export const useProgress = create<Data & Actions>()(
           ...current,
           scriptStyle: saved.scriptStyle === "traditional" ? "traditional" : "modern",
           theme: saved.theme === "dark" ? "dark" : "light",
+          speechMethod:
+            saved.speechMethod === "google" || saved.speechMethod === "browser" ? saved.speechMethod : "auto",
         };
       },
-      partialize: (state) => ({ theme: state.theme, scriptStyle: state.scriptStyle }),
+      partialize: (state) => ({
+        theme: state.theme,
+        scriptStyle: state.scriptStyle,
+        speechMethod: state.speechMethod,
+      }),
     },
   ),
 );
@@ -163,6 +174,7 @@ export type Learning = {
   lastDay: string | null;
   completed: Record<string, number>;
   speaker: Speaker;
+  speechMethod: SpeechMethod;
   showRoman: boolean;
   autoplay: boolean;
   cards: Record<string, SrsCard>;
@@ -177,6 +189,7 @@ export function learningSnapshot(state: Data): Learning {
     lastDay: state.lastDay,
     completed: state.completed,
     speaker: state.speaker,
+    speechMethod: state.speechMethod,
     showRoman: state.showRoman,
     autoplay: state.autoplay,
     cards: state.cards,
@@ -223,6 +236,8 @@ export function parseLearning(raw: unknown): Learning | null {
     lastDay: typeof row.lastDay === "string" ? row.lastDay : null,
     completed,
     speaker: row.speaker === "m" ? "m" : "f",
+    speechMethod:
+      row.speechMethod === "google" || row.speechMethod === "browser" ? row.speechMethod : "auto",
     showRoman: row.showRoman !== false,
     autoplay: row.autoplay !== false,
     cards,

@@ -4,7 +4,8 @@ import { useCatalog } from "@/lib/catalog-store";
 import { particleLabel, courseNote } from "@/lib/curriculum";
 import { UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { useProgress } from "@/lib/progress";
+import { useProgress, type SpeechMethod } from "@/lib/progress";
+import { speakThai } from "@/lib/speech";
 import { reviewStats, todayKey } from "@/lib/srs";
 import { cn } from "@/lib/cn";
 
@@ -67,19 +68,26 @@ export function Profile() {
                 thai="ค่ะ"
                 roman="khâ"
                 label="Woman"
-                onClick={() => setSpeaker("f")}
+                onClick={() => {
+                  setSpeaker("f");
+                  speakThai("สวัสดีค่ะ", "f");
+                }}
               />
               <SpeakerCard
                 active={speaker === "m"}
                 thai="ครับ"
                 roman="khráp"
                 label="Man"
-                onClick={() => setSpeaker("m")}
+                onClick={() => {
+                  setSpeaker("m");
+                  speakThai("สวัสดีครับ", "m");
+                }}
               />
             </div>
             <p className="mt-3 text-sm text-pretty text-muted">
               Now set to {particleLabel(speaker)}. Questions from a woman use คะ (khá) instead of ค่ะ. Men keep ครับ.
-              Tiles for “I” use {speaker === "m" ? "ผม (phǒm)" : "ฉัน (chǎn)"}.
+              Tiles for “I” use {speaker === "m" ? "ผม (phǒm)" : "ฉัน (chǎn)"}. Audio matches the selected voice when
+              dual voice packs are installed.
             </p>
           </div>
 
@@ -102,6 +110,16 @@ export function Profile() {
             </p>
             <div className="mt-3">
               <ScriptStylePicker />
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-extrabold">Speech method</h2>
+            <p className="mt-1 text-sm text-pretty text-muted">
+              Choose which voice engine plays when you tap a Thai word or phrase. Tap an option to preview it.
+            </p>
+            <div className="mt-3">
+              <SpeechMethodPicker />
             </div>
           </div>
 
@@ -198,6 +216,56 @@ export function ScriptStylePicker() {
         hint="Looped heads"
         onClick={() => setScriptStyle("traditional")}
       />
+    </div>
+  );
+}
+
+const SPEECH_METHODS: Array<{ id: SpeechMethod; title: string; hint: string }> = [
+  {
+    id: "auto",
+    title: "Auto (Neural + Studio)",
+    hint: "Uses Woman/Man neural packs when available, with studio MP3 fallback.",
+  },
+  {
+    id: "google",
+    title: "Studio MP3",
+    hint: "Bundled 24 kHz Thai audio clips, consistent across every browser.",
+  },
+  {
+    id: "browser",
+    title: "Device voice",
+    hint: "Uses your device or browser's built-in Thai speech engine.",
+  },
+];
+
+function SpeechMethodPicker() {
+  const speechMethod = useProgress((state) => state.speechMethod);
+  const speaker = useProgress((state) => state.speaker);
+  const setSpeechMethod = useProgress((state) => state.setSpeechMethod);
+
+  return (
+    <div className="grid gap-2">
+      {SPEECH_METHODS.map((item) => {
+        const active = speechMethod === item.id;
+        return (
+          <button
+            key={item.id}
+            type="button"
+            aria-pressed={active}
+            onClick={() => {
+              setSpeechMethod(item.id);
+              speakThai(speaker === "m" ? "สวัสดีครับ" : "สวัสดีค่ะ", speaker, item.id);
+            }}
+            className={cn(
+              "w-full rounded-2xl border-2 px-4 py-3 text-left transition-colors",
+              active ? "border-ink bg-ink text-sheet" : "border-line bg-sheet",
+            )}
+          >
+            <span className="block font-extrabold">{item.title}</span>
+            <span className={cn("block text-sm", active ? "text-sheet/80" : "text-muted")}>{item.hint}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }
