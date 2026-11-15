@@ -39,6 +39,35 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
+      - name: Restore cached Thai audio pack
+        id: audio_cache
+        uses: actions/cache/restore@v4
+        with:
+          path: public/audio/th
+          key: thai-audio-${{ hashFiles('src/lib/curriculum.ts', 'src/lib/script-data.ts', 'scripts/generate-audio.mjs') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            thai-audio-${{ hashFiles('src/lib/curriculum.ts', 'src/lib/script-data.ts', 'scripts/generate-audio.mjs') }}-
+            thai-audio-
+
+      - name: Generate missing Thai audio clips
+        id: audio_gen
+        run: |
+          LOG_FILE=$(mktemp)
+          npm run audio:generate | tee "$LOG_FILE" || true
+          if grep -Eq '"generated":[1-9]' "$LOG_FILE"; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+          rm -f "$LOG_FILE"
+
+      - name: Save updated Thai audio pack to cache
+        if: steps.audio_gen.outputs.changed == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: public/audio/th
+          key: ${{ steps.audio_cache.outputs.cache-primary-key }}
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:

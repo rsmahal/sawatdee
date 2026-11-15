@@ -356,7 +356,7 @@ async function fetchEdgeNeuralMp3Once(text, voiceName) {
         // ignore
       }
       reject(new Error(`Edge TTS timeout for ${text}`));
-    }, 15000);
+    }, 12000);
 
     const finish = (err, buf) => {
       if (settled) return;
@@ -432,8 +432,9 @@ async function fetchEdgeNeuralMp3(text, voiceName, attempt = 1) {
   try {
     return await fetchEdgeNeuralMp3Once(text, voiceName);
   } catch (err) {
-    if (attempt < 4) {
-      await new Promise((r) => setTimeout(r, 400 * attempt));
+    if (attempt < 5) {
+      const delayMs = Math.min(8000, 750 * 2 ** (attempt - 1)) + Math.floor(Math.random() * 400);
+      await new Promise((r) => setTimeout(r, delayMs));
       return fetchEdgeNeuralMp3(text, voiceName, attempt + 1);
     }
     throw err;
@@ -530,6 +531,13 @@ async function probeEdgeNeural() {
   return { ok: false, reason: lastReason };
 }
 
+function hasMissingClips(texts, outDir) {
+  return texts.some((text) => {
+    const dest = join(outDir, `${hashText(text)}.mp3`);
+    return !existsSync(dest) || statSync(dest).size < 256;
+  });
+}
+
 async function main() {
   const args = new Set(process.argv.slice(2));
   const edgeOnly = args.has("--edge");
@@ -546,32 +554,38 @@ async function main() {
     console.log(JSON.stringify({ pack: "fallback", ...baseStats }));
   }
 
-  const edgeProbe = await probeEdgeNeural();
-  if (!edgeProbe.ok) {
-    const msg =
-      `Edge Neural TTS (speech.platform.bing.com) blocked or unreachable (${edgeProbe.reason}); ` +
-      "keeping existing/fallback manifests.";
-    if (edgeOnly) {
-      console.error(msg);
-      process.exit(1);
-    }
-    for (const speaker of Object.keys(EDGE_VOICES)) {
-      const spDir = join(baseDir, speaker);
-      const spManifest = join(spDir, "manifest.json");
-      if (!existsSync(spManifest)) {
-        mkdirSync(spDir, { recursive: true });
-        writeFileSync(spManifest, "{}", "utf8");
+  const edgeNeedsFetch = Object.keys(EDGE_VOICES).some((speaker) =>
+    hasMissingClips(texts, join(baseDir, speaker)),
+  );
+
+  if (edgeNeedsFetch) {
+    const edgeProbe = await probeEdgeNeural();
+    if (!edgeProbe.ok) {
+      const msg =
+        `Edge Neural TTS (speech.platform.bing.com) blocked or unreachable (${edgeProbe.reason}); ` +
+        "keeping existing/fallback manifests.";
+      if (edgeOnly) {
+        console.error(msg);
+        process.exit(1);
       }
+      for (const speaker of Object.keys(EDGE_VOICES)) {
+        const spDir = join(baseDir, speaker);
+        const spManifest = join(spDir, "manifest.json");
+        if (!existsSync(spManifest)) {
+          mkdirSync(spDir, { recursive: true });
+          writeFileSync(spManifest, "{}", "utf8");
+        }
+      }
+      console.log(JSON.stringify({ pack: "edge", skipped: true, reason: edgeProbe.reason }));
+      return;
     }
-    console.log(JSON.stringify({ pack: "edge", skipped: true, reason: edgeProbe.reason }));
-    return;
   }
 
   for (const [speaker, voiceName] of Object.entries(EDGE_VOICES)) {
     const stats = await generatePack({
       texts,
       outDir: join(baseDir, speaker),
-      concurrency: 6,
+      concurrency: 3,
       fetchFn: (text) => fetchEdgeNeuralMp3(text, voiceName),
     });
     console.log(JSON.stringify({ pack: `edge-${speaker}`, voice: voiceName, ...stats }));
