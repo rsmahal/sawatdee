@@ -32,16 +32,18 @@ function makeExercise(card: SrsCard, pool: SrsCard[], index: number): Exercise {
   return { kind: "choice", dir, word: toWord(card), traps, coach: COACH[card.thai] };
 }
 
-function buildQueue(cards: Record<string, SrsCard>, mode: "due" | "ahead"): Item[] {
+function buildQueue(cards: Record<string, SrsCard>, mode: "due" | "ahead", limit: number | null): Item[] {
   const today = todayKey();
   const list = Object.values(cards);
-  const chosen =
-    mode === "due"
-      ? shuffle(list.filter((card) => card.due <= today)).slice(0, 12)
-      : list
-          .filter((card) => card.due > today)
-          .sort((a, b) => a.due.localeCompare(b.due))
-          .slice(0, 8);
+  if (mode === "due") {
+    const dueCards = shuffle(list.filter((card) => card.due <= today));
+    const chosen = limit === null ? dueCards : dueCards.slice(0, limit);
+    return chosen.map((card) => ({ thai: card.thai, attempt: 0 }));
+  }
+  const aheadCards = list
+    .filter((card) => card.due > today)
+    .sort((a, b) => a.due.localeCompare(b.due));
+  const chosen = limit === null ? aheadCards : aheadCards.slice(0, limit);
   return chosen.map((card) => ({ thai: card.thai, attempt: 0 }));
 }
 
@@ -49,6 +51,7 @@ export function Review({ onStart }: { onStart: (mode: "due" | "ahead") => void }
   const vocabulary = useCatalog((state) => state.vocabulary);
   const cards = useProgress((state) => state.cards);
   const showRoman = useProgress((state) => state.showRoman);
+  const reviewLimit = useProgress((state) => state.reviewLimit);
   const today = todayKey();
   const stats = reviewStats(cards, today);
   const dueList = Object.values(cards)
@@ -57,7 +60,7 @@ export function Review({ onStart }: { onStart: (mode: "due" | "ahead") => void }
   const later = Object.values(cards)
     .filter((card) => card.due > today)
     .sort((a, b) => a.due.localeCompare(b.due) || a.thai.localeCompare(b.thai, "th"));
-  const session = Math.min(stats.due, 12);
+  const session = reviewLimit === null ? stats.due : Math.min(stats.due, reviewLimit);
 
   return (
     <div className="mx-auto w-full max-w-5xl px-5 pt-6 pb-10 lg:px-8 lg:py-8">
@@ -266,8 +269,9 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
   const showRoman = useProgress((state) => state.showRoman);
   const autoplay = useProgress((state) => state.autoplay);
   const speaker = useProgress((state) => state.speaker);
+  const reviewLimit = useProgress((state) => state.reviewLimit);
   const gradeReview = useProgress((state) => state.gradeReview);
-  const [queue, setQueue] = useState<Item[]>(() => buildQueue(cards, mode));
+  const [queue, setQueue] = useState<Item[]>(() => buildQueue(cards, mode, reviewLimit));
   const [index, setIndex] = useState(0);
   const [result, setResult] = useState<Grade | null>(null);
   const [canCheck, setCanCheck] = useState(false);

@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import * as Slider from "@radix-ui/react-slider";
 import { Link } from "@tanstack/react-router";
 import { useCatalog } from "@/lib/catalog-store";
 import { particleLabel, courseNote } from "@/lib/curriculum";
 import { UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { useProgress, type SpeechMethod } from "@/lib/progress";
+import { DEFAULT_REVIEW_LIMIT, useProgress, type SpeechMethod } from "@/lib/progress";
 import { checkSpeechAvailability, getCachedSpeechAvailability, speakThai } from "@/lib/speech";
 import { reviewStats, todayKey } from "@/lib/srs";
 import { cn } from "@/lib/cn";
@@ -119,6 +120,16 @@ export function Profile() {
             </p>
             <div className="mt-3">
               <SpeechMethodPicker />
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-extrabold">Review size</h2>
+            <p className="mt-1 text-sm text-pretty text-muted">
+              Set how many words appear in a single review round, from 1 to 100 or all due words.
+            </p>
+            <div className="mt-3">
+              <ReviewLimitPicker />
             </div>
           </div>
 
@@ -355,6 +366,81 @@ function SpeakerCard({
         {roman} · {label}
       </span>
     </button>
+  );
+}
+
+function ReviewLimitPicker() {
+  const reviewLimit = useProgress((state) => state.reviewLimit);
+  const setReviewLimit = useProgress((state) => state.setReviewLimit);
+  const lastNumericRef = useRef(reviewLimit ?? DEFAULT_REVIEW_LIMIT);
+
+  if (reviewLimit !== null) {
+    lastNumericRef.current = reviewLimit;
+  }
+
+  const isAll = reviewLimit === null;
+  const sliderValue = reviewLimit ?? lastNumericRef.current;
+
+  return (
+    <div className="rounded-2xl bg-soft px-4 py-4">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="font-extrabold">Words per review</p>
+          <p className="text-sm font-bold text-chili tabular-nums">
+            {isAll ? "All due words" : `${reviewLimit} ${reviewLimit === 1 ? "word" : "words"}`}
+          </p>
+        </div>
+        <button
+          type="button"
+          aria-pressed={isAll}
+          onClick={() => setReviewLimit(isAll ? lastNumericRef.current : null)}
+          className={cn(
+            "min-h-10 rounded-xl border-2 px-4 text-sm font-extrabold transition-colors",
+            isAll ? "border-ink bg-ink text-sheet" : "border-line bg-sheet text-ink",
+          )}
+        >
+          All
+        </button>
+      </div>
+
+      <div className="mt-4">
+        <Slider.Root
+          aria-label="Words per review"
+          min={1}
+          max={100}
+          step={1}
+          value={[sliderValue]}
+          onValueChange={([next]) => {
+            if (typeof next === "number") setReviewLimit(next);
+          }}
+          className="relative flex h-7 w-full touch-none items-center select-none"
+        >
+          <Slider.Track className="relative h-2.5 w-full grow overflow-hidden rounded-full bg-line">
+            <Slider.Range className={cn("absolute h-full rounded-full", isAll ? "bg-muted/40" : "bg-chili")} />
+          </Slider.Track>
+          <Slider.Thumb
+            aria-label="Words per review slider"
+            className="block h-6 w-6 rounded-full border-2 border-ink bg-sheet shadow-sm transition-transform focus-visible:scale-110"
+          />
+        </Slider.Root>
+
+        <div className="mt-1 flex items-center justify-between text-xs font-extrabold text-muted tabular-nums">
+          {[1, 25, 50, 75, 100].map((mark) => (
+            <button
+              key={mark}
+              type="button"
+              onClick={() => setReviewLimit(mark)}
+              className={cn(
+                "rounded-md px-1 py-0.5 transition-colors hover:text-ink",
+                !isAll && reviewLimit === mark && "text-chili",
+              )}
+            >
+              {mark}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 

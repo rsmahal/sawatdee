@@ -11,6 +11,15 @@ import {
 
 export type Theme = "light" | "dark";
 export type SpeechMethod = "auto" | "google" | "browser";
+export const DEFAULT_REVIEW_LIMIT = 12;
+
+export function normalizeReviewLimit(value: unknown): number | null {
+  if (value === null || value === "all") return null;
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return Math.min(100, Math.max(1, Math.round(value)));
+  }
+  return DEFAULT_REVIEW_LIMIT;
+}
 
 type Data = {
   xp: number;
@@ -21,6 +30,7 @@ type Data = {
   speechMethod: SpeechMethod;
   showRoman: boolean;
   autoplay: boolean;
+  reviewLimit: number | null;
   scriptStyle: ScriptStyle;
   theme: Theme;
   cards: Record<string, SrsCard>;
@@ -33,6 +43,7 @@ type Actions = {
   setSpeechMethod: (method: SpeechMethod) => void;
   setShowRoman: (show: boolean) => void;
   setAutoplay: (on: boolean) => void;
+  setReviewLimit: (limit: number | null) => void;
   setScriptStyle: (style: ScriptStyle) => void;
   setTheme: (theme: Theme) => void;
   ingestWords: (words: Word[]) => void;
@@ -52,6 +63,7 @@ const initial: Data = {
   speechMethod: "auto",
   showRoman: true,
   autoplay: true,
+  reviewLimit: DEFAULT_REVIEW_LIMIT,
   scriptStyle: "modern",
   theme: "light",
   cards: {},
@@ -67,6 +79,7 @@ export const useProgress = create<Data & Actions>()(
       setSpeechMethod: (speechMethod) => set({ speechMethod }),
       setShowRoman: (showRoman) => set({ showRoman }),
       setAutoplay: (autoplay) => set({ autoplay }),
+      setReviewLimit: (reviewLimit) => set({ reviewLimit: normalizeReviewLimit(reviewLimit) }),
       setScriptStyle: (scriptStyle) => set({ scriptStyle }),
       setTheme: (theme) => set({ theme }),
       ingestWords: (words) =>
@@ -153,12 +166,15 @@ export const useProgress = create<Data & Actions>()(
           theme: saved.theme === "dark" ? "dark" : "light",
           speechMethod:
             saved.speechMethod === "google" || saved.speechMethod === "browser" ? saved.speechMethod : "auto",
+          reviewLimit:
+            "reviewLimit" in saved ? normalizeReviewLimit(saved.reviewLimit) : current.reviewLimit,
         };
       },
       partialize: (state) => ({
         theme: state.theme,
         scriptStyle: state.scriptStyle,
         speechMethod: state.speechMethod,
+        reviewLimit: state.reviewLimit,
       }),
     },
   ),
@@ -177,6 +193,7 @@ export type Learning = {
   speechMethod: SpeechMethod;
   showRoman: boolean;
   autoplay: boolean;
+  reviewLimit: number | null;
   cards: Record<string, SrsCard>;
   answered: number;
   correct: number;
@@ -192,6 +209,7 @@ export function learningSnapshot(state: Data): Learning {
     speechMethod: state.speechMethod,
     showRoman: state.showRoman,
     autoplay: state.autoplay,
+    reviewLimit: state.reviewLimit,
     cards: state.cards,
     answered: state.answered,
     correct: state.correct,
@@ -240,6 +258,7 @@ export function parseLearning(raw: unknown): Learning | null {
       row.speechMethod === "google" || row.speechMethod === "browser" ? row.speechMethod : "auto",
     showRoman: row.showRoman !== false,
     autoplay: row.autoplay !== false,
+    reviewLimit: normalizeReviewLimit(row.reviewLimit),
     cards,
     answered: Math.max(0, Math.round(num(row.answered, 0))),
     correct: Math.max(0, Math.round(num(row.correct, 0))),
