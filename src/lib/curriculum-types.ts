@@ -93,3 +93,56 @@ export type CurriculumCatalog = {
   lessons: Lesson[];
   vocabulary: VocabularyEntry[];
 };
+
+export type DialogueLine = {
+  speaker: "npc" | "user";
+  /** Thai text segments; Tok lets user lines adapt ฉัน/ผม and ค่ะ/ครับ to the learner's speaker setting */
+  tokens: Tok[];
+  /** Custom display/roman override if needed, otherwise joined from tokens */
+  roman: string;
+  en: string;
+};
+
+export type ConversationChoiceOption = {
+  tokens: Tok[];
+  roman: string;
+  en: string;
+};
+
+export type ConversationTurn =
+  | {
+      kind: "line";
+      line: DialogueLine;
+      note?: string;
+    }
+  | {
+      kind: "reply-choice";
+      prompt: string;
+      options: ConversationChoiceOption[];
+      answerIndex: number;
+      coach?: string;
+    }
+  | {
+      kind: "reply-tiles";
+      prompt: string;
+      answer: Tok[];
+      extra: Tok[];
+      roman: string;
+      en: string;
+      coach?: string;
+    };
+
+export type Conversation = {
+  id: string;
+  unitId: string;
+  level: CefrLevel;
+  title: string;
+  setting: string;
+  npcName: string;
+  npcRole: string;
+  npcSpeaker: Speaker;
+  /** Core words practiced; all lessons introducing these words must be completed to unlock */
+  words: Word[];
+  turns: ConversationTurn[];
+};
+

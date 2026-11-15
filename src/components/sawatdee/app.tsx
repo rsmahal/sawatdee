@@ -1,9 +1,10 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { BookOpen, Home, Repeat, UserRound } from "lucide-react";
+import { BookOpen, Home, MessageCircle, Repeat, UserRound } from "lucide-react";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { cn } from "@/lib/cn";
 import { useCatalog } from "@/lib/catalog-store";
+import { conversations, conversationUnlockStatus } from "@/lib/conversations";
 import { loadCurriculum } from "@/lib/curriculum-api";
 import { loadProgress, saveProgress } from "@/lib/learner-progress";
 import { learningSnapshot, useProgress } from "@/lib/progress";
@@ -14,8 +15,9 @@ import { Path } from "./path";
 import { Profile } from "./profile";
 import { Review, ReviewSession } from "./review";
 import { ScriptLab } from "./script-lab";
+import { Talk, TalkSession } from "./talk";
 
-type Tab = "learn" | "review" | "script" | "me";
+type Tab = "learn" | "talk" | "review" | "script" | "me";
 type ReviewMode = "due" | "ahead";
 
 export function SawatdeeApp() {
@@ -47,14 +49,21 @@ function Course({ userId }: { userId: string }) {
   const timer = useRef<number | null>(null);
   const [tab, setTab] = useState<Tab>("learn");
   const [lessonId, setLessonId] = useState<string | null>(null);
+  const [talkId, setTalkId] = useState<string | null>(null);
   const [reviewMode, setReviewMode] = useState<ReviewMode | null>(null);
+  const completed = useProgress((state) => state.completed);
+  const talkCompleted = useProgress((state) => state.talkCompleted);
   const cards = useProgress((state) => state.cards);
   const xp = useProgress((state) => state.xp);
   const streak = useProgress((state) => state.streak);
+  const lessons = useCatalog((state) => state.lessons);
   const vocabulary = useCatalog((state) => state.vocabulary);
   const due = reviewStats(cards, todayKey()).due;
+  const talkReady = conversations.filter(
+    (conv) => !talkCompleted[conv.id] && conversationUnlockStatus(conv, completed, lessons).unlocked,
+  ).length;
   const seenWords = Object.keys(cards).length;
-  const inSession = Boolean(lessonId || reviewMode);
+  const inSession = Boolean(lessonId || talkId || reviewMode);
 
   useEffect(() => {
     ready.current = false;
@@ -124,6 +133,7 @@ function Course({ userId }: { userId: string }) {
         <DesktopSidebar
           tab={tab}
           due={due}
+          talkReady={talkReady}
           xp={xp}
           streak={streak}
           seenWords={seenWords}
@@ -141,22 +151,33 @@ function Course({ userId }: { userId: string }) {
       >
         {lessonId ? (
           <Lesson key={lessonId} lessonId={lessonId} onExit={() => setLessonId(null)} />
+        ) : talkId ? (
+          <TalkSession key={talkId} conversationId={talkId} onExit={() => setTalkId(null)} />
         ) : reviewMode ? (
           <ReviewSession key={reviewMode} mode={reviewMode} onExit={() => setReviewMode(null)} />
         ) : (
           <>
             <div className="min-h-0 flex-1 overflow-y-auto">
               {tab === "learn" && <Path onStart={setLessonId} onReview={() => setTab("review")} />}
+              {tab === "talk" && <Talk onStart={setTalkId} onGoLearn={() => setTab("learn")} />}
               {tab === "review" && <Review onStart={setReviewMode} />}
               {tab === "script" && <ScriptLab />}
               {tab === "me" && <Profile />}
             </div>
             <nav
-              className="safe-bottom grid shrink-0 grid-cols-4 gap-1 border-t border-line bg-sheet px-2 pt-2 lg:hidden"
+              className="safe-bottom grid shrink-0 grid-cols-5 gap-1 border-t border-line bg-sheet px-2 pt-2 lg:hidden"
               aria-label="Sections"
             >
               <TabButton active={tab === "learn"} label="Learn" onClick={() => setTab("learn")}>
                 <Home className="h-5 w-5" />
+              </TabButton>
+              <TabButton
+                active={tab === "talk"}
+                label="Talk"
+                dot={talkReady > 0}
+                onClick={() => setTab("talk")}
+              >
+                <MessageCircle className="h-5 w-5" />
               </TabButton>
               <TabButton active={tab === "review"} label="Review" dot={due > 0} onClick={() => setTab("review")}>
                 <Repeat className="h-5 w-5" />
@@ -218,6 +239,7 @@ function TabButton({
 function DesktopSidebar({
   tab,
   due,
+  talkReady,
   xp,
   streak,
   seenWords,
@@ -226,15 +248,27 @@ function DesktopSidebar({
 }: {
   tab: Tab;
   due: number;
+  talkReady: number;
   xp: number;
   streak: number;
   seenWords: number;
   totalWords: number;
   onTab: (tab: Tab) => void;
 }) {
-  const navItems: { id: Tab; label: string; icon: ReactNode; badge?: number }[] = [
+  const navItems: { id: Tab; label: string; icon: ReactNode; badge?: string }[] = [
     { id: "learn", label: "Learn", icon: <Home className="h-5 w-5 shrink-0" /> },
-    { id: "review", label: "Review", icon: <Repeat className="h-5 w-5 shrink-0" />, badge: due },
+    {
+      id: "talk",
+      label: "Talk",
+      icon: <MessageCircle className="h-5 w-5 shrink-0" />,
+      badge: talkReady > 0 ? `${talkReady} new` : undefined,
+    },
+    {
+      id: "review",
+      label: "Review",
+      icon: <Repeat className="h-5 w-5 shrink-0" />,
+      badge: due > 0 ? `${due} due` : undefined,
+    },
     { id: "script", label: "Script", icon: <BookOpen className="h-5 w-5 shrink-0" /> },
     { id: "me", label: "Profile", icon: <UserRound className="h-5 w-5 shrink-0" /> },
   ];
@@ -274,8 +308,8 @@ function DesktopSidebar({
                   {item.icon}
                   {item.label}
                 </span>
-                {item.badge && item.badge > 0 ? (
-                  <span className="text-xs font-extrabold text-chili tabular-nums">{item.badge} due</span>
+                {item.badge ? (
+                  <span className="text-xs font-extrabold text-chili tabular-nums">{item.badge}</span>
                 ) : null}
               </button>
             );

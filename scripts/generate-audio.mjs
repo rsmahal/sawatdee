@@ -246,6 +246,7 @@ function loadTsModule(relPath) {
 function collectUtterances() {
   const cur = loadTsModule("src/lib/curriculum.ts");
   const script = loadTsModule("src/lib/script-data.ts");
+  const convMod = loadTsModule("src/lib/conversations.ts");
   const texts = new Set(["สวัสดีค่ะ", "สวัสดีครับ"]);
 
   for (const v of cur.vocabularyCatalog) {
@@ -281,6 +282,33 @@ function collectUtterances() {
           const phrase = ex.answer.map((tok) => cur.resolveTok(tok, sp).thai).join("");
           if (phrase) texts.add(phrase);
           for (const tok of [...ex.answer, ...ex.extra]) {
+            const w = cur.resolveTok(tok, sp);
+            if (w.thai) texts.add(w.thai);
+          }
+        }
+      }
+    }
+  }
+
+  for (const conv of convMod.conversations ?? []) {
+    for (const turn of conv.turns) {
+      if (turn.kind === "line") {
+        for (const sp of ["f", "m"]) {
+          const phrase = convMod.resolveTokensText(turn.line.tokens, sp);
+          if (phrase) texts.add(phrase);
+        }
+      } else if (turn.kind === "reply-choice") {
+        for (const opt of turn.options) {
+          for (const sp of ["f", "m"]) {
+            const phrase = convMod.resolveTokensText(opt.tokens, sp);
+            if (phrase) texts.add(phrase);
+          }
+        }
+      } else if (turn.kind === "reply-tiles") {
+        for (const sp of ["f", "m"]) {
+          const phrase = convMod.resolveTokensText(turn.answer, sp);
+          if (phrase) texts.add(phrase);
+          for (const tok of [...turn.answer, ...turn.extra]) {
             const w = cur.resolveTok(tok, sp);
             if (w.thai) texts.add(w.thai);
           }

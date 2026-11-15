@@ -15,7 +15,11 @@ import type {
 
 export type {
   CefrLevel,
+  Conversation,
+  ConversationChoiceOption,
+  ConversationTurn,
   CurriculumCatalog,
+  DialogueLine,
   Exercise,
   Lesson,
   LevelInfo,

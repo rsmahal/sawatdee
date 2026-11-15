@@ -122,14 +122,25 @@ function pickSynthesisVoice(voices: SpeechSynthesisVoice[], speaker: Speaker) {
   return thaiVoices.find((item) => pattern.test(item.name)) ?? thaiVoices[0];
 }
 
-function speakWithSynthesis(text: string, speaker: Speaker) {
-  if (!hasSynthesis() || !text) return;
+function speakWithSynthesis(text: string, speaker: Speaker, token: number, onEnd?: () => void) {
+  if (!hasSynthesis() || !text) {
+    if (token === playToken) onEnd?.();
+    return;
+  }
   const synth = window.speechSynthesis;
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang = "th-TH";
   utter.rate = 0.82;
   const voice = pickSynthesisVoice(synth.getVoices(), speaker);
   if (voice) utter.voice = voice;
+  let finished = false;
+  const done = () => {
+    if (finished) return;
+    finished = true;
+    if (token === playToken) onEnd?.();
+  };
+  utter.onend = done;
+  utter.onerror = done;
   synth.cancel();
   synth.speak(utter);
 }
@@ -146,11 +157,17 @@ export function stopSpeech() {
   }
 }
 
-function playCandidates(urls: string[], fallbackText: string, speaker: Speaker, token: number) {
+function playCandidates(
+  urls: string[],
+  fallbackText: string,
+  speaker: Speaker,
+  token: number,
+  onEnd?: () => void,
+) {
   if (token !== playToken) return;
   const [nextUrl, ...rest] = urls;
   if (!nextUrl) {
-    speakWithSynthesis(fallbackText, speaker);
+    speakWithSynthesis(fallbackText, speaker, token, onEnd);
     return;
   }
 
@@ -161,11 +178,12 @@ function playCandidates(urls: string[], fallbackText: string, speaker: Speaker, 
   const advanceFallback = () => {
     if (token !== playToken || activeAudio !== audio) return;
     activeAudio = null;
-    playCandidates(rest, fallbackText, speaker, token);
+    playCandidates(rest, fallbackText, speaker, token, onEnd);
   };
 
   audio.addEventListener("ended", () => {
     if (activeAudio === audio) activeAudio = null;
+    if (token === playToken) onEnd?.();
   });
   audio.addEventListener("error", advanceFallback);
 
@@ -174,7 +192,9 @@ function playCandidates(urls: string[], fallbackText: string, speaker: Speaker, 
     activeAudio = null;
     const name = err instanceof Error ? err.name : "";
     if (name !== "NotAllowedError" && name !== "AbortError") {
-      playCandidates(rest, fallbackText, speaker, token);
+      playCandidates(rest, fallbackText, speaker, token, onEnd);
+    } else if (token === playToken) {
+      onEnd?.();
     }
   });
 }
@@ -201,8 +221,16 @@ function resolveCandidates(
   return urls;
 }
 
-export function speakThai(text: string, speakerOverride?: Speaker, methodOverride?: SpeechMethod) {
-  if (typeof window === "undefined" || !text) return;
+export function speakThai(
+  text: string,
+  speakerOverride?: Speaker,
+  methodOverride?: SpeechMethod,
+  onEnd?: () => void,
+) {
+  if (typeof window === "undefined" || !text) {
+    onEnd?.();
+    return;
+  }
   stopSpeech();
   const token = playToken;
   const state = useProgress.getState();
@@ -210,19 +238,19 @@ export function speakThai(text: string, speakerOverride?: Speaker, methodOverrid
   const method = methodOverride ?? state.speechMethod;
 
   if (method === "browser") {
-    speakWithSynthesis(text, speaker);
+    speakWithSynthesis(text, speaker, token, onEnd);
     return;
   }
 
   if (method === "google") {
     const baseCached = manifestCache.base;
     if (baseCached) {
-      playCandidates(resolveCandidates(text, speaker, method, {}, baseCached, false), text, speaker, token);
+      playCandidates(resolveCandidates(text, speaker, method, {}, baseCached, false), text, speaker, token, onEnd);
       return;
     }
     void loadManifest("base").then((baseMap) => {
       if (token !== playToken) return;
-      playCandidates(resolveCandidates(text, speaker, method, {}, baseMap, false), text, speaker, token);
+      playCandidates(resolveCandidates(text, speaker, method, {}, baseMap, false), text, speaker, token, onEnd);
     });
     return;
   }
@@ -231,7 +259,7 @@ export function speakThai(text: string, speakerOverride?: Speaker, methodOverrid
   const baseCached = manifestCache.base;
   if (speakerCached && baseCached && edgeLiveCache !== null) {
     const candidates = resolveCandidates(text, speaker, method, speakerCached, baseCached, edgeLiveCache.value);
-    playCandidates(candidates, text, speaker, token);
+    playCandidates(candidates, text, speaker, token, onEnd);
     return;
   }
 
@@ -239,7 +267,7 @@ export function speakThai(text: string, speakerOverride?: Speaker, methodOverrid
     ([speakerMap, baseMap, liveEdge]) => {
       if (token !== playToken) return;
       const candidates = resolveCandidates(text, speaker, method, speakerMap, baseMap, liveEdge);
-      playCandidates(candidates, text, speaker, token);
+      playCandidates(candidates, text, speaker, token, onEnd);
     },
   );
 }

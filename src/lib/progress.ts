@@ -26,6 +26,7 @@ type Data = {
   streak: number;
   lastDay: string | null;
   completed: Record<string, number>;
+  talkCompleted: Record<string, number>;
   speaker: Speaker;
   speechMethod: SpeechMethod;
   showRoman: boolean;
@@ -50,6 +51,7 @@ type Actions = {
   gradeReview: (thai: string, grade: ReviewGrade) => void;
   recordAnswer: (ok: boolean, gain: number) => void;
   finishLesson: (id: string, stars: number, bonus: number) => void;
+  finishConversation: (id: string, stars: number, bonus: number) => void;
   resetProgress: () => void;
   applyLearning: (learning: Learning) => void;
 };
@@ -59,6 +61,7 @@ const initial: Data = {
   streak: 0,
   lastDay: null,
   completed: {},
+  talkCompleted: {},
   speaker: "f",
   speechMethod: "auto",
   showRoman: true,
@@ -143,12 +146,35 @@ export const useProgress = create<Data & Actions>()(
           completed: { ...state.completed, [id]: Math.max(state.completed[id] ?? 0, stars) },
         });
       },
+      finishConversation: (id, stars, bonus) => {
+        const state = get();
+        const today = todayKey();
+        const previous = new Date();
+        previous.setDate(previous.getDate() - 1);
+        const yesterday = `${previous.getFullYear()}-${String(previous.getMonth() + 1).padStart(2, "0")}-${String(previous.getDate()).padStart(2, "0")}`;
+        let streak = state.streak;
+        if (state.lastDay !== today) {
+          streak = state.lastDay === yesterday ? state.streak + 1 : 1;
+        } else if (streak === 0) {
+          streak = 1;
+        }
+        set({
+          xp: state.xp + bonus,
+          streak,
+          lastDay: today,
+          talkCompleted: {
+            ...state.talkCompleted,
+            [id]: Math.max(state.talkCompleted[id] ?? 0, stars),
+          },
+        });
+      },
       resetProgress: () =>
         set({
           xp: 0,
           streak: 0,
           lastDay: null,
           completed: {},
+          talkCompleted: {},
           cards: {},
           answered: 0,
           correct: 0,
@@ -189,6 +215,7 @@ export type Learning = {
   streak: number;
   lastDay: string | null;
   completed: Record<string, number>;
+  talkCompleted: Record<string, number>;
   speaker: Speaker;
   speechMethod: SpeechMethod;
   showRoman: boolean;
@@ -205,6 +232,7 @@ export function learningSnapshot(state: Data): Learning {
     streak: state.streak,
     lastDay: state.lastDay,
     completed: state.completed,
+    talkCompleted: state.talkCompleted,
     speaker: state.speaker,
     speechMethod: state.speechMethod,
     showRoman: state.showRoman,
@@ -227,6 +255,12 @@ export function parseLearning(raw: unknown): Learning | null {
   if (row.completed && typeof row.completed === "object") {
     for (const [id, stars] of Object.entries(row.completed)) {
       if (typeof stars === "number" && stars >= 0 && stars <= 3) completed[id] = stars;
+    }
+  }
+  const talkCompleted: Record<string, number> = {};
+  if (row.talkCompleted && typeof row.talkCompleted === "object") {
+    for (const [id, stars] of Object.entries(row.talkCompleted)) {
+      if (typeof stars === "number" && stars >= 0 && stars <= 3) talkCompleted[id] = stars;
     }
   }
   const cards: Record<string, SrsCard> = {};
@@ -253,6 +287,7 @@ export function parseLearning(raw: unknown): Learning | null {
     streak: Math.max(0, Math.round(num(row.streak, 0))),
     lastDay: typeof row.lastDay === "string" ? row.lastDay : null,
     completed,
+    talkCompleted,
     speaker: row.speaker === "m" ? "m" : "f",
     speechMethod:
       row.speechMethod === "google" || row.speechMethod === "browser" ? row.speechMethod : "auto",
