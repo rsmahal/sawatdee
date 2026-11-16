@@ -12,7 +12,7 @@ export type SrsCard = {
   seen: string;
 };
 
-export type ReviewGrade = "good" | "again" | "shaky";
+export type ReviewGrade = "again" | "hard" | "good" | "easy";
 
 export function dayKey(date: Date) {
   const y = date.getFullYear();
@@ -32,14 +32,27 @@ export function todayKey() {
   return dayKey(new Date());
 }
 
-/** 1 day, then 3, then interval × ease, capped at 90. A miss clears the ladder. */
-export function nextInterval(card: SrsCard, grade: ReviewGrade) {
+/** Anki-style SM-2 intervals capped at 90 days: Again = 0 (same round), Hard = 1d then 1.2x, Good = 3d then * ease, Easy = 7d then * ease * 1.3. */
+export function nextInterval(card: SrsCard, grade: ReviewGrade): number {
   if (grade === "again") return 0;
-  if (grade === "shaky") return 1;
-  const reps = card.reps + 1;
-  if (reps <= 1) return 1;
-  if (reps === 2) return 3;
-  return Math.min(90, Math.max(1, Math.round(Math.max(card.interval, 1) * card.ease)));
+
+  const isLearning = card.reps <= 0 || card.interval <= 0;
+  const hardDays = isLearning ? 1 : Math.min(90, Math.max(1, Math.round(card.interval * 1.2)));
+  if (grade === "hard") return hardDays;
+
+  const goodBase = isLearning
+    ? 3
+    : card.interval === 1
+      ? Math.max(3, Math.round(card.interval * card.ease))
+      : Math.max(hardDays + 1, Math.round(card.interval * card.ease));
+  const goodDays = Math.min(90, goodBase);
+  if (grade === "good") return goodDays;
+
+  const easyBase =
+    isLearning || card.interval <= 1
+      ? 7
+      : Math.max(goodDays + 1, Math.round(card.interval * card.ease * 1.3));
+  return Math.min(90, easyBase);
 }
 
 function clampEase(ease: number) {
@@ -58,12 +71,21 @@ export function scheduleCard(card: SrsCard, grade: ReviewGrade, today: string): 
       due: today,
     };
   }
-  if (grade === "shaky") {
+  if (grade === "hard") {
     return {
       ...card,
-      reps: 1,
+      reps: Math.max(1, card.reps),
       interval,
-      ease: clampEase(card.ease - 0.05),
+      ease: clampEase(card.ease - 0.15),
+      due: addDays(today, interval),
+    };
+  }
+  if (grade === "easy") {
+    return {
+      ...card,
+      reps: card.reps + 1,
+      interval,
+      ease: clampEase(card.ease + 0.15),
       due: addDays(today, interval),
     };
   }
@@ -88,6 +110,12 @@ export function duePhrase(due: string, today: string) {
   if (days <= 0) return "Due";
   if (days === 1) return "Tomorrow";
   return `In ${days} days`;
+}
+
+export function intervalChip(days: number) {
+  if (days <= 0) return "Requeue";
+  if (days === 1) return "1 day";
+  return `${days} days`;
 }
 
 export function gapLabel(days: number) {

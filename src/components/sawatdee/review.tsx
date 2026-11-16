@@ -4,7 +4,7 @@ import { useCatalog } from "@/lib/catalog-store";
 import { cn } from "@/lib/cn";
 import type { CefrLevel, Exercise, VocabularyEntry, Word } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
-import { gapLabel, nextInterval, reviewStats, todayKey, duePhrase, type ReviewGrade, type SrsCard } from "@/lib/srs";
+import { duePhrase, intervalChip, nextInterval, reviewStats, todayKey, type ReviewGrade, type SrsCard } from "@/lib/srs";
 import { shuffle } from "@/lib/shuffle";
 import { speakThai } from "@/lib/speech";
 import { ExerciseBody, type Grade, type GradeHandle } from "./exercise";
@@ -67,8 +67,8 @@ export function Review({ onStart }: { onStart: (mode: "due" | "ahead") => void }
       <p className="text-sm font-extrabold text-chili">Review</p>
       <h1 className="text-3xl font-extrabold text-balance">Words you've seen</h1>
       <p className="mt-2 max-w-2xl text-pretty text-muted">
-        Opening a lesson adds its words here. A miss stays due and comes back later in the round. A correct
-        answer waits 1 day, then 3, then longer, up to 90 days.
+        Opening a lesson adds its words here. Rate each answer Anki-style: Again (requeues this round), Hard
+        (1 day), Good (3 days), or Easy (7 days), scaling up to 90 days.
       </p>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[360px_1fr] lg:items-start">
@@ -264,6 +264,13 @@ function WordBank({
   );
 }
 
+const ANKI_RATINGS: { grade: ReviewGrade; label: string; tone: string }[] = [
+  { grade: "again", label: "Again", tone: "text-chili" },
+  { grade: "hard", label: "Hard", tone: "text-marigold-deep dark:text-marigold" },
+  { grade: "good", label: "Good", tone: "text-teal" },
+  { grade: "easy", label: "Easy", tone: "text-ink" },
+];
+
 export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit: () => void }) {
   const cards = useProgress((state) => state.cards);
   const showRoman = useProgress((state) => state.showRoman);
@@ -297,26 +304,23 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
   function onCheck() {
     const grade = gradeRef.current?.grade();
     if (!grade || result) return;
-    if (item && item.attempt === 0) {
-      if (grade.ok) setRemembered((value) => value + 1);
-      else setMissed((value) => value + 1);
-    }
     setResult(grade);
   }
 
-  function onContinue() {
+  function onRate(rating: ReviewGrade) {
     if (!result || !item || !card) return;
+    if (item.attempt === 0) {
+      if (rating === "again") setMissed((value) => value + 1);
+      else setRemembered((value) => value + 1);
+    }
     let nextQueue = queue;
-    let grade: ReviewGrade | null = null;
-    if (result.ok) grade = item.attempt === 0 ? "good" : "shaky";
-    else if (item.attempt === 0) {
-      grade = "again";
+    if (rating === "again") {
       nextQueue = queue.slice();
       const insertAt = Math.min(index + 3, nextQueue.length);
-      nextQueue.splice(insertAt, 0, { thai: item.thai, attempt: 1 });
+      nextQueue.splice(insertAt, 0, { thai: item.thai, attempt: item.attempt + 1 });
       setQueue(nextQueue);
     }
-    if (grade) gradeReview(item.thai, grade);
+    gradeReview(item.thai, rating);
     if (index + 1 >= nextQueue.length) {
       setPhase("done");
       return;
@@ -325,15 +329,6 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
     setCanCheck(false);
     setIndex((value) => value + 1);
   }
-
-  const gap =
-    result && card && item
-      ? result.ok
-        ? gapLabel(nextInterval(card, item.attempt === 0 ? "good" : "shaky"))
-        : item.attempt === 0
-          ? "Again later this round, and still due after."
-          : "Still due."
-      : "";
 
   if (phase === "done" || !item || !exercise) {
     return (
@@ -396,20 +391,31 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
           className={cn("safe-bottom px-4 pt-4 lg:px-8 lg:pb-6", result.ok ? "bg-teal text-on-accent" : "bg-chili text-on-accent")}
           aria-live="polite"
         >
-          <p className="text-xl font-extrabold">{result.ok ? "Kept." : "Not quite."}</p>
+          <p className="text-xl font-extrabold">{result.ok ? "Nice." : "Not quite."}</p>
           {result.solution && (
             <p lang="th" className="mt-1 font-bold">
               {result.solution}
             </p>
           )}
-          <p className="mt-1 text-sm">{gap}</p>
-          <button
-            type="button"
-            onClick={onContinue}
-            className="btn-3d btn-sheet mt-3 flex min-h-12 w-full items-center justify-center rounded-2xl font-extrabold"
-          >
-            Continue
-          </button>
+          {exercise.coach && <p className="mt-1 text-sm">{exercise.coach}</p>}
+          <p className="mt-2 text-xs font-extrabold tracking-wide uppercase opacity-85">
+            How well did you recall it?
+          </p>
+          <div className="mt-2 grid grid-cols-4 gap-2">
+            {ANKI_RATINGS.map((opt) => (
+              <button
+                key={opt.grade}
+                type="button"
+                onClick={() => onRate(opt.grade)}
+                className="btn-3d btn-sheet flex min-h-14 flex-col items-center justify-center rounded-2xl px-1.5 py-2 text-center"
+              >
+                <span className={cn("text-sm leading-tight font-extrabold", opt.tone)}>{opt.label}</span>
+                <span className="mt-0.5 text-[11px] leading-tight font-bold text-muted tabular-nums">
+                  {card ? intervalChip(nextInterval(card, opt.grade)) : ""}
+                </span>
+              </button>
+            ))}
+          </div>
         </footer>
       ) : (
         <footer className="safe-bottom px-4 pt-2 lg:px-8 lg:pb-6">
