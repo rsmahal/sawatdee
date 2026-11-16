@@ -103,11 +103,9 @@ export type DialogueLine = {
   en: string;
 };
 
-export type ConversationChoiceOption = {
-  tokens: Tok[];
-  roman: string;
-  en: string;
-};
+export type ConversationBlankPart =
+  | { kind: "fixed"; token: Tok }
+  | { kind: "blank"; token: Tok };
 
 export type ConversationTurn =
   | {
@@ -116,10 +114,14 @@ export type ConversationTurn =
       note?: string;
     }
   | {
-      kind: "reply-choice";
+      kind: "reply-blank";
       prompt: string;
-      options: ConversationChoiceOption[];
-      answerIndex: number;
+      /** Sentence template mixing fixed context words and at least 2 blank slots */
+      parts: ConversationBlankPart[];
+      /** Thai distractor words mixed into the answer bank alongside the blank words */
+      extra: Tok[];
+      roman: string;
+      en: string;
       coach?: string;
     }
   | {

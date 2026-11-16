@@ -20,7 +20,7 @@ import {
   resolveTokensRoman,
   resolveTokensText,
 } from "@/lib/conversations";
-import { levels, resolveTok, type CefrLevel, type Conversation, type Speaker, type Tok } from "@/lib/curriculum";
+import { levels, resolveTok, type CefrLevel, type Conversation, type Speaker, type Tok, type Word } from "@/lib/curriculum";
 import { useProgress, xpGain } from "@/lib/progress";
 import { shuffle } from "@/lib/shuffle";
 import { speakThai, stopSpeech } from "@/lib/speech";
@@ -294,7 +294,8 @@ export function TalkSession({
   const [confirmExit, setConfirmExit] = useState(false);
 
   // Interactive reply state for current turn
-  const [pickedIndex, setPickedIndex] = useState<number | null>(null);
+  const [blankPicks, setBlankPicks] = useState<Record<number, string>>({});
+  const [activeBlankIdx, setActiveBlankIdx] = useState<number | null>(null);
   const [pickedTileKeys, setPickedTileKeys] = useState<string[]>([]);
   const [gradeResult, setGradeResult] = useState<{
     ok: boolean;
@@ -346,6 +347,40 @@ export function TalkSession({
   useEffect(() => {
     scrollBottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [history.length, gradeResult]);
+
+  // Shuffled word bank and slots for `reply-blank` turns
+  const blankModel = useMemo(() => {
+    if (!currentTurn || currentTurn.kind !== "reply-blank") return null;
+    const parts = currentTurn.parts.map((part, idx) => ({
+      idx,
+      kind: part.kind,
+      word: resolveTok(part.token, userSpeaker),
+    }));
+    const blankIndices = parts.filter((part) => part.kind === "blank").map((part) => part.idx);
+    const answers = parts
+      .filter((part) => part.kind === "blank")
+      .map((part, i) => ({
+        key: `b-${i}`,
+        word: part.word,
+      }));
+    const extras = currentTurn.extra.map((tok: Tok, i: number) => ({
+      key: `x-${i}`,
+      word: resolveTok(tok, userSpeaker),
+    }));
+    return {
+      parts,
+      blankIndices,
+      bank: shuffle([...answers, ...extras]),
+    };
+  }, [currentTurn, userSpeaker]);
+
+  const focusedBlankIdx = useMemo(() => {
+    if (!blankModel) return null;
+    if (activeBlankIdx !== null && blankModel.blankIndices.includes(activeBlankIdx)) {
+      return activeBlankIdx;
+    }
+    return blankModel.blankIndices.find((idx) => !blankPicks[idx]) ?? blankModel.blankIndices[0] ?? null;
+  }, [blankModel, activeBlankIdx, blankPicks]);
 
   // Shuffled tile bank for `reply-tiles` turns
   const tileModel = useMemo(() => {
@@ -399,7 +434,8 @@ export function TalkSession({
         : history;
     if (appendedMsg) setHistory(nextHistory);
 
-    setPickedIndex(null);
+    setBlankPicks({});
+    setActiveBlankIdx(null);
     setPickedTileKeys([]);
     setGradeResult(null);
 
@@ -415,14 +451,46 @@ export function TalkSession({
     setStepIndex((i) => i + 1);
   }
 
-  function handleCheckChoice() {
-    if (!currentTurn || currentTurn.kind !== "reply-choice" || pickedIndex === null || gradeResult) return;
-    const chosen = currentTurn.options[pickedIndex];
-    const correct = currentTurn.options[currentTurn.answerIndex]!;
-    if (!chosen) return;
-    const ok = pickedIndex === currentTurn.answerIndex;
-    const thai = resolveTokensText(correct.tokens, userSpeaker);
-    const roman = resolveTokensRoman(correct.tokens, userSpeaker, correct.roman);
+  function handlePickBlankOption(chip: { key: string; word: Word }) {
+    if (!blankModel || gradeResult) return;
+    const usedKeys = new Set(Object.values(blankPicks));
+    if (usedKeys.has(chip.key)) return;
+    const targetIdx =
+      focusedBlankIdx !== null && !blankPicks[focusedBlankIdx]
+        ? focusedBlankIdx
+        : (blankModel.blankIndices.find((idx) => !blankPicks[idx]) ?? focusedBlankIdx);
+    if (targetIdx === null) return;
+    if (autoplay) speakThai(chip.word.thai, userSpeaker);
+    const nextPicks = { ...blankPicks, [targetIdx]: chip.key };
+    setBlankPicks(nextPicks);
+    const nextEmpty = blankModel.blankIndices.find((idx) => !nextPicks[idx]);
+    setActiveBlankIdx(nextEmpty ?? null);
+  }
+
+  function handleClickBlankSlot(partIdx: number) {
+    if (gradeResult) return;
+    if (blankPicks[partIdx]) {
+      setBlankPicks((prev) => {
+        const next = { ...prev };
+        delete next[partIdx];
+        return next;
+      });
+    }
+    setActiveBlankIdx(partIdx);
+  }
+
+  function handleCheckBlank() {
+    if (!currentTurn || currentTurn.kind !== "reply-blank" || !blankModel || gradeResult) return;
+    if (!blankModel.blankIndices.every((idx) => Boolean(blankPicks[idx]))) return;
+    const ok = blankModel.parts.every((part) => {
+      if (part.kind !== "blank") return true;
+      const chosenKey = blankPicks[part.idx];
+      const chosenChip = blankModel.bank.find((item) => item.key === chosenKey);
+      return chosenChip?.word.thai === part.word.thai;
+    });
+    const tokens = currentTurn.parts.map((part) => part.token);
+    const thai = resolveTokensText(tokens, userSpeaker);
+    const roman = resolveTokensRoman(tokens, userSpeaker, currentTurn.roman);
     const gain = ok ? xpGain(combo) : 0;
     if (ok) {
       setCombo((c) => c + 1);
@@ -432,7 +500,7 @@ export function TalkSession({
       setMistakes((m) => m + 1);
     }
     recordAnswer(ok, gain);
-    setGradeResult({ ok, thai, roman, en: correct.en, coach: currentTurn.coach });
+    setGradeResult({ ok, thai, roman, en: currentTurn.en, coach: currentTurn.coach });
     speakThai(thai, userSpeaker);
   }
 
@@ -602,39 +670,106 @@ export function TalkSession({
             </footer>
           )}
 
-          {currentTurn?.kind === "reply-choice" && !gradeResult && (
+          {currentTurn?.kind === "reply-blank" && blankModel && !gradeResult && (
             <footer className="safe-bottom border-t border-line bg-sheet px-4 pt-3 lg:px-8 lg:pb-6">
-              <p className="text-xs font-extrabold tracking-wide text-chili uppercase">Your reply</p>
+              <p className="text-xs font-extrabold tracking-wide text-chili uppercase">Fill in the blanks</p>
               <p className="mt-0.5 text-sm font-extrabold">{currentTurn.prompt}</p>
-              <div className="mt-2.5 grid gap-2">
-                {currentTurn.options.map((opt, idx) => {
-                  const thai = resolveTokensText(opt.tokens, userSpeaker);
-                  const roman = resolveTokensRoman(opt.tokens, userSpeaker, opt.roman);
-                  const picked = pickedIndex === idx;
+              <p className="mt-0.5 text-xs font-bold text-muted">&ldquo;{currentTurn.en}&rdquo;</p>
+
+              {/* Sentence with inline fixed words & at least 2 interactive blanks */}
+              <div className="mt-2.5 flex flex-wrap items-center gap-1.5 rounded-2xl border-2 border-dashed border-line bg-paper p-2.5">
+                {blankModel.parts.map((part) => {
+                  if (part.kind === "fixed") {
+                    return (
+                      <span
+                        key={part.idx}
+                        className="rounded-xl border border-line/60 bg-sheet px-2.5 py-1 text-left"
+                      >
+                        <span lang="th" className="thai-display block text-base">
+                          {part.word.thai}
+                        </span>
+                        {showRoman && (
+                          <span className="block text-[11px] font-bold text-muted">{part.word.roman}</span>
+                        )}
+                      </span>
+                    );
+                  }
+                  const pickedKey = blankPicks[part.idx];
+                  const pickedChip = pickedKey
+                    ? blankModel.bank.find((item) => item.key === pickedKey)
+                    : null;
+                  const blankNum = blankModel.blankIndices.indexOf(part.idx) + 1;
+                  const isFocused = focusedBlankIdx === part.idx;
                   return (
                     <button
-                      key={`${thai}-${idx}`}
+                      key={part.idx}
                       type="button"
-                      aria-pressed={picked}
-                      onClick={() => setPickedIndex(idx)}
+                      aria-label={
+                        pickedChip
+                          ? `Blank ${blankNum}: ${pickedChip.word.thai}, tap to clear`
+                          : `Blank ${blankNum}, empty`
+                      }
+                      onClick={() => handleClickBlankSlot(part.idx)}
                       className={cn(
-                        "rounded-2xl border-2 px-3.5 py-2.5 text-left transition-colors",
-                        picked ? "border-chili bg-soft" : "border-line bg-paper",
+                        "min-h-11 min-w-16 rounded-xl border-2 px-3 py-1 text-center transition-colors",
+                        pickedChip
+                          ? "border-chili bg-soft"
+                          : isFocused
+                            ? "border-chili bg-sheet ring-2 ring-chili/25"
+                            : "border-line border-dashed bg-sheet",
                       )}
                     >
-                      <span lang="th" className="thai-display block text-lg">
-                        {thai}
-                      </span>
-                      {showRoman && <span className="block text-xs font-bold text-muted">{roman}</span>}
-                      <span className="block text-xs font-extrabold text-muted">{opt.en}</span>
+                      {pickedChip ? (
+                        <>
+                          <span lang="th" className="thai-display block text-base">
+                            {pickedChip.word.thai}
+                          </span>
+                          {showRoman && (
+                            <span className="block text-[11px] font-bold text-muted">
+                              {pickedChip.word.roman}
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        <span className="text-xs font-extrabold tracking-widest text-muted">
+                          ____
+                        </span>
+                      )}
                     </button>
                   );
                 })}
               </div>
+
+              {/* Thai-only Answer Options (no English translation) */}
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                {blankModel.bank.map((chip) => {
+                  const used = Object.values(blankPicks).includes(chip.key);
+                  return (
+                    <button
+                      key={chip.key}
+                      type="button"
+                      disabled={used}
+                      onClick={() => handlePickBlankOption(chip)}
+                      className={cn(
+                        "rounded-xl border-2 px-3 py-1.5 text-left transition-opacity",
+                        used ? "border-line opacity-30" : "border-line bg-sheet hover:bg-soft",
+                      )}
+                    >
+                      <span lang="th" className="thai-display block text-base">
+                        {chip.word.thai}
+                      </span>
+                      {showRoman && (
+                        <span className="block text-[11px] font-bold text-muted">{chip.word.roman}</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
               <button
                 type="button"
-                disabled={pickedIndex === null}
-                onClick={handleCheckChoice}
+                disabled={!blankModel.blankIndices.every((idx) => Boolean(blankPicks[idx]))}
+                onClick={handleCheckBlank}
                 className="btn-3d btn-chili mt-3 flex min-h-12 w-full items-center justify-center rounded-2xl font-extrabold"
               >
                 Check reply

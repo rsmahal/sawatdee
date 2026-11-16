@@ -1,12 +1,14 @@
 import { a1Vocab } from "./curriculum-a1";
 import { a2Vocab } from "./curriculum-a2";
 import { resolveTok } from "./curriculum";
-import type { Conversation, Lesson, Speaker, Tok, Word } from "./curriculum-types";
+import type { Conversation, ConversationBlankPart, Lesson, Speaker, Tok, Word } from "./curriculum-types";
 
 const a1 = a1Vocab;
 const a2 = a2Vocab;
 
 const t = (word: Word): Tok => ({ kind: "w", word });
+const fixed = (token: Tok): ConversationBlankPart => ({ kind: "fixed", token });
+const blank = (token: Tok): ConversationBlankPart => ({ kind: "blank", token });
 const SELF: Tok = { kind: "self" };
 const POLITE: Tok = { kind: "polite" };
 const POLITE_Q: Tok = { kind: "polite", q: true };
@@ -51,26 +53,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Greet Mint back and say nice to meet you:",
-        options: [
-          {
-            tokens: [t(a1.hello), t(a1.meet), POLITE],
-            roman: "sà-wàt-dii · yin-dii-thîi-dâai-rúu-jàk {polite}",
-            en: "Hello, nice to meet you.",
-          },
-          {
-            tokens: [t(a1.bye), POLITE],
-            roman: "laa-gàwn {polite}",
-            en: "Goodbye.",
-          },
-          {
-            tokens: [t(a1.cant), POLITE],
-            roman: "mâi-dâai {polite}",
-            en: "Cannot.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [blank(t(a1.hello)), blank(t(a1.meet)), fixed(POLITE)],
+        extra: [t(a1.bye), t(a1.thanks), t(a1.sorry)],
+        roman: "sà-wàt-dii · yin-dii-thîi-dâai-rúu-jàk {polite}",
+        en: "Hello, nice to meet you.",
         coach: "ยินดีที่ได้รู้จัก (yin-dii-thîi-dâai-rúu-jàk) is the warm greeting when meeting someone new.",
       },
       {
@@ -142,26 +130,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Respond naturally about yourself:",
-        options: [
-          {
-            tokens: [SELF, t(a1.study), t(a1.thailand), POLITE],
-            roman: "{self} riian bprà-thêet-thai {polite}",
-            en: "I study in Thailand.",
-          },
-          {
-            tokens: [t(a1.family), t(a1.cant), POLITE],
-            roman: "khrâawp-khrua mâi-dâai {polite}",
-            en: "Family cannot.",
-          },
-          {
-            tokens: [t(a1.doctor), t(a1.sorry), POLITE],
-            roman: "mǎaw khǎaw-thôot {polite}",
-            en: "Doctor, sorry.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [fixed(SELF), blank(t(a1.study)), blank(t(a1.thailand)), fixed(POLITE)],
+        extra: [t(a1.work), t(a1.family), t(a1.bangkok)],
+        roman: "{self} riian bprà-thêet-thai {polite}",
+        en: "I study in Thailand.",
       },
     ],
   },
@@ -204,26 +178,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Say you don't want it spicy:",
-        options: [
-          {
-            tokens: [t(a1.no), t(a1.spicy), POLITE],
-            roman: "mâi phèt {polite}",
-            en: "Not spicy.",
-          },
-          {
-            tokens: [t(a1.sweet), t(a1.salty), POLITE],
-            roman: "wǎan khem {polite}",
-            en: "Sweet and salty.",
-          },
-          {
-            tokens: [t(a1.hungry), t(a1.rice), POLITE],
-            roman: "hǐu khâao {polite}",
-            en: "I'm hungry.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [blank(t(a1.no)), blank(t(a1.spicy)), fixed(POLITE)],
+        extra: [t(a1.sweet), t(a1.hungry), t(a1.salty)],
+        roman: "mâi phèt {polite}",
+        en: "Not spicy.",
       },
       {
         kind: "reply-tiles",
@@ -274,26 +234,12 @@ export const conversations: Conversation[] = [
         coach: "Put the classifier last: กาแฟ + สอง + แก้ว.",
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Add one bottle of water:",
-        options: [
-          {
-            tokens: [t(a1.water), t(a1.one), t(a1.clfBottle), POLITE],
-            roman: "náam nùeng khùat {polite}",
-            en: "One bottle of water.",
-          },
-          {
-            tokens: [t(a1.water), t(a1.one), t(a1.clfPlate), POLITE],
-            roman: "náam nùeng jaan {polite}",
-            en: "One plate of water.",
-          },
-          {
-            tokens: [t(a1.water), t(a1.twenty), t(a1.clfPerson), POLITE],
-            roman: "náam yîi-sìp khon {polite}",
-            en: "Twenty people of water.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [fixed(t(a1.water)), blank(t(a1.one)), blank(t(a1.clfBottle)), fixed(POLITE)],
+        extra: [t(a1.two), t(a1.clfGlass), t(a1.clfPlate)],
+        roman: "náam nùeng khùat {polite}",
+        en: "One bottle of water.",
       },
       {
         kind: "line",
@@ -344,26 +290,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
-        prompt: "What did P'Nok tell you to do?",
-        options: [
-          {
-            tokens: [t(a1.straight), t(a1.turn), t(a1.left)],
-            roman: "dtrong-bpai líiao sáai",
-            en: "Go straight, turn left.",
-          },
-          {
-            tokens: [t(a1.turn), t(a1.right), t(a1.go), t(a1.home)],
-            roman: "líiao khwǎa bpai bâan",
-            en: "Turn right and go home.",
-          },
-          {
-            tokens: [t(a1.go), t(a1.hospital)],
-            roman: "bpai roong-phá-yaa-baan",
-            en: "Go to the hospital.",
-          },
-        ],
-        answerIndex: 0,
+        kind: "reply-blank",
+        prompt: "Repeat back P'Nok's directions:",
+        parts: [fixed(t(a1.straight)), blank(t(a1.turn)), blank(t(a1.left))],
+        extra: [t(a1.right), t(a1.go), t(a1.market)],
+        roman: "dtrong-bpai líiao sáai",
+        en: "Go straight, turn left.",
       },
       {
         kind: "line",
@@ -405,26 +337,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Ask what time you should meet:",
-        options: [
-          {
-            tokens: [t(a1.go), t(a1.whatTime), POLITE_Q],
-            roman: "bpai gìi-moong {politeQ}",
-            en: "What time are we going?",
-          },
-          {
-            tokens: [t(a1.yesterday), t(a1.morning), POLITE],
-            roman: "mûea-waan cháao {polite}",
-            en: "Yesterday morning.",
-          },
-          {
-            tokens: [t(a1.rainySeason), POLITE],
-            roman: "rúe-duu-fǒn {polite}",
-            en: "Rainy season.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [blank(t(a1.go)), blank(t(a1.whatTime)), fixed(POLITE_Q)],
+        extra: [t(a1.yesterday), t(a1.morning), t(a1.afternoon)],
+        roman: "bpai gìi-moong {politeQ}",
+        en: "What time are we going?",
       },
       {
         kind: "line",
@@ -466,26 +384,19 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Say you're buying dinner and going home to rest:",
-        options: [
-          {
-            tokens: [SELF, t(a1.buy), t(a1.rice), t(a1.goBack), t(a1.rest), POLITE],
-            roman: "{self} súue khâao glàp phák-phàawn {polite}",
-            en: "I'm buying food and going back to rest.",
-          },
-          {
-            tokens: [SELF, t(a1.wakeUp), t(a1.sleep), POLITE],
-            roman: "{self} dtùuen naawn {polite}",
-            en: "I wake up and sleep.",
-          },
-          {
-            tokens: [SELF, t(a1.forget), t(a1.pay), POLITE],
-            roman: "{self} luuem jàai {polite}",
-            en: "I forgot to pay.",
-          },
+        parts: [
+          fixed(SELF),
+          blank(t(a1.buy)),
+          fixed(t(a1.rice)),
+          blank(t(a1.goBack)),
+          fixed(t(a1.rest)),
+          fixed(POLITE),
         ],
-        answerIndex: 0,
+        extra: [t(a1.wakeUp), t(a1.cook), t(a1.wait)],
+        roman: "{self} súue khâao glàp phák-phàawn {polite}",
+        en: "I'm buying food and going back to rest.",
       },
       {
         kind: "line",
@@ -535,26 +446,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Check if your phone is in the bag:",
-        options: [
-          {
-            tokens: [t(a1.phone), t(a1.located), t(a1.bag), POLITE_Q],
-            roman: "thoo-rá-sàp yùu grà-bpǎo {politeQ}",
-            en: "Is the phone in the bag?",
-          },
-          {
-            tokens: [t(a1.wear), t(a1.kitchen), POLITE],
-            roman: "sài hông-khrua {polite}",
-            en: "Wear the kitchen.",
-          },
-          {
-            tokens: [t(a1.takeOff), t(a1.door), POLITE],
-            roman: "thàawt bprà-dtuu {polite}",
-            en: "Take off the door.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [blank(t(a1.phone)), fixed(t(a1.located)), blank(t(a1.bag)), fixed(POLITE_Q)],
+        extra: [t(a1.key), t(a1.table), t(a1.umbrella)],
+        roman: "thoo-rá-sàp yùu grà-bpǎo {politeQ}",
+        en: "Is the phone in the bag?",
       },
       {
         kind: "line",
@@ -605,26 +502,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Reply that you are NOT allergic to medicine:",
-        options: [
-          {
-            tokens: [t(a1.no), t(a1.allergic), t(a1.medicine), POLITE],
-            roman: "mâi pháae yaa {polite}",
-            en: "I'm not allergic to medicine.",
-          },
-          {
-            tokens: [t(a1.stomach), t(a1.tasty), POLITE],
-            roman: "tháawng à-ròi {polite}",
-            en: "Stomach delicious.",
-          },
-          {
-            tokens: [t(a1.headache), t(a1.expensive), POLITE],
-            roman: "bpùat-hǔa phaeng {polite}",
-            en: "Headache expensive.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [blank(t(a1.no)), blank(t(a1.allergic)), fixed(t(a1.medicine)), fixed(POLITE)],
+        extra: [t(a1.sick), t(a1.fever), t(a1.recover)],
+        roman: "mâi pháae yaa {polite}",
+        en: "I'm not allergic to medicine.",
       },
       {
         kind: "line",
@@ -658,26 +541,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Point to the blue shirt and say it's pretty:",
-        options: [
-          {
-            tokens: [t(a1.shirt), t(a1.blue), t(a1.pretty), POLITE],
-            roman: "sûea sǐi-fáa sǔai {polite}",
-            en: "The blue shirt is pretty.",
-          },
-          {
-            tokens: [t(a1.shirt), t(a1.angry), t(a1.sleepy), POLITE],
-            roman: "sûea gròot ngûang {polite}",
-            en: "The shirt is angry and sleepy.",
-          },
-          {
-            tokens: [t(a1.cold), t(a1.hard), POLITE],
-            roman: "nǎao yâak {polite}",
-            en: "Cold and difficult.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [fixed(t(a1.shirt)), blank(t(a1.blue)), blank(t(a1.pretty)), fixed(POLITE)],
+        extra: [t(a1.white), t(a1.hot), t(a1.small)],
+        roman: "sûea sǐi-fáa sǔai {polite}",
+        en: "The blue shirt is pretty.",
       },
       {
         kind: "line",
@@ -737,26 +606,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Ask who is going with you:",
-        options: [
-          {
-            tokens: [t(a1.who), t(a1.willW), t(a1.go), t(a1.withW), SELF, POLITE_Q],
-            roman: "khrai jà bpai gàp {self} {politeQ}",
-            en: "Who will go with me?",
-          },
-          {
-            tokens: [t(a1.what), t(a1.underW), t(a1.table), POLITE],
-            roman: "à-rai dtâi dtó {polite}",
-            en: "What is under the table?",
-          },
-          {
-            tokens: [t(a1.why), t(a1.already), POLITE],
-            roman: "tham-mai láaeo {polite}",
-            en: "Why already?",
-          },
-        ],
-        answerIndex: 0,
+        parts: [blank(t(a1.who)), fixed(t(a1.willW)), fixed(t(a1.go)), blank(t(a1.withW)), fixed(SELF), fixed(POLITE_Q)],
+        extra: [t(a1.what), t(a1.when), t(a1.because)],
+        roman: "khrai jà bpai gàp {self} {politeQ}",
+        en: "Who will go with me?",
       },
     ],
   },
@@ -789,26 +644,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Ask if they can give a discount:",
-        options: [
-          {
-            tokens: [t(a1.discount), t(a1.can), POLITE_Q],
-            roman: "lót-raa-khaa dâai {politeQ}",
-            en: "Can you discount it?",
-          },
-          {
-            tokens: [t(a1.closeW), t(a1.shop), POLITE],
-            roman: "bpìt ráan {polite}",
-            en: "Close the shop.",
-          },
-          {
-            tokens: [t(a1.swim), t(a1.sea), POLITE],
-            roman: "wâai-náam thá-lee {polite}",
-            en: "Swim in the sea.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [blank(t(a1.discount)), blank(t(a1.can)), fixed(POLITE_Q)],
+        extra: [t(a1.closeW), t(a1.expensive), t(a1.tryW)],
+        roman: "lót-raa-khaa dâai {politeQ}",
+        en: "Can you discount it?",
       },
       {
         kind: "line",
@@ -861,26 +702,12 @@ export const conversations: Conversation[] = [
         coach: "Put ไม่ใส่ (without) right before the ingredient you want left out.",
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Add plain water and ask for your tea less sweet:",
-        options: [
-          {
-            tokens: [t(a2.plainWater), t(a1.andW), t(a1.tea), t(a2.lessSweet), POLITE],
-            roman: "náam-bplào láe chaa wǎan-náawy {polite}",
-            en: "Plain water and less-sweet tea.",
-          },
-          {
-            tokens: [t(a2.takeaway), t(a2.spoon), t(a2.fork), POLITE],
-            roman: "sài-thǔng cháawn sâawm {polite}",
-            en: "Pack spoon and fork to go.",
-          },
-          {
-            tokens: [t(a2.full), t(a2.tipW), POLITE],
-            roman: "ìm thíp {polite}",
-            en: "Full tip.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [blank(t(a2.plainWater)), fixed(t(a1.andW)), fixed(t(a1.tea)), blank(t(a2.lessSweet)), fixed(POLITE)],
+        extra: [t(a2.full), t(a2.chicken), t(a2.bill)],
+        roman: "náam-bplào láe chaa wǎan-náawy {polite}",
+        en: "Plain water and less-sweet tea.",
       },
       {
         kind: "line",
@@ -939,26 +766,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Hand it over and ask if the Skytrain station is near:",
-        options: [
-          {
-            tokens: [t(a2.station), t(a2.skytrain), t(a2.near), t(a2.here), POLITE_Q],
-            roman: "sà-thǎa-nii rót-fai-fáa glâi thîi-nîi {politeQ}",
-            en: "Is the Skytrain station near here?",
-          },
-          {
-            tokens: [t(a2.flight), t(a2.gate), t(a2.far), POLITE],
-            roman: "thîiao-bin bprà-dtuu-thaang-àawk glai {polite}",
-            en: "Flight boarding gate is far.",
-          },
-          {
-            tokens: [t(a2.visa), t(a2.suitcase), POLITE],
-            roman: "wii-sâa grà-bpǎo-doen-thaang {polite}",
-            en: "Visa suitcase.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [fixed(t(a2.station)), fixed(t(a2.skytrain)), blank(t(a2.near)), blank(t(a2.here)), fixed(POLITE_Q)],
+        extra: [t(a2.far), t(a2.hotel), t(a2.passport)],
+        roman: "sà-thǎa-nii rót-fai-fáa glâi thîi-nîi {politeQ}",
+        en: "Is the Skytrain station near here?",
         coach: "ใกล้ (glâi, falling tone) means near; ไกล (glai, mid tone) means far.",
       },
       {
@@ -1001,26 +814,12 @@ export const conversations: Conversation[] = [
         en: "I understand Thai a little.",
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Ask P'June politely to speak slowly:",
-        options: [
-          {
-            tokens: [t(a1.help), t(a2.speak), t(a2.slowly), POLITE],
-            roman: "chûai phûut cháa-cháa {polite}",
-            en: "Please speak slowly.",
-          },
-          {
-            tokens: [t(a2.beCareful), t(a2.goodLuck), POLITE],
-            roman: "rá-wang chôok-dii {polite}",
-            en: "Be careful, good luck.",
-          },
-          {
-            tokens: [t(a2.krengJai), t(a2.single), POLITE],
-            roman: "greeng-jai sòot {polite}",
-            en: "Considerate single.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [fixed(t(a1.help)), blank(t(a2.speak)), blank(t(a2.slowly)), fixed(POLITE)],
+        extra: [t(a2.understand), t(a2.aLittle), t(a2.meaning)],
+        roman: "chûai phûut cháa-cháa {polite}",
+        en: "Please speak slowly.",
       },
       {
         kind: "line",
@@ -1054,26 +853,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Suggest taking a boat to the island:",
-        options: [
-          {
-            tokens: [t(a1.go), t(a2.island), t(a2.fun), POLITE],
-            roman: "bpai gàw sà-nùk {polite}",
-            en: "Going to the island will be fun!",
-          },
-          {
-            tokens: [t(a2.storm), t(a2.tired), POLITE],
-            roman: "phaa-yú nùeai {polite}",
-            en: "Storm tired.",
-          },
-          {
-            tokens: [t(a2.cloud), t(a2.moon), POLITE],
-            roman: "mêek phrá-jan {polite}",
-            en: "Cloud moon.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [fixed(t(a1.go)), blank(t(a2.island)), blank(t(a2.fun)), fixed(POLITE)],
+        extra: [t(a2.rain), t(a2.wind), t(a2.boat)],
+        roman: "bpai gàw sà-nùk {polite}",
+        en: "Going to the island will be fun!",
       },
       {
         kind: "line",
@@ -1124,26 +909,12 @@ export const conversations: Conversation[] = [
         coach: "Put เกินไป (too much) after the adjective: แพงเกินไป.",
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Ask how often P'Bua comes here:",
-        options: [
-          {
-            tokens: [t(a1.come), t(a2.here), t(a2.often), POLITE_Q],
-            roman: "maa thîi-nîi bòi-bòi {politeQ}",
-            en: "Do you come here often?",
-          },
-          {
-            tokens: [t(a2.almost), t(a2.untilW), POLITE],
-            roman: "gùeap jon-gwàa {polite}",
-            en: "Almost until.",
-          },
-          {
-            tokens: [t(a2.different), t(a2.equalTo), POLITE],
-            roman: "dtàang-gan thâo-gan {polite}",
-            en: "Different equal.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [fixed(t(a1.come)), blank(t(a2.here)), blank(t(a2.often)), fixed(POLITE_Q)],
+        extra: [t(a2.moreThan), t(a2.tooMuch), t(a2.sameAs)],
+        roman: "maa thîi-nîi bòi-bòi {politeQ}",
+        en: "Do you come here often?",
       },
       {
         kind: "line",
@@ -1185,26 +956,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Thank Arm and mention your battery needs charging:",
-        options: [
-          {
-            tokens: [t(a1.thanks), SELF, t(a1.mustW), t(a2.chargeW), t(a2.battery), POLITE],
-            roman: "khàawp-khun · {self} dtâawng cháat bàet-dtòe-rîi {polite}",
-            en: "Thanks! I need to charge my battery.",
-          },
-          {
-            tokens: [t(a2.camera), t(a2.download), POLITE],
-            roman: "glâawng daao-lòot {polite}",
-            en: "Camera download.",
-          },
-          {
-            tokens: [t(a2.salary), t(a2.boss), POLITE],
-            roman: "ngoen-duean jâo-naai {polite}",
-            en: "Salary boss.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [fixed(t(a1.thanks)), fixed(SELF), fixed(t(a1.mustW)), blank(t(a2.chargeW)), blank(t(a2.battery)), fixed(POLITE)],
+        extra: [t(a2.sendW), t(a2.wifi), t(a2.email)],
+        roman: "khàawp-khun · {self} dtâawng cháat bàet-dtòe-rîi {polite}",
+        en: "Thanks! I need to charge my battery.",
       },
       {
         kind: "line",
@@ -1246,26 +1003,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Ask which floor the parcel room is on:",
-        options: [
-          {
-            tokens: [t(a2.parcel), t(a1.located), t(a2.floorLevel), t(a1.which), POLITE_Q],
-            roman: "phát-sà-dù yùu chán nǎi {politeQ}",
-            en: "Which floor is the parcel on?",
-          },
-          {
-            tokens: [t(a2.doLaundry), t(a2.gasStation), POLITE],
-            roman: "sák-phâa bpám-náam-man {polite}",
-            en: "Do laundry at gas station.",
-          },
-          {
-            tokens: [t(a2.parking), t(a2.ironClothes), POLITE],
-            roman: "thîi-jàawt-rót rîit-phâa {polite}",
-            en: "Parking iron clothes.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [blank(t(a2.parcel)), fixed(t(a1.located)), blank(t(a2.floorLevel)), fixed(t(a1.which)), fixed(POLITE_Q)],
+        extra: [t(a2.aircon), t(a2.elevator), t(a2.condo)],
+        roman: "phát-sà-dù yùu chán nǎi {politeQ}",
+        en: "Which floor is the parcel on?",
       },
       {
         kind: "line",
@@ -1299,26 +1042,20 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Say this pair is a bit tight and ask to try a bigger size:",
-        options: [
-          {
-            tokens: [t(a1.thisOne), t(a2.tight), t(a1.please), t(a1.tryW), t(a1.big), t(a2.moreThan), POLITE],
-            roman: "an-níi kháp · khǎaw laawng yài gwàa {polite}",
-            en: "This one is tight, may I try a bigger one?",
-          },
-          {
-            tokens: [t(a2.heavy), t(a2.shattered), POLITE],
-            roman: "nàk phang {polite}",
-            en: "Heavy and wrecked.",
-          },
-          {
-            tokens: [t(a2.withdraw), t(a2.coin), POLITE],
-            roman: "thǎawn rǐian {polite}",
-            en: "Withdraw coins.",
-          },
+        parts: [
+          fixed(t(a1.thisOne)),
+          blank(t(a2.tight)),
+          fixed(t(a1.please)),
+          fixed(t(a1.tryW)),
+          blank(t(a1.big)),
+          fixed(t(a2.moreThan)),
+          fixed(POLITE),
         ],
-        answerIndex: 0,
+        extra: [t(a2.loose), t(a2.justRight), t(a2.soldOut)],
+        roman: "an-níi kháp · khǎaw laawng yài gwàa {polite}",
+        en: "This one is tight, may I try a bigger one?",
       },
       {
         kind: "line",
@@ -1377,26 +1114,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Confirm how many times per day:",
-        options: [
-          {
-            tokens: [t(a2.perDay), t(a1.howMany), t(a2.pill), POLITE_Q],
-            roman: "wan-lá gìi mét {politeQ}",
-            en: "How many pills per day?",
-          },
-          {
-            tokens: [t(a2.police), t(a2.embassy), POLITE],
-            roman: "dtam-rùat sà-thǎan-thûut {polite}",
-            en: "Police embassy.",
-          },
-          {
-            tokens: [t(a2.accident), t(a2.safe), POLITE],
-            roman: "ù-bàt-dtì-hèet bplàawt-phai {polite}",
-            en: "Accident safe.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [blank(t(a2.perDay)), fixed(t(a1.howMany)), blank(t(a2.pill)), fixed(POLITE_Q)],
+        extra: [t(a2.afterMeal), t(a2.cough), t(a2.painkiller)],
+        roman: "wan-lá gìi mét {politeQ}",
+        en: "How many pills per day?",
       },
     ],
   },
@@ -1421,26 +1144,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Say our friend is kind and funny:",
-        options: [
-          {
-            tokens: [t(a1.friend), t(a2.kind), t(a1.andW), t(a2.funny), POLITE],
-            roman: "phûean jai-dii láe dtà-lòk {polite}",
-            en: "Our friend is kind and funny.",
-          },
-          {
-            tokens: [t(a2.lazy), t(a2.loud), POLITE],
-            roman: "khîi-gìiat sǐiang-dang {polite}",
-            en: "Lazy and loud.",
-          },
-          {
-            tokens: [t(a2.disappointed), t(a2.worry), POLITE],
-            roman: "phìt-wǎng gang-won {polite}",
-            en: "Disappointed and worried.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [fixed(t(a1.friend)), blank(t(a2.kind)), fixed(t(a1.andW)), blank(t(a2.funny)), fixed(POLITE)],
+        extra: [t(a2.polite), t(a2.excited), t(a2.party)],
+        roman: "phûean jai-dii láe dtà-lòk {polite}",
+        en: "Our friend is kind and funny.",
       },
       {
         kind: "line",
@@ -1499,26 +1208,12 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Mention you've also heard about Loy Krathong:",
-        options: [
-          {
-            tokens: [SELF, t(a2.like), t(a2.tradition), t(a2.loyKrathong), t(a1.alsoW), POLITE],
-            roman: "{self} châawp bprà-phee-nii laawy-grà-thong dûai {polite}",
-            en: "I like the Loy Krathong tradition too.",
-          },
-          {
-            tokens: [t(a2.push), t(a2.pull), t(a2.jump), POLITE],
-            roman: "phlàk dueng grà-dòot {polite}",
-            en: "Push, pull, jump.",
-          },
-          {
-            tokens: [t(a2.missFail), t(a2.concert), POLITE],
-            roman: "phlâat khaawn-sòet {polite}",
-            en: "Miss the concert.",
-          },
-        ],
-        answerIndex: 0,
+        parts: [fixed(SELF), fixed(t(a2.like)), blank(t(a2.tradition)), blank(t(a2.loyKrathong)), fixed(t(a1.alsoW)), fixed(POLITE)],
+        extra: [t(a2.festival), t(a2.songkran), t(a2.makeMerit)],
+        roman: "{self} châawp bprà-phee-nii laawy-grà-thong dûai {polite}",
+        en: "I like the Loy Krathong tradition too.",
       },
     ],
   },
@@ -1560,26 +1255,20 @@ export const conversations: Conversation[] = [
         },
       },
       {
-        kind: "reply-choice",
+        kind: "reply-blank",
         prompt: "Finish the story: “By chance I met a friend, and finally found a solution!”",
-        options: [
-          {
-            tokens: [t(a2.byChance), t(a1.meetFind), t(a1.friend), t(a2.finally), t(a1.good), t(a2.solution), POLITE],
-            roman: "bang-oen phóp phûean · nai-thîi-sùt dii thaang-gâae {polite}",
-            en: "By chance I met a friend, and finally found a great solution!",
-          },
-          {
-            tokens: [t(a2.reason), t(a2.summary), t(a2.past), POLITE],
-            roman: "hèet-phǒn sà-rùp à-dìit {polite}",
-            en: "Reason summary past.",
-          },
-          {
-            tokens: [t(a2.immediately), t(a2.truth), t(a2.example), POLITE],
-            roman: "than-thii khwaam-jing dtua-yàang {polite}",
-            en: "Immediately truth example.",
-          },
+        parts: [
+          blank(t(a2.byChance)),
+          fixed(t(a1.meetFind)),
+          fixed(t(a1.friend)),
+          blank(t(a2.finally)),
+          fixed(t(a1.good)),
+          blank(t(a2.solution)),
+          fixed(POLITE),
         ],
-        answerIndex: 0,
+        extra: [t(a2.atFirst), t(a2.problem), t(a2.afterThat)],
+        roman: "bang-oen phóp phûean · nai-thîi-sùt dii thaang-gâae {polite}",
+        en: "By chance I met a friend, and finally found a great solution!",
       },
       {
         kind: "line",

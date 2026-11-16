@@ -297,11 +297,16 @@ function collectUtterances() {
           const phrase = convMod.resolveTokensText(turn.line.tokens, sp);
           if (phrase) texts.add(phrase);
         }
-      } else if (turn.kind === "reply-choice") {
-        for (const opt of turn.options) {
-          for (const sp of ["f", "m"]) {
-            const phrase = convMod.resolveTokensText(opt.tokens, sp);
-            if (phrase) texts.add(phrase);
+      } else if (turn.kind === "reply-blank") {
+        for (const sp of ["f", "m"]) {
+          const phrase = convMod.resolveTokensText(
+            turn.parts.map((part) => part.token),
+            sp,
+          );
+          if (phrase) texts.add(phrase);
+          for (const tok of [...turn.parts.map((part) => part.token), ...turn.extra]) {
+            const w = cur.resolveTok(tok, sp);
+            if (w.thai) texts.add(w.thai);
           }
         }
       } else if (turn.kind === "reply-tiles") {

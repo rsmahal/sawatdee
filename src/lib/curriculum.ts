@@ -16,7 +16,7 @@ import type {
 export type {
   CefrLevel,
   Conversation,
-  ConversationChoiceOption,
+  ConversationBlankPart,
   ConversationTurn,
   CurriculumCatalog,
   DialogueLine,
