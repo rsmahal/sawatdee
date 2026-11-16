@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
+  BookOpen,
   Check,
   Lock,
   MessageCircle,
@@ -24,6 +25,8 @@ import { levels, resolveTok, type CefrLevel, type Conversation, type Speaker, ty
 import { useProgress, xpGain } from "@/lib/progress";
 import { shuffle } from "@/lib/shuffle";
 import { speakThai, stopSpeech } from "@/lib/speech";
+import { unitGuideById } from "@/lib/unit-guides";
+import { UnitGuide } from "./unit-guide";
 
 type FilterMode = "all" | "unlocked" | CefrLevel;
 
@@ -292,6 +295,7 @@ export function TalkSession({
   const [phase, setPhase] = useState<"play" | "done">("play");
   const [stars, setStars] = useState(3);
   const [confirmExit, setConfirmExit] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
 
   // Interactive reply state for current turn
   const [blankPicks, setBlankPicks] = useState<Record<number, string>>({});
@@ -573,16 +577,32 @@ export function TalkSession({
                 />
               </div>
             </div>
-            {history.length > 0 && (
-              <button
-                type="button"
-                onClick={() => (playingAllIdx !== null ? stopPlayingAll() : startPlayAll(history))}
-                className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full bg-soft px-3 text-xs font-extrabold text-chili"
-              >
-                {playingAllIdx !== null ? <Square className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
-                {playingAllIdx !== null ? "Stop" : "Play all"}
-              </button>
-            )}
+            <div className="flex shrink-0 items-center gap-1.5">
+              {unitGuideById(conv.unitId) && (
+                <button
+                  type="button"
+                  aria-label="Open unit sentence guide"
+                  onClick={() => {
+                    stopPlayingAll();
+                    setShowGuide(true);
+                  }}
+                  className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full bg-soft px-3 text-xs font-extrabold text-ink transition-colors hover:text-chili"
+                >
+                  <BookOpen className="h-3.5 w-3.5 text-chili" />
+                  Guide
+                </button>
+              )}
+              {history.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => (playingAllIdx !== null ? stopPlayingAll() : startPlayAll(history))}
+                  className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full bg-soft px-3 text-xs font-extrabold text-chili"
+                >
+                  {playingAllIdx !== null ? <Square className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+                  {playingAllIdx !== null ? "Stop" : "Play all"}
+                </button>
+              )}
+            </div>
           </header>
 
           <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 lg:px-8">
@@ -941,6 +961,16 @@ export function TalkSession({
               Keep going
             </button>
           </div>
+        </div>
+      )}
+
+      {showGuide && (
+        <div className="absolute inset-0 z-30 flex flex-col bg-sheet">
+          <UnitGuide
+            unitId={conv.unitId}
+            backLabel="Back to conversation"
+            onBack={() => setShowGuide(false)}
+          />
         </div>
       )}
     </div>

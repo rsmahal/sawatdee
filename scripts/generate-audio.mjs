@@ -247,6 +247,7 @@ function collectUtterances() {
   const cur = loadTsModule("src/lib/curriculum.ts");
   const script = loadTsModule("src/lib/script-data.ts");
   const convMod = loadTsModule("src/lib/conversations.ts");
+  const guideMod = loadTsModule("src/lib/unit-guides.ts");
   const texts = new Set(["สวัสดีค่ะ", "สวัสดีครับ"]);
 
   for (const v of cur.vocabularyCatalog) {
@@ -317,6 +318,17 @@ function collectUtterances() {
             const w = cur.resolveTok(tok, sp);
             if (w.thai) texts.add(w.thai);
           }
+        }
+      }
+    }
+  }
+
+  for (const guide of guideMod.unitGuides ?? []) {
+    for (const pattern of guide.patterns) {
+      for (const ex of pattern.examples) {
+        for (const sp of ["f", "m"]) {
+          const resolved = guideMod.resolveGuideText(ex.thai, sp);
+          if (resolved) texts.add(resolved);
         }
       }
     }

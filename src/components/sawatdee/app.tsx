@@ -6,6 +6,7 @@ import { cn } from "@/lib/cn";
 import { useCatalog } from "@/lib/catalog-store";
 import { conversations, conversationUnlockStatus } from "@/lib/conversations";
 import { loadCurriculum } from "@/lib/curriculum-api";
+import { isUnlocked } from "@/lib/curriculum";
 import { loadProgress, saveProgress } from "@/lib/learner-progress";
 import { learningSnapshot, useProgress } from "@/lib/progress";
 import { reviewStats, todayKey } from "@/lib/srs";
@@ -16,6 +17,7 @@ import { Profile } from "./profile";
 import { Review, ReviewSession } from "./review";
 import { ScriptLab } from "./script-lab";
 import { Talk, TalkSession } from "./talk";
+import { UnitGuide } from "./unit-guide";
 
 type Tab = "learn" | "talk" | "review" | "script" | "me";
 type ReviewMode = "due" | "ahead";
@@ -50,6 +52,7 @@ function Course({ userId }: { userId: string }) {
   const [tab, setTab] = useState<Tab>("learn");
   const [lessonId, setLessonId] = useState<string | null>(null);
   const [talkId, setTalkId] = useState<string | null>(null);
+  const [guideUnitId, setGuideUnitId] = useState<string | null>(null);
   const [reviewMode, setReviewMode] = useState<ReviewMode | null>(null);
   const completed = useProgress((state) => state.completed);
   const talkCompleted = useProgress((state) => state.talkCompleted);
@@ -57,13 +60,26 @@ function Course({ userId }: { userId: string }) {
   const xp = useProgress((state) => state.xp);
   const streak = useProgress((state) => state.streak);
   const lessons = useCatalog((state) => state.lessons);
+  const units = useCatalog((state) => state.units);
   const vocabulary = useCatalog((state) => state.vocabulary);
   const due = reviewStats(cards, todayKey()).due;
   const talkReady = conversations.filter(
     (conv) => !talkCompleted[conv.id] && conversationUnlockStatus(conv, completed, lessons).unlocked,
   ).length;
   const seenWords = Object.keys(cards).length;
-  const inSession = Boolean(lessonId || talkId || reviewMode);
+  const inSession = Boolean(lessonId || talkId || reviewMode || guideUnitId);
+  const guideUnitLesson = guideUnitId
+    ? (lessons.find(
+        (lesson) =>
+          lesson.unit === guideUnitId &&
+          !completed[lesson.id] &&
+          isUnlocked(lesson.id, completed, lessons, units),
+      ) ??
+      lessons.find(
+        (lesson) =>
+          lesson.unit === guideUnitId && isUnlocked(lesson.id, completed, lessons, units),
+      ))
+    : undefined;
 
   useEffect(() => {
     ready.current = false;
@@ -151,6 +167,23 @@ function Course({ userId }: { userId: string }) {
       >
         {lessonId ? (
           <Lesson key={lessonId} lessonId={lessonId} onExit={() => setLessonId(null)} />
+        ) : guideUnitId ? (
+          <UnitGuide
+            key={guideUnitId}
+            unitId={guideUnitId}
+            backLabel="Back to path"
+            onBack={() => setGuideUnitId(null)}
+            nextLessonTitle={guideUnitLesson?.title}
+            onStartNextLesson={
+              guideUnitLesson
+                ? () => {
+                    const id = guideUnitLesson.id;
+                    setGuideUnitId(null);
+                    setLessonId(id);
+                  }
+                : undefined
+            }
+          />
         ) : talkId ? (
           <TalkSession key={talkId} conversationId={talkId} onExit={() => setTalkId(null)} />
         ) : reviewMode ? (
@@ -158,7 +191,13 @@ function Course({ userId }: { userId: string }) {
         ) : (
           <>
             <div className="min-h-0 flex-1 overflow-y-auto">
-              {tab === "learn" && <Path onStart={setLessonId} onReview={() => setTab("review")} />}
+              {tab === "learn" && (
+                <Path
+                  onStart={setLessonId}
+                  onReview={() => setTab("review")}
+                  onGuide={setGuideUnitId}
+                />
+              )}
               {tab === "talk" && <Talk onStart={setTalkId} onGoLearn={() => setTab("learn")} />}
               {tab === "review" && <Review onStart={setReviewMode} />}
               {tab === "script" && <ScriptLab />}

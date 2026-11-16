@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
-import { Check, Heart, Volume2, X } from "lucide-react";
+import { BookOpen, Check, ChevronRight, Heart, Volume2, X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useCatalog } from "@/lib/catalog-store";
 import { lessonById } from "@/lib/curriculum";
 import { useProgress, xpGain } from "@/lib/progress";
 import { speakThai } from "@/lib/speech";
+import { unitGuideById } from "@/lib/unit-guides";
 import { ExerciseBody, type Grade, type GradeHandle } from "./exercise";
+import { UnitGuide } from "./unit-guide";
 
 const PRAISE = ["Nice.", "That's it.", "Exactly."];
 
@@ -33,6 +35,7 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
   const [result, setResult] = useState<Grade | null>(null);
   const [canCheck, setCanCheck] = useState(false);
   const [confirmExit, setConfirmExit] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
   const gradeRef = useRef<GradeHandle | null>(null);
   const onCanCheck = useCallback((ready: boolean) => setCanCheck(ready), []);
 
@@ -102,6 +105,21 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
           <div className="min-h-0 flex-1 overflow-y-auto px-5 pt-4 pb-4 lg:px-8">
             <h1 className="text-3xl font-extrabold text-balance">{lesson.title}</h1>
             <p className="mt-2 text-pretty text-muted">{lesson.tip}</p>
+            {unitGuideById(lesson.unit) && (
+              <button
+                type="button"
+                onClick={() => setShowGuide(true)}
+                className="mt-3 flex w-full items-center justify-between gap-3 rounded-2xl border border-line bg-soft px-4 py-3 text-left transition-colors hover:border-chili"
+              >
+                <span className="flex items-center gap-2.5 min-w-0">
+                  <BookOpen className="h-4 w-4 shrink-0 text-chili" />
+                  <span className="truncate text-sm font-extrabold">
+                    How sentences work in this unit
+                  </span>
+                </span>
+                <ChevronRight className="h-4 w-4 shrink-0 text-chili" />
+              </button>
+            )}
             {lesson.words.length > 0 && (
               <ul className="mt-5 grid gap-2 sm:grid-cols-2">
                 {lesson.words.map((word) => (
@@ -269,6 +287,16 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
               Keep going
             </button>
           </div>
+        </div>
+      )}
+
+      {showGuide && (
+        <div className="absolute inset-0 z-30 flex flex-col bg-sheet">
+          <UnitGuide
+            unitId={lesson.unit}
+            backLabel="Back to lesson"
+            onBack={() => setShowGuide(false)}
+          />
         </div>
       )}
     </div>

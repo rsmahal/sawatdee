@@ -1,13 +1,22 @@
 import { useState } from "react";
-import { Award, Check, ChevronRight, Flame, Lock, Star, Volume2 } from "lucide-react";
+import { Award, BookOpen, Check, ChevronRight, Flame, Lock, Star, Volume2 } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-store";
 import { cn } from "@/lib/cn";
 import { dailyPhrases, courseNote, isUnlocked, levels, nextLesson, type Speaker } from "@/lib/curriculum";
 import { useProgress } from "@/lib/progress";
 import { reviewStats, todayKey } from "@/lib/srs";
 import { speakThai } from "@/lib/speech";
+import { unitGuideById } from "@/lib/unit-guides";
 
-export function Path({ onStart, onReview }: { onStart: (id: string) => void; onReview: () => void }) {
+export function Path({
+  onStart,
+  onReview,
+  onGuide,
+}: {
+  onStart: (id: string) => void;
+  onReview: () => void;
+  onGuide: (unitId: string) => void;
+}) {
   const units = useCatalog((state) => state.units);
   const lessons = useCatalog((state) => state.lessons);
   const vocabulary = useCatalog((state) => state.vocabulary);
@@ -119,14 +128,28 @@ export function Path({ onStart, onReview }: { onStart: (id: string) => void; onR
                 {levelUnits.map((unit) => {
                   const unitLessons = lessons.filter((lesson) => lesson.unit === unit.id);
                   const unitDone = unitLessons.filter((lesson) => completed[lesson.id]).length;
+                  const hasGuide = Boolean(unitGuideById(unit.id));
                   return (
                     <div
                       key={unit.id}
                       className="flex flex-col rounded-3xl border border-line bg-sheet p-4 lg:p-5"
                     >
                       <div className="rounded-2xl bg-soft px-4 py-3.5">
-                        <p className="text-xs font-extrabold tracking-wide text-chili uppercase">{unit.kicker}</p>
-                        <div className="flex items-end justify-between gap-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-xs font-extrabold tracking-wide text-chili uppercase">{unit.kicker}</p>
+                          {hasGuide && (
+                            <button
+                              type="button"
+                              aria-label={`Sentence guide for ${unit.title}`}
+                              onClick={() => onGuide(unit.id)}
+                              className="inline-flex min-h-8 items-center gap-1 rounded-full border border-line bg-sheet px-2.5 text-xs font-extrabold text-ink transition-colors hover:border-chili hover:text-chili"
+                            >
+                              <BookOpen className="h-3.5 w-3.5 text-chili" />
+                              Guide
+                            </button>
+                          )}
+                        </div>
+                        <div className="mt-0.5 flex items-end justify-between gap-3">
                           <h3 className="text-xl font-extrabold">{unit.title}</h3>
                           <p className="text-sm font-extrabold text-muted tabular-nums">
                             {unitDone}/{unitLessons.length}
