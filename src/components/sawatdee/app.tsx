@@ -6,12 +6,14 @@ import { cn } from "@/lib/cn";
 import { useCatalog } from "@/lib/catalog-store";
 import { conversations, conversationUnlockStatus } from "@/lib/conversations";
 import { loadCurriculum } from "@/lib/curriculum-api";
-import { isUnlocked } from "@/lib/curriculum";
+import { isUnlocked, type CefrLevel } from "@/lib/curriculum";
 import { loadProgress, saveProgress } from "@/lib/learner-progress";
+import type { MilestoneMode } from "@/lib/milestone";
 import { learningSnapshot, useProgress } from "@/lib/progress";
 import { reviewStats, todayKey } from "@/lib/srs";
 import { warmVoices } from "@/lib/speech";
 import { Lesson } from "./lesson";
+import { MilestoneSession } from "./milestone";
 import { Path } from "./path";
 import { Profile } from "./profile";
 import { Review, ReviewSession } from "./review";
@@ -53,6 +55,7 @@ function Course({ userId }: { userId: string }) {
   const [lessonId, setLessonId] = useState<string | null>(null);
   const [talkId, setTalkId] = useState<string | null>(null);
   const [guideUnitId, setGuideUnitId] = useState<string | null>(null);
+  const [milestoneTarget, setMilestoneTarget] = useState<{ level: CefrLevel; mode: MilestoneMode } | null>(null);
   const [reviewMode, setReviewMode] = useState<ReviewMode | null>(null);
   const completed = useProgress((state) => state.completed);
   const talkCompleted = useProgress((state) => state.talkCompleted);
@@ -67,7 +70,7 @@ function Course({ userId }: { userId: string }) {
     (conv) => !talkCompleted[conv.id] && conversationUnlockStatus(conv, completed, lessons).unlocked,
   ).length;
   const seenWords = Object.keys(cards).length;
-  const inSession = Boolean(lessonId || talkId || reviewMode || guideUnitId);
+  const inSession = Boolean(lessonId || talkId || reviewMode || guideUnitId || milestoneTarget);
   const guideUnitLesson = guideUnitId
     ? (lessons.find(
         (lesson) =>
@@ -186,6 +189,13 @@ function Course({ userId }: { userId: string }) {
           />
         ) : talkId ? (
           <TalkSession key={talkId} conversationId={talkId} onExit={() => setTalkId(null)} />
+        ) : milestoneTarget ? (
+          <MilestoneSession
+            key={`${milestoneTarget.level}-${milestoneTarget.mode}`}
+            level={milestoneTarget.level}
+            mode={milestoneTarget.mode}
+            onExit={() => setMilestoneTarget(null)}
+          />
         ) : reviewMode ? (
           <ReviewSession key={reviewMode} mode={reviewMode} onExit={() => setReviewMode(null)} />
         ) : (
@@ -196,6 +206,7 @@ function Course({ userId }: { userId: string }) {
                   onStart={setLessonId}
                   onReview={() => setTab("review")}
                   onGuide={setGuideUnitId}
+                  onMilestone={(level, mode) => setMilestoneTarget({ level, mode })}
                 />
               )}
               {tab === "talk" && <Talk onStart={setTalkId} onGoLearn={() => setTab("learn")} />}

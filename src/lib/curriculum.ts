@@ -160,7 +160,7 @@ export const vocabularyCatalog: VocabularyEntry[] = (() => {
   return entries;
 })();
 
-export const CURRICULUM_VERSION = `cefr-a1-a2-v4-u${units.length}-l${lessons.length}-w${vocabularyCatalog.length}`;
+export const CURRICULUM_VERSION = `cefr-a1-a2-v5-u${units.length}-l${lessons.length}-w${vocabularyCatalog.length}`;
 
 export const staticCurriculumCatalog: CurriculumCatalog = {
   version: CURRICULUM_VERSION,

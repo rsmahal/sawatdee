@@ -7,6 +7,7 @@ import { useProgress, xpGain } from "@/lib/progress";
 import { speakThai } from "@/lib/speech";
 import { unitGuideById } from "@/lib/unit-guides";
 import { ExerciseBody, type Grade, type GradeHandle } from "./exercise";
+import { ToneStrip } from "./tone-strip";
 import { UnitGuide } from "./unit-guide";
 
 const PRAISE = ["Nice.", "That's it.", "Exactly."];
@@ -16,6 +17,7 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
   const lesson = lessonById(lessonId, catalogLessons);
   const speaker = useProgress((state) => state.speaker);
   const showRoman = useProgress((state) => state.showRoman);
+  const showTones = useProgress((state) => state.showTones);
   const autoplay = useProgress((state) => state.autoplay);
   const recordAnswer = useProgress((state) => state.recordAnswer);
   const finishLesson = useProgress((state) => state.finishLesson);
@@ -140,6 +142,7 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
                         {word.thai}
                       </p>
                       {showRoman && <p className="text-sm font-bold text-muted">{word.roman}</p>}
+                      {showTones && <ToneStrip roman={word.roman} className="mt-1" />}
                       <p className="font-extrabold">{word.en}</p>
                     </div>
                   </li>
@@ -214,6 +217,9 @@ export function Lesson({ lessonId, onExit }: { lessonId: string; onExit: () => v
                 <p lang="th" className="mt-1 font-bold">
                   {result.solution}
                 </p>
+              )}
+              {showTones && exercise.kind === "choice" && (
+                <ToneStrip roman={exercise.word.roman} variant="inverse" className="mt-1.5" />
               )}
               {exercise.coach && <p className="mt-1 text-sm">{exercise.coach}</p>}
               <button

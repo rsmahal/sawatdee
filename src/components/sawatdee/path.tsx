@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Award, BookOpen, Check, ChevronRight, Flame, Lock, Star, Volume2 } from "lucide-react";
+import { Award, BookOpen, Check, ChevronRight, Flame, Headphones, Lock, Shuffle, Star, Volume2 } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-store";
 import { cn } from "@/lib/cn";
-import { dailyPhrases, courseNote, isUnlocked, levels, nextLesson, type Speaker } from "@/lib/curriculum";
+import { dailyPhrases, courseNote, isUnlocked, levels, nextLesson, type CefrLevel, type Speaker } from "@/lib/curriculum";
+import { MILESTONE_MODES, milestoneKey, type MilestoneMode } from "@/lib/milestone";
 import { useProgress } from "@/lib/progress";
 import { reviewStats, todayKey } from "@/lib/srs";
 import { speakThai } from "@/lib/speech";
@@ -12,10 +13,12 @@ export function Path({
   onStart,
   onReview,
   onGuide,
+  onMilestone,
 }: {
   onStart: (id: string) => void;
   onReview: () => void;
   onGuide: (unitId: string) => void;
+  onMilestone: (level: CefrLevel, mode: MilestoneMode) => void;
 }) {
   const units = useCatalog((state) => state.units);
   const lessons = useCatalog((state) => state.lessons);
@@ -23,6 +26,7 @@ export function Path({
   const xp = useProgress((state) => state.xp);
   const streak = useProgress((state) => state.streak);
   const completed = useProgress((state) => state.completed);
+  const milestones = useProgress((state) => state.milestones);
   const cards = useProgress((state) => state.cards);
   const speaker = useProgress((state) => state.speaker);
   const setSpeaker = useProgress((state) => state.setSpeaker);
@@ -213,6 +217,117 @@ export function Path({
                   );
                 })}
               </div>
+
+              {(() => {
+                const levelUnitIds = new Set(levelUnits.map((u) => u.id));
+                const levelLessons = lessons.filter((l) => levelUnitIds.has(l.unit));
+                const levelDone = levelLessons.filter((l) => completed[l.id]).length;
+                const allUnitsDone = levelLessons.length > 0 && levelDone >= levelLessons.length;
+                const passedModes = MILESTONE_MODES.filter(
+                  (m) => milestones[milestoneKey(level.id, m.mode)]?.passed,
+                ).length;
+
+                return (
+                  <div
+                    aria-label={`${level.id} Milestone Exam`}
+                    className="rounded-3xl border border-line bg-sheet p-5 lg:p-6"
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-extrabold tracking-wide text-chili uppercase">
+                          CEFR {level.id} · Final Exam Section
+                        </p>
+                        <div className="mt-0.5 flex flex-wrap items-center gap-2">
+                          <Award className="h-6 w-6 shrink-0 text-marigold" />
+                          <h3 className="text-2xl font-extrabold">{level.id} Milestone</h3>
+                        </div>
+                        <p className="mt-1 max-w-2xl text-sm text-pretty text-muted">
+                          Test yourself on 100 random {level.id} words across three exam formats: Reading only, Listening only, and Mixed.
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end gap-1 text-right">
+                        <span
+                          className={cn(
+                            "rounded-full px-3 py-1 text-xs font-extrabold tabular-nums",
+                            allUnitsDone ? "bg-teal text-on-accent" : "bg-soft text-muted",
+                          )}
+                        >
+                          {allUnitsDone
+                            ? `${level.id} lessons complete`
+                            : `${levelDone}/${levelLessons.length} ${level.id} lessons`}
+                        </span>
+                        <span className="text-xs font-extrabold text-muted tabular-nums">
+                          {passedModes}/3 exams passed
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-5 grid gap-3 md:grid-cols-3">
+                      {MILESTONE_MODES.map((item) => {
+                        const record = milestones[milestoneKey(level.id, item.mode)];
+                        const pct = record ? Math.round((100 * record.bestScore) / record.total) : null;
+                        const ModeIcon =
+                          item.mode === "reading"
+                            ? BookOpen
+                            : item.mode === "listening"
+                              ? Headphones
+                              : Shuffle;
+                        return (
+                          <button
+                            key={item.mode}
+                            type="button"
+                            onClick={() => onMilestone(level.id, item.mode)}
+                            className={cn(
+                              "flex flex-col justify-between gap-3 rounded-2xl border-2 p-4 text-left transition-colors hover:border-chili",
+                              record?.passed
+                                ? "border-teal/50 bg-teal/5"
+                                : "border-line bg-soft/60",
+                            )}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="grid h-10 w-10 place-items-center rounded-xl bg-sheet text-chili">
+                                  <ModeIcon className="h-5 w-5" />
+                                </span>
+                                {record?.passed ? (
+                                  <span className="inline-flex items-center gap-1 rounded-full bg-teal px-2.5 py-0.5 text-xs font-extrabold text-on-accent">
+                                    <Check className="h-3.5 w-3.5" />
+                                    Passed
+                                  </span>
+                                ) : (
+                                  <span className="text-xs font-extrabold text-muted tabular-nums">
+                                    100 words
+                                  </span>
+                                )}
+                              </div>
+                              <p className="mt-3 text-lg font-extrabold">{item.title}</p>
+                              <p className="text-sm text-muted">{item.subtitle}</p>
+                            </div>
+
+                            <div className="flex items-center justify-between gap-2 border-t border-line pt-3">
+                              {record ? (
+                                <span className="flex items-center gap-2 text-xs font-extrabold text-ink tabular-nums">
+                                  <span>Best {pct}%</span>
+                                  {record.stars > 0 && (
+                                    <span className="flex text-marigold" aria-label={`${record.stars} stars`}>
+                                      {Array.from({ length: record.stars }, (_, star) => (
+                                        <Star key={star} className="h-3.5 w-3.5" fill="currentColor" />
+                                      ))}
+                                    </span>
+                                  )}
+                                </span>
+                              ) : (
+                                <span className="text-xs font-extrabold text-chili">Start exam</span>
+                              )}
+                              <ChevronRight className="h-4 w-4 shrink-0 text-chili" />
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })()}
             </section>
           );
         })}

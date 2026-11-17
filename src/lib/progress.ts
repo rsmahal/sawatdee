@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Speaker, Word } from "@/lib/curriculum";
+import type { CefrLevel, Speaker, Word } from "@/lib/curriculum";
+import { milestoneKey, milestoneStars, type MilestoneMode } from "@/lib/milestone";
 import {
   scheduleCard,
   todayKey,
@@ -21,15 +22,25 @@ export function normalizeReviewLimit(value: unknown): number | null {
   return DEFAULT_REVIEW_LIMIT;
 }
 
+export type MilestoneResult = {
+  bestScore: number;
+  total: number;
+  passed: boolean;
+  stars: number;
+  attempts: number;
+};
+
 type Data = {
   xp: number;
   streak: number;
   lastDay: string | null;
   completed: Record<string, number>;
   talkCompleted: Record<string, number>;
+  milestones: Record<string, MilestoneResult>;
   speaker: Speaker;
   speechMethod: SpeechMethod;
   showRoman: boolean;
+  showTones: boolean;
   autoplay: boolean;
   reviewLimit: number | null;
   scriptStyle: ScriptStyle;
@@ -43,6 +54,7 @@ type Actions = {
   setSpeaker: (speaker: Speaker) => void;
   setSpeechMethod: (method: SpeechMethod) => void;
   setShowRoman: (show: boolean) => void;
+  setShowTones: (show: boolean) => void;
   setAutoplay: (on: boolean) => void;
   setReviewLimit: (limit: number | null) => void;
   setScriptStyle: (style: ScriptStyle) => void;
@@ -52,6 +64,13 @@ type Actions = {
   recordAnswer: (ok: boolean, gain: number) => void;
   finishLesson: (id: string, stars: number, bonus: number) => void;
   finishConversation: (id: string, stars: number, bonus: number) => void;
+  finishMilestone: (
+    level: CefrLevel,
+    mode: MilestoneMode,
+    score: number,
+    total: number,
+    bonus: number,
+  ) => void;
   resetProgress: () => void;
   applyLearning: (learning: Learning) => void;
 };
@@ -62,9 +81,11 @@ const initial: Data = {
   lastDay: null,
   completed: {},
   talkCompleted: {},
+  milestones: {},
   speaker: "f",
   speechMethod: "auto",
   showRoman: true,
+  showTones: true,
   autoplay: true,
   reviewLimit: DEFAULT_REVIEW_LIMIT,
   scriptStyle: "modern",
@@ -81,6 +102,7 @@ export const useProgress = create<Data & Actions>()(
       setSpeaker: (speaker) => set({ speaker }),
       setSpeechMethod: (speechMethod) => set({ speechMethod }),
       setShowRoman: (showRoman) => set({ showRoman }),
+      setShowTones: (showTones) => set({ showTones }),
       setAutoplay: (autoplay) => set({ autoplay }),
       setReviewLimit: (reviewLimit) => set({ reviewLimit: normalizeReviewLimit(reviewLimit) }),
       setScriptStyle: (scriptStyle) => set({ scriptStyle }),
@@ -168,6 +190,38 @@ export const useProgress = create<Data & Actions>()(
           },
         });
       },
+      finishMilestone: (level, mode, score, total, bonus) => {
+        const state = get();
+        const today = todayKey();
+        const previous = new Date();
+        previous.setDate(previous.getDate() - 1);
+        const yesterday = `${previous.getFullYear()}-${String(previous.getMonth() + 1).padStart(2, "0")}-${String(previous.getDate()).padStart(2, "0")}`;
+        let streak = state.streak;
+        if (state.lastDay !== today) {
+          streak = state.lastDay === yesterday ? state.streak + 1 : 1;
+        } else if (streak === 0) {
+          streak = 1;
+        }
+        const key = milestoneKey(level, mode);
+        const prev = state.milestones[key];
+        const earnedStars = milestoneStars(score, total);
+        const passed = earnedStars > 0;
+        set({
+          xp: state.xp + bonus,
+          streak,
+          lastDay: today,
+          milestones: {
+            ...state.milestones,
+            [key]: {
+              bestScore: Math.max(prev?.bestScore ?? 0, score),
+              total,
+              passed: Boolean(prev?.passed || passed),
+              stars: Math.max(prev?.stars ?? 0, earnedStars),
+              attempts: (prev?.attempts ?? 0) + 1,
+            },
+          },
+        });
+      },
       resetProgress: () =>
         set({
           xp: 0,
@@ -175,6 +229,7 @@ export const useProgress = create<Data & Actions>()(
           lastDay: null,
           completed: {},
           talkCompleted: {},
+          milestones: {},
           cards: {},
           answered: 0,
           correct: 0,
@@ -216,9 +271,11 @@ export type Learning = {
   lastDay: string | null;
   completed: Record<string, number>;
   talkCompleted: Record<string, number>;
+  milestones: Record<string, MilestoneResult>;
   speaker: Speaker;
   speechMethod: SpeechMethod;
   showRoman: boolean;
+  showTones: boolean;
   autoplay: boolean;
   reviewLimit: number | null;
   cards: Record<string, SrsCard>;
@@ -233,9 +290,11 @@ export function learningSnapshot(state: Data): Learning {
     lastDay: state.lastDay,
     completed: state.completed,
     talkCompleted: state.talkCompleted,
+    milestones: state.milestones,
     speaker: state.speaker,
     speechMethod: state.speechMethod,
     showRoman: state.showRoman,
+    showTones: state.showTones,
     autoplay: state.autoplay,
     reviewLimit: state.reviewLimit,
     cards: state.cards,
@@ -263,6 +322,24 @@ export function parseLearning(raw: unknown): Learning | null {
       if (typeof stars === "number" && stars >= 0 && stars <= 3) talkCompleted[id] = stars;
     }
   }
+  const milestones: Record<string, MilestoneResult> = {};
+  if (row.milestones && typeof row.milestones === "object") {
+    for (const [key, value] of Object.entries(row.milestones)) {
+      if (!value || typeof value !== "object") continue;
+      const item = value as Partial<MilestoneResult>;
+      const total = Math.max(1, Math.round(num(item.total, 100)));
+      const bestScore = Math.max(0, Math.min(total, Math.round(num(item.bestScore, 0))));
+      const stars = Math.max(0, Math.min(3, Math.round(num(item.stars, 0))));
+      const attempts = Math.max(1, Math.round(num(item.attempts, 1)));
+      milestones[key] = {
+        bestScore,
+        total,
+        passed: Boolean(item.passed),
+        stars,
+        attempts,
+      };
+    }
+  }
   const cards: Record<string, SrsCard> = {};
   if (row.cards && typeof row.cards === "object") {
     for (const [key, value] of Object.entries(row.cards).slice(0, 2000)) {
@@ -288,10 +365,12 @@ export function parseLearning(raw: unknown): Learning | null {
     lastDay: typeof row.lastDay === "string" ? row.lastDay : null,
     completed,
     talkCompleted,
+    milestones,
     speaker: row.speaker === "m" ? "m" : "f",
     speechMethod:
       row.speechMethod === "google" || row.speechMethod === "browser" ? row.speechMethod : "auto",
     showRoman: row.showRoman !== false,
+    showTones: row.showTones !== false,
     autoplay: row.autoplay !== false,
     reviewLimit: normalizeReviewLimit(row.reviewLimit),
     cards,

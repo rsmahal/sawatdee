@@ -501,8 +501,8 @@ export const a2Units: Unit[] = [
     id: "a2-finale",
     level: "A2",
     kicker: "A2 · Unit 12",
-    title: "Storytelling & A2 Finale",
-    blurb: "Sequence events from first to finally and pass the CEFR A2 milestone.",
+    title: "Storytelling & Sequencing",
+    blurb: "Sequence events from first to finally and prepare for the A2 Milestone exam.",
   },
 ];
 
@@ -1106,26 +1106,6 @@ export const a2Lessons: Lesson[] = [
       pairs([v.atFirst, v.afterThat, v.finally, v.immediately]),
       pairs([v.problem, v.solution, v.reason, v.example]),
       pairs([v.truth, v.future, v.past, v.byChance]),
-    ],
-  },
-  {
-    id: "checkpoint-2",
-    unit: "a2-finale",
-    title: "CEFR A2 Finale",
-    subtitle: "Full Course Checkpoint · A1 & A2",
-    tip: "Everything from greetings and A1 foundations through A2 comparisons, errands, health, and storytelling.",
-    checkpoint: true,
-    words: [],
-    exercises: [
-      choice("listen", v.understand, [a1.hello, v.problem, v.rain]),
-      tiles("Can I scan?", [t(v.scanQR), t(a1.can), POLITE_Q], [t(v.withdraw), t(v.transferMoney)]),
-      tiles("Cheaper", [t(a1.cheap), t(v.moreThan)], [t(v.mostW), t(a1.expensive)]),
-      tiles("The AC is broken", [t(v.aircon), t(v.broken)], [t(v.fan), t(v.clean)]),
-      choice("th-en", v.afterMeal, [v.beforeMeal, v.perDay, v.pill]),
-      tiles("Passport is missing", [t(v.passport), t(v.missing)], [t(v.police), t(v.embassy)]),
-      pairs([v.krengJai, v.finally, v.worthIt, v.agreeOpinion]),
-      choice("en-th", v.soreThroat, [v.cough, v.dizzy, v.painkiller]),
-      tiles("I agree", [SELF, t(v.agreeOpinion), POLITE], [t(v.disagree), t(v.sure)]),
     ],
   },
 ];

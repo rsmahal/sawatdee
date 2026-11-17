@@ -20,10 +20,12 @@ export function Profile() {
   const correct = useProgress((state) => state.correct);
   const speaker = useProgress((state) => state.speaker);
   const showRoman = useProgress((state) => state.showRoman);
+  const showTones = useProgress((state) => state.showTones);
   const autoplay = useProgress((state) => state.autoplay);
   const cards = useProgress((state) => state.cards);
   const setSpeaker = useProgress((state) => state.setSpeaker);
   const setShowRoman = useProgress((state) => state.setShowRoman);
+  const setShowTones = useProgress((state) => state.setShowTones);
   const setAutoplay = useProgress((state) => state.setAutoplay);
   const resetProgress = useProgress((state) => state.resetProgress);
   const theme = useProgress((state) => state.theme);
@@ -145,6 +147,12 @@ export function Profile() {
               label="Romanization"
               hint="Show the pronunciation under the Thai script."
               onToggle={() => setShowRoman(!showRoman)}
+            />
+            <Toggle
+              on={showTones}
+              label="Tones"
+              hint="Show per-syllable tones (Mid, Low, Falling, High, Rising) on vocabulary and feedback."
+              onToggle={() => setShowTones(!showTones)}
             />
             <Toggle
               on={autoplay}

@@ -8,6 +8,7 @@ import { duePhrase, intervalChip, nextInterval, reviewStats, todayKey, type Revi
 import { shuffle } from "@/lib/shuffle";
 import { speakThai } from "@/lib/speech";
 import { ExerciseBody, type Grade, type GradeHandle } from "./exercise";
+import { ToneStrip } from "./tone-strip";
 
 const COACH: Record<string, string> = {
   สีขาว: "ขาว rises. ข้าว, rice, falls.",
@@ -51,6 +52,7 @@ export function Review({ onStart }: { onStart: (mode: "due" | "ahead") => void }
   const vocabulary = useCatalog((state) => state.vocabulary);
   const cards = useProgress((state) => state.cards);
   const showRoman = useProgress((state) => state.showRoman);
+  const showTones = useProgress((state) => state.showTones);
   const reviewLimit = useProgress((state) => state.reviewLimit);
   const today = todayKey();
   const stats = reviewStats(cards, today);
@@ -90,10 +92,24 @@ export function Review({ onStart }: { onStart: (mode: "due" | "ahead") => void }
           </p>
 
           {dueList.length > 0 && (
-            <DeckList title="Due" cards={dueList.slice(0, 8)} extra={Math.max(0, dueList.length - 8)} today={today} showRoman={showRoman} />
+            <DeckList
+              title="Due"
+              cards={dueList.slice(0, 8)}
+              extra={Math.max(0, dueList.length - 8)}
+              today={today}
+              showRoman={showRoman}
+              showTones={showTones}
+            />
           )}
           {later.length > 0 && (
-            <DeckList title="Coming up" cards={later.slice(0, 5)} extra={Math.max(0, later.length - 5)} today={today} showRoman={showRoman} />
+            <DeckList
+              title="Coming up"
+              cards={later.slice(0, 5)}
+              extra={Math.max(0, later.length - 5)}
+              today={today}
+              showRoman={showRoman}
+              showTones={showTones}
+            />
           )}
 
           <button
@@ -116,7 +132,7 @@ export function Review({ onStart }: { onStart: (mode: "due" | "ahead") => void }
           )}
         </div>
 
-        <WordBank vocabulary={vocabulary} cards={cards} showRoman={showRoman} today={today} />
+        <WordBank vocabulary={vocabulary} cards={cards} showRoman={showRoman} showTones={showTones} today={today} />
       </div>
     </div>
   );
@@ -126,11 +142,13 @@ function WordBank({
   vocabulary,
   cards,
   showRoman,
+  showTones,
   today,
 }: {
   vocabulary: VocabularyEntry[];
   cards: Record<string, SrsCard>;
   showRoman: boolean;
+  showTones: boolean;
   today: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -245,7 +263,8 @@ function WordBank({
                           {showRoman ? `${word.roman} · ` : ""}
                           {word.en}
                         </span>
-                        <span className="block text-xs font-bold text-muted/80">
+                        {showTones && <ToneStrip roman={word.roman} className="mt-1" />}
+                        <span className="mt-1 block text-xs font-bold text-muted/80">
                           {word.level} · {word.pos} · {word.topic}
                         </span>
                       </span>
@@ -274,6 +293,7 @@ const ANKI_RATINGS: { grade: ReviewGrade; label: string; tone: string }[] = [
 export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit: () => void }) {
   const cards = useProgress((state) => state.cards);
   const showRoman = useProgress((state) => state.showRoman);
+  const showTones = useProgress((state) => state.showTones);
   const autoplay = useProgress((state) => state.autoplay);
   const speaker = useProgress((state) => state.speaker);
   const reviewLimit = useProgress((state) => state.reviewLimit);
@@ -397,6 +417,9 @@ export function ReviewSession({ mode, onExit }: { mode: "due" | "ahead"; onExit:
               {result.solution}
             </p>
           )}
+          {showTones && card?.roman && (
+            <ToneStrip roman={card.roman} variant="inverse" className="mt-1.5" />
+          )}
           {exercise.coach && <p className="mt-1 text-sm">{exercise.coach}</p>}
           <p className="mt-2 text-xs font-extrabold tracking-wide uppercase opacity-85">
             How well did you recall it?
@@ -439,12 +462,14 @@ function DeckList({
   extra,
   today,
   showRoman,
+  showTones,
 }: {
   title: string;
   cards: SrsCard[];
   extra: number;
   today: string;
   showRoman: boolean;
+  showTones: boolean;
 }) {
   return (
     <section className="mt-5">
@@ -460,6 +485,7 @@ function DeckList({
                 {showRoman ? `${card.roman} · ` : ""}
                 {card.en}
               </span>
+              {showTones && card.roman && <ToneStrip roman={card.roman} className="mt-1" />}
             </span>
             <span className="shrink-0 text-xs font-extrabold text-chili">{duePhrase(card.due, today)}</span>
           </li>

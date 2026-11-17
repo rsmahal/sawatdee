@@ -471,8 +471,8 @@ export const a1Units: Unit[] = [
     id: "shopping-hobbies",
     level: "A1",
     kicker: "A1 · Unit 12",
-    title: "Shopping, Hobbies & A1 Finale",
-    blurb: "Pay at a counter, talk about free time, and pass A1.",
+    title: "Shopping & Free Time",
+    blurb: "Pay at a counter, talk about hobbies, and prepare for the A1 Milestone exam.",
   },
 ];
 
@@ -1112,25 +1112,6 @@ export const a1Lessons: Lesson[] = [
       tiles("Listen to music", [t(v.listen), t(v.music)], [t(v.watch), t(v.movie)]),
       pairs([v.sea, v.mountain, v.music, v.movie]),
       pairs([v.walk, v.run, v.swim, v.sport]),
-    ],
-  },
-  {
-    id: "checkpoint-a1",
-    unit: "shopping-hobbies",
-    title: "A1 Milestone",
-    subtitle: "Checkpoint 2 · Full CEFR A1",
-    tip: "Everything from greetings, numbers, calendar, daily verbs, health, questions, and shopping.",
-    checkpoint: true,
-    words: [],
-    exercises: [
-      choice("listen", v.headache, [v.stomachache, v.medicine, v.fever]),
-      tiles("I will go tomorrow", [SELF, t(v.willW), t(v.go), t(v.tomorrow)], [t(v.yesterday), t(v.already)]),
-      tiles("Two bottles of water", [t(v.water), t(v.two), t(v.clfBottle)], [t(v.clfGlass), t(v.ice)]),
-      choice("th-en", v.friday, [v.monday, v.saturday, v.sunday]),
-      tiles("Pay by cash", [t(v.pay), t(v.cash), POLITE], [t(v.creditCard), t(v.receipt)]),
-      pairs([v.because, v.butW, v.onW, v.behind]),
-      tiles("I don't know", [SELF, t(v.no), t(v.know), POLITE], [t(v.remember), t(v.forget)]),
-      choice("en-th", v.discount, [v.price, v.receipt, v.changeW]),
     ],
   },
 ];

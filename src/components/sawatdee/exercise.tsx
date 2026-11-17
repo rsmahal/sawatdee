@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type RefObject } from "react";
 import { Volume2 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { resolveTok, type Exercise, type Speaker, type Word } from "@/lib/curriculum";
+import type { MilestoneMode } from "@/lib/milestone";
 import { shuffle } from "@/lib/shuffle";
 import { speakThai, stopSpeech } from "@/lib/speech";
 
@@ -21,6 +22,7 @@ export function ExerciseBody({
   gradeRef,
   onAnswer,
   onCanCheck,
+  examMode,
 }: {
   exercise: Exercise;
   speaker: Speaker;
@@ -30,6 +32,7 @@ export function ExerciseBody({
   gradeRef: RefObject<GradeHandle | null>;
   onAnswer: (grade: Grade) => void;
   onCanCheck: (ready: boolean) => void;
+  examMode?: MilestoneMode;
 }) {
   if (exercise.kind === "choice") {
     return (
@@ -40,6 +43,7 @@ export function ExerciseBody({
         result={result}
         gradeRef={gradeRef}
         onCanCheck={onCanCheck}
+        examMode={examMode}
       />
     );
   }
@@ -75,6 +79,7 @@ function Choice({
   result,
   gradeRef,
   onCanCheck,
+  examMode,
 }: {
   exercise: Extract<Exercise, { kind: "choice" }>;
   showRoman: boolean;
@@ -82,23 +87,31 @@ function Choice({
   result: Grade | null;
   gradeRef: RefObject<GradeHandle | null>;
   onCanCheck: (ready: boolean) => void;
+  examMode?: MilestoneMode;
 }) {
   const options = useMemo(() => shuffle([exercise.word, ...exercise.traps]), [exercise]);
   const [picked, setPicked] = useState<string | null>(null);
   const [peek, setPeek] = useState(false);
 
+  const suppressPromptAudio = examMode === "reading";
+  const hideListenPeek = examMode === "listening" || examMode === "mixed";
+
   useEffect(() => {
-    if (autoplay && (exercise.dir === "th-en" || exercise.dir === "listen")) {
+    const shouldSpeakOnOpen =
+      !suppressPromptAudio &&
+      ((exercise.dir === "listen" && (autoplay || examMode === "listening")) ||
+        (exercise.dir === "th-en" && autoplay));
+    if (shouldSpeakOnOpen) {
       speakThai(exercise.word.thai);
     }
     return () => stopSpeech();
-  }, [autoplay, exercise]);
+  }, [autoplay, exercise, suppressPromptAudio, examMode]);
 
   useEffect(() => {
-    if (result && autoplay && exercise.dir === "en-th") {
+    if (result && autoplay && (exercise.dir === "en-th" || suppressPromptAudio)) {
       speakThai(exercise.word.thai);
     }
-  }, [result, autoplay, exercise]);
+  }, [result, autoplay, exercise, suppressPromptAudio]);
 
   useEffect(() => {
     onCanCheck(picked !== null);
@@ -138,7 +151,7 @@ function Choice({
           <p className="mt-3 text-lg font-extrabold">Listen first</p>
         )}
         <div className="mt-3 flex items-center justify-center gap-2">
-          {(exercise.dir !== "en-th" || Boolean(result)) && (
+          {((!suppressPromptAudio && exercise.dir !== "en-th") || Boolean(result)) && (
             <button
               type="button"
               aria-label="Play Thai"
@@ -148,7 +161,7 @@ function Choice({
               <Volume2 className="h-5 w-5" />
             </button>
           )}
-          {exercise.dir === "listen" && !revealed && (
+          {exercise.dir === "listen" && !revealed && !hideListenPeek && (
             <button
               type="button"
               onClick={() => setPeek(true)}

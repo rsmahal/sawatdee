@@ -1,5 +1,7 @@
 import { a1Vocab } from "./curriculum-a1";
 import { a2Vocab } from "./curriculum-a2";
+import { a1ExtraConversations } from "./conversations-a1-extra";
+import { a2ExtraConversations } from "./conversations-a2-extra";
 import { resolveTok } from "./curriculum";
 import type { Conversation, ConversationBlankPart, Lesson, Speaker, Tok, Word } from "./curriculum-types";
 
@@ -30,7 +32,7 @@ export function resolveTokensRoman(tokens: Tok[], speaker: Speaker, fallbackRoma
   return fallbackRoman;
 }
 
-export const conversations: Conversation[] = [
+const baseConversations: Conversation[] = [
   // ================= A1 CONVERSATIONS =================
   {
     id: "talk-a1-hello",
@@ -1282,6 +1284,23 @@ export const conversations: Conversation[] = [
     ],
   },
 ];
+
+const unitOrder: string[] = [];
+for (const conv of baseConversations) {
+  if (!unitOrder.includes(conv.unitId)) unitOrder.push(conv.unitId);
+}
+
+const extraByUnit = new Map<string, Conversation[]>();
+for (const conv of [...a1ExtraConversations, ...a2ExtraConversations]) {
+  const list = extraByUnit.get(conv.unitId) ?? [];
+  list.push(conv);
+  extraByUnit.set(conv.unitId, list);
+}
+
+export const conversations: Conversation[] = unitOrder.flatMap((unitId) => [
+  ...baseConversations.filter((conv) => conv.unitId === unitId),
+  ...(extraByUnit.get(unitId) ?? []),
+]);
 
 export type ConversationUnlockStatus = {
   unlocked: boolean;
