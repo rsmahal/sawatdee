@@ -159,21 +159,60 @@ function authPopupPlugin(): Plugin {
   };
 }
 
-// `0.0.0.0:8080` is the live-preview contract — don't change host/port.
+function staticAudioManifests(root: string) {
+  return {
+    f: existsSync(join(root, "public/audio/th/f/manifest.json")),
+    m: existsSync(join(root, "public/audio/th/m/manifest.json")),
+    base: existsSync(join(root, "public/audio/th/manifest.json")),
+  };
+}
+
+// `0.0.0.0:3000` is the live-preview contract — don't change host/port.
 // The dev server starts once `src/router.tsx` and `src/routes/` exist — see
 // AGENTS.md § "First scaffold".
 export default defineConfig(({ command, isPreview }) => ({
+  define: {
+    __SAWATDEE_AUDIO_MANIFESTS__: JSON.stringify(staticAudioManifests(process.cwd())),
+  },
   server: {
     host: "0.0.0.0",
     port: 3000,
     strictPort: true,
     allowedHosts: true,
+    hmr: false,
+    warmup: {
+      clientFiles: [
+        "./src/router.tsx",
+        "./src/routes/__root.tsx",
+        "./src/routes/index.tsx",
+        "./src/routes/login.tsx",
+      ],
+    },
   },
   preview: {
     host: "0.0.0.0",
     port: 3000,
     strictPort: true,
     allowedHosts: true,
+  },
+  optimizeDeps: {
+    include: [
+      "better-auth/react",
+      "better-auth/client/plugins",
+      "lucide-react",
+      "zod",
+      "clsx",
+      "tailwind-merge",
+      "zustand",
+      "zustand/middleware",
+      "@radix-ui/react-slider",
+    ],
+    exclude: [
+      "@electric-sql/pglite",
+      "pg",
+      "kysely",
+      "jose",
+    ],
   },
   resolve: { tsconfigPaths: true },
   plugins: [

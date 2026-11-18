@@ -1,12 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
 import { authMiddleware } from "@/lib/auth/middleware";
-import { ensureCurriculumSeeded } from "@/lib/curriculum-store.server";
-import { getSql } from "@/lib/db";
 import { parseLearning, type Learning } from "@/lib/progress";
 
 export const loadProgress = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context }): Promise<Learning | null> => {
+    const [{ ensureCurriculumSeeded }, { getSql }] = await Promise.all([
+      import("@/lib/curriculum-store.server"),
+      import("@/lib/db"),
+    ]);
     const sql = await getSql();
     await ensureCurriculumSeeded(sql);
     const rows = await sql<{ payload: unknown }>`
@@ -25,6 +27,10 @@ export const saveProgress = createServerFn({ method: "POST" })
   })
   .middleware([authMiddleware])
   .handler(async ({ context, data }) => {
+    const [{ ensureCurriculumSeeded }, { getSql }] = await Promise.all([
+      import("@/lib/curriculum-store.server"),
+      import("@/lib/db"),
+    ]);
     const sql = await getSql();
     await ensureCurriculumSeeded(sql);
     const payload = JSON.stringify(data);

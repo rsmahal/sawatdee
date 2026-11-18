@@ -27,9 +27,24 @@ function liveEdgeUrl(speaker: Speaker, text: string) {
   return `/api/tts?speaker=${encodeURIComponent(speaker)}&text=${encodeURIComponent(text)}`;
 }
 
+declare const __SAWATDEE_AUDIO_MANIFESTS__: Partial<Record<AudioScope, boolean>> | undefined;
+
+function hasStaticManifest(scope: AudioScope): boolean {
+  try {
+    return typeof __SAWATDEE_AUDIO_MANIFESTS__ !== "undefined" && Boolean(__SAWATDEE_AUDIO_MANIFESTS__?.[scope]);
+  } catch {
+    return false;
+  }
+}
+
 function loadManifest(scope: AudioScope): Promise<Record<string, string>> {
   const cached = manifestCache[scope];
   if (cached) return Promise.resolve(cached);
+
+  if (!hasStaticManifest(scope)) {
+    manifestCache[scope] = {};
+    return Promise.resolve({});
+  }
 
   if (!manifestPromises[scope]) {
     manifestPromises[scope] = fetch(manifestUrl(scope))

@@ -28,6 +28,7 @@ export type MilestoneResult = {
   passed: boolean;
   stars: number;
   attempts: number;
+  bestTimeSec?: number;
 };
 
 type Data = {
@@ -45,6 +46,8 @@ type Data = {
   reviewLimit: number | null;
   scriptStyle: ScriptStyle;
   theme: Theme;
+  pathLevel: CefrLevel | null;
+  collapsedUnits: Record<string, boolean>;
   cards: Record<string, SrsCard>;
   answered: number;
   correct: number;
@@ -59,6 +62,9 @@ type Actions = {
   setReviewLimit: (limit: number | null) => void;
   setScriptStyle: (style: ScriptStyle) => void;
   setTheme: (theme: Theme) => void;
+  setPathLevel: (level: CefrLevel | null) => void;
+  toggleUnitCollapsed: (unitId: string) => void;
+  setUnitsCollapsed: (unitIds: string[], collapsed: boolean) => void;
   ingestWords: (words: Word[]) => void;
   gradeReview: (thai: string, grade: ReviewGrade) => void;
   recordAnswer: (ok: boolean, gain: number) => void;
@@ -70,6 +76,7 @@ type Actions = {
     score: number,
     total: number,
     bonus: number,
+    durationSec?: number,
   ) => void;
   resetProgress: () => void;
   applyLearning: (learning: Learning) => void;
@@ -90,6 +97,8 @@ const initial: Data = {
   reviewLimit: DEFAULT_REVIEW_LIMIT,
   scriptStyle: "modern",
   theme: "light",
+  pathLevel: null,
+  collapsedUnits: {},
   cards: {},
   answered: 0,
   correct: 0,
@@ -107,6 +116,23 @@ export const useProgress = create<Data & Actions>()(
       setReviewLimit: (reviewLimit) => set({ reviewLimit: normalizeReviewLimit(reviewLimit) }),
       setScriptStyle: (scriptStyle) => set({ scriptStyle }),
       setTheme: (theme) => set({ theme }),
+      setPathLevel: (pathLevel) => set({ pathLevel }),
+      toggleUnitCollapsed: (unitId) =>
+        set((state) => ({
+          collapsedUnits: {
+            ...state.collapsedUnits,
+            [unitId]: !state.collapsedUnits[unitId],
+          },
+        })),
+      setUnitsCollapsed: (unitIds, collapsed) =>
+        set((state) => {
+          const next = { ...state.collapsedUnits };
+          for (const id of unitIds) {
+            if (collapsed) next[id] = true;
+            else delete next[id];
+          }
+          return { collapsedUnits: next };
+        }),
       ingestWords: (words) =>
         set((state) => {
           const today = todayKey();
@@ -190,7 +216,7 @@ export const useProgress = create<Data & Actions>()(
           },
         });
       },
-      finishMilestone: (level, mode, score, total, bonus) => {
+      finishMilestone: (level, mode, score, total, bonus, durationSec) => {
         const state = get();
         const today = todayKey();
         const previous = new Date();
@@ -206,6 +232,16 @@ export const useProgress = create<Data & Actions>()(
         const prev = state.milestones[key];
         const earnedStars = milestoneStars(score, total);
         const passed = earnedStars > 0;
+        const cleanDuration =
+          typeof durationSec === "number" && Number.isFinite(durationSec) && durationSec > 0
+            ? Math.round(durationSec)
+            : undefined;
+        const bestTimeSec =
+          passed && cleanDuration !== undefined
+            ? prev?.bestTimeSec !== undefined
+              ? Math.min(prev.bestTimeSec, cleanDuration)
+              : cleanDuration
+            : prev?.bestTimeSec;
         set({
           xp: state.xp + bonus,
           streak,
@@ -218,6 +254,7 @@ export const useProgress = create<Data & Actions>()(
               passed: Boolean(prev?.passed || passed),
               stars: Math.max(prev?.stars ?? 0, earnedStars),
               attempts: (prev?.attempts ?? 0) + 1,
+              ...(bestTimeSec !== undefined ? { bestTimeSec } : {}),
             },
           },
         });
@@ -241,6 +278,12 @@ export const useProgress = create<Data & Actions>()(
       skipHydration: true,
       merge: (persisted, current) => {
         const saved = (persisted ?? {}) as Partial<Data>;
+        const collapsedUnits: Record<string, boolean> = {};
+        if (saved.collapsedUnits && typeof saved.collapsedUnits === "object") {
+          for (const [k, v] of Object.entries(saved.collapsedUnits)) {
+            if (v === true) collapsedUnits[k] = true;
+          }
+        }
         return {
           ...current,
           scriptStyle: saved.scriptStyle === "traditional" ? "traditional" : "modern",
@@ -249,6 +292,8 @@ export const useProgress = create<Data & Actions>()(
             saved.speechMethod === "google" || saved.speechMethod === "browser" ? saved.speechMethod : "auto",
           reviewLimit:
             "reviewLimit" in saved ? normalizeReviewLimit(saved.reviewLimit) : current.reviewLimit,
+          pathLevel: saved.pathLevel === "A1" || saved.pathLevel === "A2" ? saved.pathLevel : null,
+          collapsedUnits,
         };
       },
       partialize: (state) => ({
@@ -256,6 +301,8 @@ export const useProgress = create<Data & Actions>()(
         scriptStyle: state.scriptStyle,
         speechMethod: state.speechMethod,
         reviewLimit: state.reviewLimit,
+        pathLevel: state.pathLevel,
+        collapsedUnits: state.collapsedUnits,
       }),
     },
   ),
@@ -331,12 +378,18 @@ export function parseLearning(raw: unknown): Learning | null {
       const bestScore = Math.max(0, Math.min(total, Math.round(num(item.bestScore, 0))));
       const stars = Math.max(0, Math.min(3, Math.round(num(item.stars, 0))));
       const attempts = Math.max(1, Math.round(num(item.attempts, 1)));
+      const rawTime = item.bestTimeSec;
+      const bestTimeSec =
+        typeof rawTime === "number" && Number.isFinite(rawTime) && rawTime > 0
+          ? Math.round(rawTime)
+          : undefined;
       milestones[key] = {
         bestScore,
         total,
         passed: Boolean(item.passed),
         stars,
         attempts,
+        ...(bestTimeSec !== undefined ? { bestTimeSec } : {}),
       };
     }
   }

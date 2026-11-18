@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getEdgeThaiMp3, probeEdgeTts, type TtsSpeaker } from "@/lib/edge-tts.server";
+import type { TtsSpeaker } from "@/lib/edge-tts.server";
 
 export const Route = createFileRoute("/api/tts")({
   server: {
     handlers: {
       GET: async ({ request }) => {
+        const { getEdgeThaiMp3, probeEdgeTts } = await import("@/lib/edge-tts.server");
         const url = new URL(request.url);
         if (url.searchParams.get("probe") === "1") {
           const status = await probeEdgeTts();

@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useRef, useState } from "react";
-import { Award, BookOpen, Check, Headphones, RotateCcw, Shuffle, Star, X } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Award, BookOpen, Check, Clock, Headphones, RotateCcw, Shuffle, Star, X } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useCatalog } from "@/lib/catalog-store";
 import type { CefrLevel } from "@/lib/curriculum";
 import {
   buildMilestoneExercises,
+  formatExamTime,
   MILESTONE_MODES,
   MILESTONE_PASS_PERCENT,
   milestoneKey,
@@ -44,8 +45,25 @@ export function MilestoneSession({
   const [result, setResult] = useState<Grade | null>(null);
   const [canCheck, setCanCheck] = useState(false);
   const [confirmExit, setConfirmExit] = useState(false);
+  const [elapsedSec, setElapsedSec] = useState(0);
+  const [runTimeSec, setRunTimeSec] = useState(0);
+  const [isNewBestTime, setIsNewBestTime] = useState(false);
+  const startedAtRef = useRef<number | null>(null);
   const gradeRef = useRef<GradeHandle | null>(null);
   const onCanCheck = useCallback((ready: boolean) => setCanCheck(ready), []);
+
+  useEffect(() => {
+    if (phase !== "play") return;
+    if (startedAtRef.current === null) {
+      startedAtRef.current = Date.now();
+    }
+    const timer = window.setInterval(() => {
+      if (startedAtRef.current !== null) {
+        setElapsedSec(Math.floor((Date.now() - startedAtRef.current) / 1000));
+      }
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [phase, runId]);
 
   const exercises = useMemo(
     () => buildMilestoneExercises(level, mode, vocabulary),
@@ -59,6 +77,14 @@ export function MilestoneSession({
   const prevRecord = milestones[milestoneKey(level, mode)];
   const levelPoolSize = vocabulary.filter((w) => w.level === level).length;
 
+  function beginPlay() {
+    startedAtRef.current = Date.now();
+    setElapsedSec(0);
+    setRunTimeSec(0);
+    setIsNewBestTime(false);
+    setPhase("play");
+  }
+
   function startNewRun() {
     setIndex(0);
     setScore(0);
@@ -66,6 +92,10 @@ export function MilestoneSession({
     setSessionXp(0);
     setResult(null);
     setCanCheck(false);
+    startedAtRef.current = Date.now();
+    setElapsedSec(0);
+    setRunTimeSec(0);
+    setIsNewBestTime(false);
     setRunId((id) => id + 1);
     setPhase("play");
   }
@@ -88,8 +118,15 @@ export function MilestoneSession({
     if (!result || !exercise) return;
     const last = index + 1 >= total;
     if (last) {
-      const bonus = score * 100 >= MILESTONE_PASS_PERCENT * total ? 50 : 15;
-      finishMilestone(level, mode, score, total, bonus);
+      const durationSec = startedAtRef.current
+        ? Math.max(1, Math.round((Date.now() - startedAtRef.current) / 1000))
+        : Math.max(1, elapsedSec);
+      const didPass = milestoneStars(score, total) > 0;
+      const newBest = didPass && (prevRecord?.bestTimeSec === undefined || durationSec < prevRecord.bestTimeSec);
+      const bonus = didPass ? 50 : 15;
+      finishMilestone(level, mode, score, total, bonus, durationSec);
+      setRunTimeSec(durationSec);
+      setIsNewBestTime(newBest);
       setSessionXp((value) => value + bonus);
       setPhase("done");
       return;
@@ -103,6 +140,7 @@ export function MilestoneSession({
   const finalPct = total > 0 ? Math.round((100 * score) / total) : 0;
   const earnedStars = milestoneStars(score, total);
   const passed = earnedStars > 0;
+  const savedBestTime = milestones[milestoneKey(level, mode)]?.bestTimeSec;
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
@@ -134,15 +172,13 @@ export function MilestoneSession({
             <dl className="mt-6 grid grid-cols-2 gap-2">
               <div className="rounded-2xl bg-soft px-4 py-3">
                 <dt className="text-xs font-extrabold tracking-wide text-muted uppercase">Questions</dt>
-                <dd className="text-2xl font-extrabold tabular-nums">{total} words</dd>
-              </div>
-              <div className="rounded-2xl bg-soft px-4 py-3">
-                <dt className="text-xs font-extrabold tracking-wide text-muted uppercase">Word pool</dt>
-                <dd className="text-2xl font-extrabold tabular-nums">{levelPoolSize} {level}</dd>
+                <dd className="text-2xl font-extrabold tabular-nums">
+                  {total} <span className="text-sm font-bold text-muted">/ {levelPoolSize} {level}</span>
+                </dd>
               </div>
               <div className="rounded-2xl bg-soft px-4 py-3">
                 <dt className="text-xs font-extrabold tracking-wide text-muted uppercase">Pass target</dt>
-                <dd className="text-xl font-extrabold tabular-nums">{MILESTONE_PASS_PERCENT}%+</dd>
+                <dd className="text-2xl font-extrabold tabular-nums">{MILESTONE_PASS_PERCENT}%+</dd>
               </div>
               <div className="rounded-2xl bg-soft px-4 py-3">
                 <dt className="text-xs font-extrabold tracking-wide text-muted uppercase">Best score</dt>
@@ -152,17 +188,25 @@ export function MilestoneSession({
                     : "Not taken"}
                 </dd>
               </div>
+              <div className="rounded-2xl bg-soft px-4 py-3">
+                <dt className="text-xs font-extrabold tracking-wide text-muted uppercase">Best time</dt>
+                <dd className="text-xl font-extrabold tabular-nums">
+                  {prevRecord?.bestTimeSec !== undefined
+                    ? formatExamTime(prevRecord.bestTimeSec)
+                    : "Not set"}
+                </dd>
+              </div>
             </dl>
 
             <p className="mt-5 text-sm text-pretty text-muted">
-              Each run draws {total} fresh random {level} words. No 5-heart limit — finish every question to get your score.
+              Each run draws {total} fresh random {level} words. No 5-heart limit — finish every question to get your score and best passing time.
             </p>
           </div>
 
           <footer className="safe-bottom px-4 pt-2 lg:px-8 lg:pb-6">
             <button
               type="button"
-              onClick={() => setPhase("play")}
+              onClick={beginPlay}
               className="btn-3d btn-chili flex min-h-12 w-full items-center justify-center rounded-2xl font-extrabold"
             >
               Start {total}-word exam
@@ -195,7 +239,13 @@ export function MilestoneSession({
 
           <div className="flex items-center justify-between px-5 pt-2 text-xs font-extrabold tracking-wide text-muted uppercase lg:px-8">
             <span>{level} · {modeInfo.title}</span>
-            <span className="tabular-nums">Score {score}/{answered}</span>
+            <div className="flex items-center gap-3 tabular-nums">
+              <span className="inline-flex items-center gap-1">
+                <Clock className="h-3.5 w-3.5" />
+                {formatExamTime(elapsedSec)}
+              </span>
+              <span>Score {score}/{answered}</span>
+            </div>
           </div>
 
           <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-3 pb-4 lg:px-8 lg:pt-5">
@@ -288,6 +338,24 @@ export function MilestoneSession({
               </div>
             )}
             <p className="mt-3 text-xl font-extrabold text-chili tabular-nums">+{sessionXp} XP</p>
+
+            <dl className="mt-5 grid w-full max-w-xs grid-cols-2 gap-2 text-left">
+              <div className="rounded-2xl bg-soft px-4 py-3">
+                <dt className="text-xs font-extrabold tracking-wide text-muted uppercase">Time</dt>
+                <dd className="text-xl font-extrabold tabular-nums">{formatExamTime(runTimeSec)}</dd>
+              </div>
+              <div className="rounded-2xl bg-soft px-4 py-3">
+                <dt className="text-xs font-extrabold tracking-wide text-muted uppercase">Best time</dt>
+                <dd className="text-xl font-extrabold tabular-nums">
+                  {savedBestTime !== undefined ? formatExamTime(savedBestTime) : "Pass to set"}
+                </dd>
+              </div>
+            </dl>
+            {isNewBestTime && (
+              <p className="mt-2 rounded-full bg-teal/15 px-3 py-1 text-xs font-extrabold text-teal">
+                New best time!
+              </p>
+            )}
           </div>
           <footer className="safe-bottom grid gap-2 px-4 pt-2 lg:px-8 lg:pb-6">
             <button
