@@ -69,6 +69,16 @@ export const unitGuides: UnitGuideInfo[] = [
             ],
           },
           {
+            thai: "ยินดีต้อนรับ เชิญ{polite}",
+            roman: "yin-dii-dtâawn-ráp · choen {polite}",
+            en: "Welcome — please come in.",
+            slots: [
+              { role: "Welcome", thai: "ยินดีต้อนรับ", roman: "yin-dii-dtâawn-ráp", en: "welcome" },
+              { role: "Invite", thai: "เชิญ", roman: "choen", en: "please go ahead", accent: true },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
+          {
             thai: "ไม่เป็นไร{polite}",
             roman: "mâi-bpen-rai {polite}",
             en: "No problem / You're welcome.",
@@ -78,7 +88,7 @@ export const unitGuides: UnitGuideInfo[] = [
             ],
           },
         ],
-        watchOut: "In writing, ค่ะ (statement) has a tone mark and คะ (question) does not.",
+        watchOut: "In writing, ค่ะ (statement) has a tone mark and คะ (question) does not. Add หน่อย (nòi) or นิดนึง (nít-nueng) before the particle to soften requests.",
       },
       {
         title: "Negating with ไม่ (mâi)",
@@ -330,19 +340,39 @@ export const unitGuides: UnitGuideInfo[] = [
           },
         ],
       },
+      {
+        title: "Transport, Heading Out & Getting Around",
+        formula: ["Subject", "Verb (ขับ drive / ไป go / ออก exit)", "Vehicle / Destination", "Polite"],
+        setup:
+          "Put movement verbs like ไป (go), ขับ (drive), เข้า (enter), or ออก (exit) directly before the transport mode or destination.",
+        examples: [
+          {
+            thai: "{self}ไม่ขับมอเตอร์ไซค์{polite}",
+            roman: "{self} mâi khàp maw-dtoe-sai {polite}",
+            en: "I don't ride a motorbike.",
+            slots: [
+              { role: "Subject", thai: "{self}", roman: "{self}", en: "I" },
+              { role: "Neg", thai: "ไม่", roman: "mâi", en: "not", accent: true },
+              { role: "Verb", thai: "ขับ", roman: "khàp", en: "drive/ride", accent: true },
+              { role: "Vehicle", thai: "มอเตอร์ไซค์", roman: "maw-dtoe-sai", en: "motorbike" },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
     unitId: "time",
     headline: "Time expressions frame the sentence",
     summary:
-      "Thai verbs never change form for past or future. Instead, place time words like วันนี้ (today), พรุ่งนี้ (tomorrow), or วันเสาร์ (Saturday) at the start or end.",
+      "Thai verbs never change form for past or future. Instead, place time words like วันนี้ (today), เสาร์อาทิตย์ (weekend), เมื่อคืน (last night), or a month at the start or end.",
     patterns: [
       {
-        title: "Setting a Day or Time",
-        formula: ["Time / Day", "Subject / Verb", "Okay (ได้)", "Polite"],
+        title: "Setting a Day, Month or Time",
+        formula: ["Time / Day / Month", "Subject / Verb", "Okay (ได้)", "Polite"],
         setup:
-          "Put the day or time phrase upfront to set the scene, then follow with the activity or ได้ (works/can).",
+          "Put the day, weekend, month, or time phrase upfront to set the scene, then follow with the activity or ได้ (works/can).",
         examples: [
           {
             thai: "วันเสาร์เที่ยงได้{polite}",
@@ -367,13 +397,32 @@ export const unitGuides: UnitGuideInfo[] = [
           },
         ],
       },
+      {
+        title: "Past vs. Immediate Timing Markers",
+        formula: ["Subject / Action", "เมื่อคืน (last night) / เดี๋ยวนี้ (right now) / เร็วๆนี้ (soon)", "Polite"],
+        setup:
+          "Time phrases like เมื่อคืน (last night), ตอนเช้า (in the morning), or เดี๋ยวนี้ (right now) pinpoint when an action happens without touching the verb.",
+        examples: [
+          {
+            thai: "{self}เรียนเมื่อคืน{polite}",
+            roman: "{self} riian mûea-khuuen {polite}",
+            en: "I studied last night.",
+            slots: [
+              { role: "Subject", thai: "{self}", roman: "{self}", en: "I" },
+              { role: "Verb", thai: "เรียน", roman: "riian", en: "study" },
+              { role: "When", thai: "เมื่อคืน", roman: "mûea-khuuen", en: "last night", accent: true },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
     unitId: "routine",
     headline: "Chain actions smoothly in time order",
     summary:
-      "Instead of adding 'and then' or 'to' between verbs, Thai stacks verbs in the exact order they happen.",
+      "Instead of adding 'and then' or 'to' between verbs, Thai stacks action, study, and social verbs in the exact order they happen.",
     patterns: [
       {
         title: "Serial Verb Chains",
@@ -396,19 +445,39 @@ export const unitGuides: UnitGuideInfo[] = [
           },
         ],
       },
+      {
+        title: "Study, Practice & Daily Habits",
+        formula: ["Subject", "ฝึก (practice) / สอน (teach)", "Verb / Action", "ทุกวัน (every day)", "Polite"],
+        setup:
+          "Pair ฝึก (practice) right in front of another action like คุย (chat), ตอบ (answer), or อ่าน (read), and add ทุกวัน (every day) at the end.",
+        examples: [
+          {
+            thai: "เราฝึกคุยทุกวัน{polite}",
+            roman: "rao fùek khui thúk-wan {polite}",
+            en: "We practice chatting every day.",
+            slots: [
+              { role: "Subject", thai: "เรา", roman: "rao", en: "we" },
+              { role: "Helper", thai: "ฝึก", roman: "fùek", en: "practice", accent: true },
+              { role: "Verb", thai: "คุย", roman: "khui", en: "chat", accent: true },
+              { role: "Habit", thai: "ทุกวัน", roman: "thúk-wan", en: "every day" },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
     unitId: "home-things",
-    headline: "Say where objects are with อยู่",
+    headline: "Say where objects are with อยู่ & count pets with ตัว",
     summary:
-      "Just like places in town, everyday objects use อยู่ (yùu) to describe where they are—no 'in' or 'on' is required in casual speech.",
+      "Just like places in town, everyday home items, bath kits, and stationery use อยู่ (yùu) to describe where they sit, while animals and clothes take the classifier ตัว (dtua).",
     patterns: [
       {
         title: "Finding Objects Around the House",
-        formula: ["Object", "อยู่ (is in/at)", "Furniture / Container", "Polite"],
+        formula: ["Object", "อยู่ (is in/at)", "Furniture / Room", "Polite"],
         setup:
-          "Name the item first, then อยู่, then the table, bag, or room where it sits.",
+          "Name the item first, then อยู่, then the sofa, table, bag, or bathroom where it sits.",
         examples: [
           {
             thai: "กุญแจอยู่โต๊ะ{polite}",
@@ -422,14 +491,34 @@ export const unitGuides: UnitGuideInfo[] = [
             ],
           },
           {
-            thai: "โทรศัพท์อยู่กระเป๋า{politeQ}",
-            roman: "thoo-rá-sàp yùu grà-bpǎo {politeQ}",
-            en: "Is the phone in the bag?",
+            thai: "สมุดอยู่โซฟา{polite}",
+            roman: "sà-mùt yùu soo-faa {polite}",
+            en: "The notebook is on the sofa.",
             slots: [
-              { role: "Object", thai: "โทรศัพท์", roman: "thoo-rá-sàp", en: "phone", accent: true },
-              { role: "Located", thai: "อยู่", roman: "yùu", en: "is in" },
-              { role: "Spot", thai: "กระเป๋า", roman: "grà-bpǎo", en: "bag", accent: true },
-              { role: "Polite", thai: "{politeQ}", roman: "{politeQ}" },
+              { role: "Object", thai: "สมุด", roman: "sà-mùt", en: "notebook", accent: true },
+              { role: "Located", thai: "อยู่", roman: "yùu", en: "is on" },
+              { role: "Spot", thai: "โซฟา", roman: "soo-faa", en: "sofa", accent: true },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
+        ],
+      },
+      {
+        title: "Counting Clothing & Pets with ตัว",
+        formula: ["มี (have)", "Animal / Shirt", "Number", "ตัว (body classifier)", "Polite"],
+        setup:
+          "Animals like หมา (dog), แมว (cat), and นก (bird) share the classifier ตัว (dtua) with shirts and pants.",
+        examples: [
+          {
+            thai: "มีหมาแมวสองตัว{polite}",
+            roman: "mii mǎa maaeo sǎawng dtua {polite}",
+            en: "There are a dog and a cat — two pets.",
+            slots: [
+              { role: "Have", thai: "มี", roman: "mii", en: "have" },
+              { role: "Pets", thai: "หมาแมว", roman: "mǎa maaeo", en: "dog & cat" },
+              { role: "Number", thai: "สอง", roman: "sǎawng", en: "two", accent: true },
+              { role: "Classifier", thai: "ตัว", roman: "dtua", en: "animals", accent: true },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
             ],
           },
         ],
@@ -438,15 +527,15 @@ export const unitGuides: UnitGuideInfo[] = [
   },
   {
     unitId: "body-health",
-    headline: "Express aches without 'I have a'",
+    headline: "Express aches & needs without 'I have a'",
     summary:
-      "In Thai, symptom words like ปวดหัว (headache) and แพ้ (allergic) act directly as verbs—no need to say 'I have a'.",
+      "In Thai, symptom words like ปวดหัว (headache), ปวด (ache) + body part, หิวน้ำ (thirsty), and แพ้ (allergic) act directly as verbs—no need to say 'I have a'.",
     patterns: [
       {
-        title: "Symptoms & Allergies",
-        formula: ["(Subject)", "(ไม่)", "Symptom / Verb", "Object / Medicine", "Polite"],
+        title: "Symptoms, Body Parts & Allergies",
+        formula: ["(Subject)", "(ไม่)", "ปวด + Body part / แพ้ + Thing", "Polite"],
         setup:
-          "Say ฉัน/ผม + ปวดหัว directly ('I headache'). To say you are not allergic, place ไม่ directly before แพ้: ไม่แพ้ยา.",
+          "Put ปวด (bpùat, ache) in front of any body part (คอ throat, ไหล่ shoulder, ขา leg, ฟัน tooth), and place ไม่ directly before แพ้ to negate an allergy.",
         examples: [
           {
             thai: "{self}ปวดหัวไข้{polite}",
@@ -472,19 +561,39 @@ export const unitGuides: UnitGuideInfo[] = [
           },
         ],
       },
+      {
+        title: "Stating Physical Needs (Thirsty, Sleepy, Care)",
+        formula: ["Subject", "หิวน้ำ (thirsty) / ง่วงนอน (sleepy)", "(อยาก + Action)", "Polite"],
+        setup:
+          "Feelings like หิวน้ำ (thirsty) and ง่วงนอน (sleepy) work without a linking verb—follow with อยาก (want to) + an action like นอน (sleep) when needed.",
+        examples: [
+          {
+            thai: "{self}ง่วงนอนอยากนอน{polite}",
+            roman: "{self} ngûang-naawn yàak naawn {polite}",
+            en: "I'm sleepy and want to sleep.",
+            slots: [
+              { role: "Subject", thai: "{self}", roman: "{self}", en: "I" },
+              { role: "State", thai: "ง่วงนอน", roman: "ngûang-naawn", en: "sleepy", accent: true },
+              { role: "Want", thai: "อยาก", roman: "yàak", en: "want" },
+              { role: "Verb", thai: "นอน", roman: "naawn", en: "sleep" },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
     unitId: "adjectives-a1",
     headline: "Adjectives & colors come AFTER the noun",
     summary:
-      "Thai flips English adjective order: say 'shirt blue' instead of 'blue shirt', and skip the verb 'is/are' completely.",
+      "Thai flips English adjective order: say 'shirt blue' instead of 'blue shirt', put modifiers like มาก (very) after the adjective, and skip the verb 'is/are' completely.",
     patterns: [
       {
-        title: "Noun + Color / Adjective",
-        formula: ["Noun", "Color / Adjective", "(Predicate Adj)", "Polite"],
+        title: "Noun + Color / Adjective + มาก",
+        formula: ["Noun", "Color / Size / Quality", "(Predicate + มาก)", "Polite"],
         setup:
-          "Place modifiers after the noun they describe. Adding a second adjective at the end makes a full sentence ('The blue shirt is pretty') with zero verb 'to be'.",
+          "Place modifiers after the noun they describe. Adding a second adjective or เก่ง + มาก at the end makes a full sentence with zero verb 'to be'.",
         examples: [
           {
             thai: "เสื้อสีฟ้าสวย{polite}",
@@ -494,6 +603,18 @@ export const unitGuides: UnitGuideInfo[] = [
               { role: "Noun", thai: "เสื้อ", roman: "sûea", en: "shirt" },
               { role: "Color", thai: "สีฟ้า", roman: "sǐi-fáa", en: "blue", accent: true },
               { role: "Predicate", thai: "สวย", roman: "sǔai", en: "is pretty", accent: true },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
+          {
+            thai: "ครูสูงเก่งมาก{polite}",
+            roman: "khruu sǔung gèng mâak {polite}",
+            en: "The tall teacher is very skilled.",
+            slots: [
+              { role: "Noun", thai: "ครู", roman: "khruu", en: "teacher" },
+              { role: "Trait", thai: "สูง", roman: "sǔung", en: "tall", accent: true },
+              { role: "Skill", thai: "เก่ง", roman: "gèng", en: "skilled", accent: true },
+              { role: "Degree", thai: "มาก", roman: "mâak", en: "very" },
               { role: "Polite", thai: "{polite}", roman: "{polite}" },
             ],
           },
@@ -596,6 +717,17 @@ export const unitGuides: UnitGuideInfo[] = [
               { role: "Action", thai: "ลดราคา", roman: "lót-raa-khaa", en: "discount", accent: true },
               { role: "Can", thai: "ได้", roman: "dâai", en: "can", accent: true },
               { role: "Polite", thai: "{politeQ}", roman: "{politeQ}" },
+            ],
+          },
+          {
+            thai: "อยากออกกำลังกายด้วยกัน{polite}",
+            roman: "yàak àawk-gam-lang-gaai dûai-gan {polite}",
+            en: "I want to exercise together.",
+            slots: [
+              { role: "Want", thai: "อยาก", roman: "yàak", en: "want" },
+              { role: "Hobby", thai: "ออกกำลังกาย", roman: "àawk-gam-lang-gaai", en: "exercise", accent: true },
+              { role: "Together", thai: "ด้วยกัน", roman: "dûai-gan", en: "together", accent: true },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
             ],
           },
         ],
@@ -748,6 +880,27 @@ export const unitGuides: UnitGuideInfo[] = [
               { role: "Noun", thai: "ร้านใหญ่", roman: "ráan yài", en: "big shop" },
               { role: "Adjective", thai: "แพง", roman: "phaeng", en: "expensive" },
               { role: "Excess", thai: "เกินไป", roman: "goen-bpai", en: "too much", accent: true },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
+        ],
+      },
+      {
+        title: "Probability, Frequency & Problem Solving",
+        formula: ["Subject", "น่าจะ (ought to) / ต้อง (must)", "ตรวจสอบ (check) / ตัดสินใจ (decide)", "Polite"],
+        setup:
+          "Place modals like น่าจะ (ought to) or ต้อง (must) directly before action verbs such as ตรวจสอบ (check) or แก้ไข (resolve).",
+        examples: [
+          {
+            thai: "เราต้องตรวจสอบก่อนตัดสินใจ{polite}",
+            roman: "rao dtâawng dtrùat-sàawp gàawn dtàt-sǐn-jai {polite}",
+            en: "We should inspect first before deciding.",
+            slots: [
+              { role: "Subject", thai: "เรา", roman: "rao", en: "we" },
+              { role: "Must", thai: "ต้อง", roman: "dtâawng", en: "must" },
+              { role: "Check", thai: "ตรวจสอบ", roman: "dtrùat-sàawp", en: "inspect", accent: true },
+              { role: "Before", thai: "ก่อน", roman: "gàawn", en: "before" },
+              { role: "Decide", thai: "ตัดสินใจ", roman: "dtàt-sǐn-jai", en: "decide", accent: true },
               { role: "Polite", thai: "{polite}", roman: "{polite}" },
             ],
           },
@@ -944,6 +1097,26 @@ export const unitGuides: UnitGuideInfo[] = [
               { role: "Subject", thai: "{self}", roman: "{self}", en: "I" },
               { role: "Event", thai: "ลืมกุญแจ", roman: "luuem gun-jae", en: "forgot key" },
               { role: "Tone", thai: "จริงๆแล้ว", roman: "jing-jing-láaeo", en: "actually" },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
+        ],
+      },
+      {
+        title: "Ideas, Results & Future Plans",
+        formula: ["Subject", "มี / อยาก", "ไอเดีย (idea) / โอกาส (opportunity)", "น่าสนใจ (interesting)", "Polite"],
+        setup:
+          "Pair abstract nouns like แผนการ (plan), เป้าหมาย (goal), or ผลลัพธ์ (result) with evaluation adjectives like คุ้มค่า (worthwhile) or น่าสนใจ (interesting).",
+        examples: [
+          {
+            thai: "ผลลัพธ์คุ้มค่าและดี{polite}",
+            roman: "phǒn-láp khúm-khâa láe dii {polite}",
+            en: "The result is worthwhile and good.",
+            slots: [
+              { role: "Outcome", thai: "ผลลัพธ์", roman: "phǒn-láp", en: "result", accent: true },
+              { role: "Value", thai: "คุ้มค่า", roman: "khúm-khâa", en: "worthwhile", accent: true },
+              { role: "And", thai: "และ", roman: "láe", en: "and" },
+              { role: "Quality", thai: "ดี", roman: "dii", en: "good" },
               { role: "Polite", thai: "{polite}", roman: "{polite}" },
             ],
           },

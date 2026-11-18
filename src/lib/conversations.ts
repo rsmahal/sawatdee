@@ -102,7 +102,7 @@ const baseConversations: Conversation[] = [
     npcName: "Ton",
     npcRole: "Friend",
     npcSpeaker: "m",
-    words: [a1.howru, a1.well, a1.friend, a1.work, a1.bangkok, a1.thailand, a1.beCopula, a1.hasHave],
+    words: [a1.howru, a1.well, a1.friend, a1.teacher, a1.study, a1.bangkok, a1.thailand, a1.beCopula, a1.hasHave, a1.hello, a1.thanks, a1.iM],
     turns: [
       {
         kind: "line",
@@ -133,11 +133,11 @@ const baseConversations: Conversation[] = [
       },
       {
         kind: "reply-blank",
-        prompt: "Respond about where you study and having a friend in Thailand:",
-        parts: [fixed(SELF), blank(t(a1.study)), fixed(t(a1.thailand)), fixed(t(a1.andW)), blank(t(a1.hasHave)), fixed(t(a1.friend)), fixed(POLITE)],
+        prompt: "Respond about studying in Thailand and having friends here:",
+        parts: [fixed(SELF), blank(t(a1.study)), fixed(t(a1.thailand)), blank(t(a1.hasHave)), fixed(t(a1.friend)), fixed(POLITE)],
         extra: [t(a1.work), t(a1.beCopula), t(a1.bangkok)],
-        roman: "{self} riian bprà-thêet-thai láe mii phûean {polite}",
-        en: "I study in Thailand and have friends here.",
+        roman: "{self} riian bprà-thêet-thai · mii phûean {polite}",
+        en: "I study in Thailand — I have friends here!",
       },
     ],
   },
@@ -150,7 +150,7 @@ const baseConversations: Conversation[] = [
     npcName: "P'Daeng",
     npcRole: "Vendor",
     npcSpeaker: "f",
-    words: [a1.hungry, a1.friedRice, a1.coffee, a1.please, a1.thisOne, a1.howMuch, a1.spicy, a1.tasty, a1.maiQ],
+    words: [a1.eat, a1.rice, a1.friedRice, a1.please, a1.thisOne, a1.howMuch, a1.spicy, a1.no, a1.cheap, a1.tasty, a1.maiQ],
     turns: [
       {
         kind: "line",
@@ -199,9 +199,9 @@ const baseConversations: Conversation[] = [
         kind: "line",
         line: {
           speaker: "npc",
-          tokens: [t(a1.fifty), t(a1.baht), { kind: "w", word: a1.kha }],
-          roman: "hâa-sìp bàat khâ",
-          en: "Fifty baht.",
+          tokens: [t(a1.cheap), t(a1.tasty), { kind: "w", word: a1.kha }],
+          roman: "thùuk · à-ròi khâ",
+          en: "Cheap and delicious!",
         },
       },
     ],
@@ -215,15 +215,15 @@ const baseConversations: Conversation[] = [
     npcName: "Beam",
     npcRole: "Barista",
     npcSpeaker: "m",
-    words: [a1.one, a1.two, a1.twenty, a1.hundred, a1.clfGlass, a1.clfBottle, a1.allTotal, a1.coffee, a1.water],
+    words: [a1.one, a1.two, a1.twenty, a1.hundred, a1.baht, a1.clfGlass, a1.clfBottle, a1.allTotal, a1.coffee, a1.water, a1.hello, a1.maiQ, a1.please, a1.thanks],
     turns: [
       {
         kind: "line",
         line: {
           speaker: "npc",
-          tokens: [t(a1.hello), t(a1.takeWant), t(a1.coffee), { kind: "w", word: a1.khrap }],
-          roman: "sà-wàt-dii · ao gaa-fae khráp",
-          en: "Hello, getting coffee?",
+          tokens: [t(a1.hello), t(a1.coffee), t(a1.maiQ), { kind: "w", word: a1.khrap }],
+          roman: "sà-wàt-dii · gaa-fae mǎi khráp",
+          en: "Hello, would you like coffee?",
         },
       },
       {
@@ -271,7 +271,7 @@ const baseConversations: Conversation[] = [
     npcName: "P'Nok",
     npcRole: "Local",
     npcSpeaker: "f",
-    words: [a1.bathroom, a1.market, a1.where, a1.located, a1.straight, a1.turn, a1.left, a1.right, a1.taxi],
+    words: [a1.bathroom, a1.market, a1.where, a1.located, a1.straight, a1.turn, a1.left, a1.right, a1.sorry, a1.thanks],
     turns: [
       {
         kind: "reply-tiles",
@@ -327,7 +327,7 @@ const baseConversations: Conversation[] = [
     npcName: "Pim",
     npcRole: "Friend",
     npcSpeaker: "f",
-    words: [a1.today, a1.tomorrow, a1.saturday, a1.morning, a1.afternoon, a1.whatTime, a1.noon, a1.holiday],
+    words: [a1.today, a1.tomorrow, a1.saturday, a1.morning, a1.afternoon, a1.whatTime, a1.noon, a1.holiday, a1.go, a1.can],
     turns: [
       {
         kind: "line",
@@ -374,7 +374,7 @@ const baseConversations: Conversation[] = [
     npcName: "Boss",
     npcRole: "Roommate",
     npcSpeaker: "m",
-    words: [a1.wakeUp, a1.goBack, a1.buy, a1.cook, a1.wait, a1.rest, a1.help, a1.know],
+    words: [a1.goBack, a1.buy, a1.cook, a1.wait, a1.rest, a1.help, a1.home, a1.now, a1.rice, a1.iM, a1.can, a1.thanks],
     turns: [
       {
         kind: "line",
@@ -428,7 +428,7 @@ const baseConversations: Conversation[] = [
     npcName: "May",
     npcRole: "Partner",
     npcSpeaker: "f",
-    words: [a1.key, a1.phone, a1.bag, a1.table, a1.umbrella, a1.shoes, a1.wear, a1.lookFor],
+    words: [a1.key, a1.phone, a1.bag, a1.table, a1.umbrella, a1.lookFor, a1.located, a1.where, a1.yes],
     turns: [
       {
         kind: "reply-tiles",
@@ -475,7 +475,7 @@ const baseConversations: Conversation[] = [
     npcName: "Dr. Ek",
     npcRole: "Doctor",
     npcSpeaker: "m",
-    words: [a1.sick, a1.headache, a1.stomachache, a1.fever, a1.medicine, a1.allergic, a1.recover],
+    words: [a1.headache, a1.fever, a1.medicine, a1.allergic, a1.recover, a1.hurt, a1.hello, a1.where, a1.no, a1.eat],
     turns: [
       {
         kind: "line",
@@ -531,7 +531,7 @@ const baseConversations: Conversation[] = [
     npcName: "Fah",
     npcRole: "Friend",
     npcSpeaker: "f",
-    words: [a1.shirt, a1.color, a1.white, a1.blue, a1.pretty, a1.small, a1.big, a1.hot, a1.happy],
+    words: [a1.shirt, a1.color, a1.white, a1.blue, a1.pretty, a1.hot, a1.happy, a1.today, a1.good],
     turns: [
       {
         kind: "line",
@@ -578,7 +578,7 @@ const baseConversations: Conversation[] = [
     npcName: "Khao",
     npcRole: "Friend",
     npcSpeaker: "m",
-    words: [a1.who, a1.when, a1.why, a1.because, a1.butW, a1.willW, a1.already, a1.nextTo],
+    words: [a1.who, a1.when, a1.because, a1.willW, a1.nextTo, a1.withW, a1.go, a1.market, a1.today, a1.tomorrow, a1.busy, a1.shop, a1.located],
     turns: [
       {
         kind: "line",
@@ -626,7 +626,7 @@ const baseConversations: Conversation[] = [
     npcName: "P'Lek",
     npcRole: "Shopkeeper",
     npcSpeaker: "f",
-    words: [a1.hat, a1.tryW, a1.price, a1.discount, a1.cash, a1.creditCard, a1.receipt, a1.travel],
+    words: [a1.hat, a1.tryW, a1.discount, a1.cash, a1.creditCard, a1.receipt, a1.please, a1.can, a1.pretty, a1.pay, a1.orW],
     turns: [
       {
         kind: "reply-tiles",
@@ -683,7 +683,7 @@ const baseConversations: Conversation[] = [
     npcName: "P'Ploy",
     npcRole: "Server",
     npcSpeaker: "f",
-    words: [a2.orderW, a2.padThai, a2.chicken, a2.without, a2.peanut, a2.lessSweet, a2.plainWater, a2.bill],
+    words: [a2.orderW, a2.padThai, a2.chicken, a2.without, a2.peanut, a2.lessSweet, a2.plainWater, a2.bill, a2.flavor, a1.what, a1.please, a1.andW, a1.tea, a1.good, a1.tasty, a2.full],
     turns: [
       {
         kind: "line",
@@ -739,7 +739,7 @@ const baseConversations: Conversation[] = [
     npcName: "Natt",
     npcRole: "Receptionist",
     npcSpeaker: "m",
-    words: [a2.skytrain, a2.station, a2.near, a2.intersection, a2.hotel, a2.reserve, a2.checkIn, a2.passport],
+    words: [a2.skytrain, a2.station, a2.near, a2.intersection, a2.hotel, a2.reserve, a2.checkIn, a2.passport, a2.here, a1.hello, a1.room, a1.already, a1.please],
     turns: [
       {
         kind: "line",
@@ -796,7 +796,7 @@ const baseConversations: Conversation[] = [
     npcName: "P'June",
     npcRole: "Colleague",
     npcSpeaker: "f",
-    words: [a2.nameW, a2.speak, a2.thaiLang, a2.understand, a2.aLittle, a2.slowly, a2.meaning, a2.gladly],
+    words: [a2.speak, a2.thaiLang, a2.understand, a2.aLittle, a2.slowly, a2.gladly, a1.you, a1.good, a1.help],
     turns: [
       {
         kind: "line",
@@ -843,7 +843,7 @@ const baseConversations: Conversation[] = [
     npcName: "Win",
     npcRole: "Friend",
     npcSpeaker: "m",
-    words: [a2.weatherAir, a2.rain, a2.fall, a2.sunshine, a2.wind, a2.island, a2.boat, a2.fun, a2.like],
+    words: [a2.weatherAir, a2.rain, a2.fall, a2.wind, a2.island, a2.shady, a2.river, a2.tree, a2.fun, a2.like, a1.today, a1.good, a1.no, a1.go, a1.andW],
     turns: [
       {
         kind: "line",
@@ -890,7 +890,7 @@ const baseConversations: Conversation[] = [
     npcName: "P'Bua",
     npcRole: "Friend",
     npcSpeaker: "f",
-    words: [a2.moreThan, a2.mostW, a2.tooMuch, a2.really, a2.often, a2.sameAs, a2.stillYet, a2.soThus],
+    words: [a2.moreThan, a2.tooMuch, a2.really, a2.often, a2.sameAs, a2.here, a1.shop, a1.thisOne, a1.coffee, a1.tasty, a1.big, a1.expensive, a1.come],
     turns: [
       {
         kind: "line",
@@ -938,7 +938,7 @@ const baseConversations: Conversation[] = [
     npcName: "Arm",
     npcRole: "Staff",
     npcSpeaker: "m",
-    words: [a2.wifi, a2.password, a2.internet, a2.email, a2.sendW, a2.meeting, a2.battery, a2.chargeW],
+    words: [a2.wifi, a2.password, a2.internet, a2.sendW, a2.message, a2.battery, a2.chargeW, a1.please, a1.already, a1.thanks, a1.mustW, a1.fast, a1.can],
     turns: [
       {
         kind: "reply-tiles",
@@ -985,7 +985,7 @@ const baseConversations: Conversation[] = [
     npcName: "P'Ann",
     npcRole: "Building Manager",
     npcSpeaker: "f",
-    words: [a2.condo, a2.aircon, a2.broken, a2.repair, a2.parcel, a2.receive, a2.floorLevel, a2.elevator],
+    words: [a2.aircon, a2.broken, a2.repair, a2.parcel, a2.receive, a2.floorLevel, a2.elevator, a1.room, a1.tomorrow, a1.can, a1.andW, a1.you, a1.located, a1.which, a1.one, a1.nextTo],
     turns: [
       {
         kind: "reply-tiles",
@@ -1032,7 +1032,7 @@ const baseConversations: Conversation[] = [
     npcName: "P'Tae",
     npcRole: "Seller",
     npcSpeaker: "m",
-    words: [a2.sizeW, a2.tight, a2.loose, a2.justRight, a2.scanQR, a2.transferMoney, a2.worthIt, a2.soldOut],
+    words: [a2.sizeW, a2.tight, a2.justRight, a2.scanQR, a2.transferMoney, a2.worthIt, a2.moreThan, a1.shoes, a1.which, a1.thisOne, a1.please, a1.tryW, a1.big, a1.can],
     turns: [
       {
         kind: "line",
@@ -1087,7 +1087,7 @@ const baseConversations: Conversation[] = [
     npcName: "P'Gai",
     npcRole: "Pharmacist",
     npcSpeaker: "f",
-    words: [a2.pharmacy, a2.cough, a2.soreThroat, a2.dizzy, a2.painkiller, a2.pill, a2.perDay, a2.afterMeal],
+    words: [a2.cough, a2.soreThroat, a2.pill, a2.perDay, a2.afterMeal, a1.hello, a1.lookFor, a1.medicine, a1.what, a1.andW, a1.eat, a1.one, a1.howMany],
     turns: [
       {
         kind: "line",
@@ -1134,7 +1134,7 @@ const baseConversations: Conversation[] = [
     npcName: "Nong Mint",
     npcRole: "Coworker",
     npcSpeaker: "f",
-    words: [a2.kind, a2.funny, a2.polite, a2.party, a2.celebrate, a2.gift, a2.agreeOpinion, a2.excited],
+    words: [a2.kind, a2.funny, a2.party, a2.celebrate, a2.gift, a2.flower, a2.agreeOpinion, a2.excited, a1.tomorrow, a1.birthday, a1.friend, a1.andW, a1.buy, a1.good],
     turns: [
       {
         kind: "line",
@@ -1181,7 +1181,7 @@ const baseConversations: Conversation[] = [
     npcName: "P'Keng",
     npcRole: "Friend",
     npcSpeaker: "m",
-    words: [a2.songkran, a2.loyKrathong, a2.makeMerit, a2.festival, a2.tradition, a2.startW, a2.finished],
+    words: [a2.songkran, a2.loyKrathong, a2.makeMerit, a2.festival, a2.tradition, a2.startW, a2.tryDoing, a2.like, a1.big, a1.thailand, a1.want, a1.temple, a1.morning, a1.good, a1.alsoW],
     turns: [
       {
         kind: "line",
@@ -1228,7 +1228,7 @@ const baseConversations: Conversation[] = [
     npcName: "P'Dao",
     npcRole: "Friend",
     npcSpeaker: "f",
-    words: [a2.atFirst, a2.afterThat, a2.finally, a2.problem, a2.solution, a2.actually, a2.byChance],
+    words: [a2.atFirst, a2.afterThat, a2.finally, a2.problem, a2.solution, a2.actually, a2.byChance, a2.relieved, a1.yesterday, a1.what, a1.forget, a1.key, a1.how, a1.meetFind, a1.friend, a1.good],
     turns: [
       {
         kind: "line",

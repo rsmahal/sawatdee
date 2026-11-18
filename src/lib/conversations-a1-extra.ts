@@ -22,7 +22,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Nong Fah",
     npcRole: "Barista",
     npcSpeaker: "f",
-    words: [a1.hello, a1.yes, a1.no, a1.can, a1.cant, a1.sorry, a1.np, a1.thanks],
+    words: [a1.hello, a1.yes, a1.no, a1.can, a1.cant, a1.sorry, a1.np, a1.thanks, a1.bye],
     turns: [
       {
         kind: "line",
@@ -70,7 +70,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "P'Boy",
     npcRole: "Neighbor",
     npcSpeaker: "m",
-    words: [a1.mom, a1.dad, a1.older, a1.family, a1.teacher, a1.doctor, a1.student, a1.english, a1.beCopula],
+    words: [a1.mom, a1.dad, a1.older, a1.family, a1.teacher, a1.doctor, a1.student, a1.english, a1.beCopula, a1.iM, a1.well, a1.thanks],
     turns: [
       {
         kind: "line",
@@ -125,7 +125,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Auntie Som",
     npcRole: "Fruit Seller",
     npcSpeaker: "f",
-    words: [a1.mango, a1.banana, a1.fruit, a1.tea, a1.ice, a1.sweet, a1.sour, a1.cheap],
+    words: [a1.mango, a1.banana, a1.fruit, a1.tea, a1.ice, a1.sweet, a1.sour, a1.cheap, a1.tasty, a1.please],
     turns: [
       {
         kind: "line",
@@ -173,7 +173,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "P'Ek",
     npcRole: "Server",
     npcSpeaker: "m",
-    words: [a1.three, a1.four, a1.clfPlate, a1.clfPerson, a1.clfThing, a1.howMany, a1.thirty, a1.many],
+    words: [a1.three, a1.four, a1.clfPlate, a1.clfPerson, a1.clfThing, a1.howMany, a1.thirty, a1.many, a1.friedRice, a1.snack, a1.baht, a1.please, a1.two],
     turns: [
       {
         kind: "line",
@@ -221,7 +221,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Uncle Chai",
     npcRole: "Taxi Driver",
     npcSpeaker: "m",
-    words: [a1.taxi, a1.bank, a1.temple, a1.park, a1.street, a1.turn, a1.right, a1.straight],
+    words: [a1.taxi, a1.bank, a1.temple, a1.park, a1.street, a1.turn, a1.right, a1.straight, a1.go, a1.where, a1.located],
     turns: [
       {
         kind: "line",
@@ -268,7 +268,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Beam",
     npcRole: "Classmate",
     npcSpeaker: "m",
-    words: [a1.monday, a1.friday, a1.everyDay, a1.rainySeason, a1.coolSeason, a1.morning, a1.evening, a1.after],
+    words: [a1.monday, a1.friday, a1.everyDay, a1.rainySeason, a1.coolSeason, a1.morning, a1.evening, a1.before, a1.after, a1.today, a1.study, a1.yes, a1.go, a1.home, a1.can],
     turns: [
       {
         kind: "line",
@@ -315,7 +315,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Ploy",
     npcRole: "Study Buddy",
     npcSpeaker: "f",
-    words: [a1.read, a1.write, a1.listen, a1.remember, a1.forget, a1.sleep, a1.shower, a1.ask],
+    words: [a1.read, a1.write, a1.listen, a1.remember, a1.forget, a1.sleep, a1.shower, a1.ask, a1.today, a1.everyDay, a1.think, a1.can, a1.before],
     turns: [
       {
         kind: "line",
@@ -362,7 +362,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Ton",
     npcRole: "Roommate",
     npcSpeaker: "m",
-    words: [a1.bedroom, a1.kitchen, a1.door, a1.window, a1.fridge, a1.glasses, a1.money, a1.card],
+    words: [a1.bedroom, a1.kitchen, a1.door, a1.window, a1.fridge, a1.glasses, a1.money, a1.card, a1.water, a1.located, a1.where, a1.table, a1.thanks, a1.bag],
     turns: [
       {
         kind: "line",
@@ -409,7 +409,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Nurse Pim",
     npcRole: "Nurse",
     npcSpeaker: "f",
-    words: [a1.tooth, a1.stomachache, a1.hand, a1.foot, a1.ache, a1.hurt, a1.healthy, a1.doctor],
+    words: [a1.tooth, a1.stomachache, a1.hand, a1.foot, a1.ache, a1.hurt, a1.healthy, a1.doctor, a1.today, a1.no, a1.help, a1.can, a1.thanks, a1.want],
     turns: [
       {
         kind: "line",
@@ -456,7 +456,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Kru Lek",
     npcRole: "Teacher",
     npcSpeaker: "f",
-    words: [a1.easy, a1.hard, a1.newW, a1.fast, a1.slow, a1.busy, a1.free, a1.sleepy],
+    words: [a1.easy, a1.hard, a1.newW, a1.fast, a1.slow, a1.busy, a1.free, a1.sleepy, a1.today, a1.no, a1.tomorrow],
     turns: [
       {
         kind: "line",
@@ -503,7 +503,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "May",
     npcRole: "Friend",
     npcSpeaker: "f",
-    words: [a1.ifW, a1.mustW, a1.everW, a1.currently, a1.inFront, a1.behind, a1.between, a1.fromW],
+    words: [a1.ifW, a1.mustW, a1.everW, a1.currently, a1.inFront, a1.behind, a1.between, a1.fromW, a1.you, a1.go, a1.shop, a1.coffee, a1.newW, a1.located, a1.park, a1.orW, a1.come, a1.alsoW],
     turns: [
       {
         kind: "line",
@@ -550,7 +550,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Khao",
     npcRole: "Friend",
     npcSpeaker: "m",
-    words: [a1.sea, a1.mountain, a1.swim, a1.walk, a1.takePhoto, a1.movie, a1.music, a1.openW],
+    words: [a1.sea, a1.mountain, a1.swim, a1.walk, a1.takePhoto, a1.movie, a1.music, a1.openW, a1.holiday, a1.willW, a1.travel, a1.orW, a1.want, a1.evening, a1.watch, a1.listen, a1.ready, a1.shop],
     turns: [
       {
         kind: "line",
@@ -597,7 +597,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "P'Mai",
     npcRole: "Owner",
     npcSpeaker: "f",
-    words: [hf.welcome, hf.inviteGo, hf.comfortable, hf.okayLoan, hf.softenerNoi, hf.seeYouLater],
+    words: [hf.welcome, hf.inviteGo, hf.comfortable, hf.okayLoan, hf.softenerNoi, hf.seeYouLater, a1.thanks],
     turns: [
       {
         kind: "line",
@@ -644,7 +644,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "ChefLek",
     npcRole: "Chef",
     npcSpeaker: "m",
-    words: [hf.mealFood, hf.tomYum, hf.curry, hf.stickyRice, hf.orangeFruit, hf.lime, a1.hasHave, a1.maiQ],
+    words: [hf.mealFood, hf.tomYum, hf.curry, hf.stickyRice, hf.orangeFruit, hf.lime, hf.deliciousVery, a1.hasHave, a1.maiQ, a1.tasty, a1.please],
     turns: [
       {
         kind: "line",
@@ -667,9 +667,9 @@ export const a1ExtraConversations: Conversation[] = [
         kind: "line",
         line: {
           speaker: "npc",
-          tokens: [t(a1.hasHave), t(hf.orangeFruit), t(hf.lime), t(a1.alsoW), { kind: "w", word: a1.khrap }],
-          roman: "mii sôm má-naao dûai khráp",
-          en: "Yes, we have orange juice and fresh lime too!",
+          tokens: [t(a1.hasHave), t(hf.orangeFruit), t(hf.lime), t(hf.deliciousVery), { kind: "w", word: a1.khrap }],
+          roman: "mii sôm má-naao sòt khráp",
+          en: "Yes, we have oranges and fresh lime!",
         },
       },
       {
@@ -691,7 +691,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "P'Ton",
     npcRole: "Local",
     npcSpeaker: "m",
-    words: [hf.carVehicle, hf.motorbike, hf.busStop, hf.provinces, hf.driveVerb, hf.enterVerb, hf.exitVerb],
+    words: [hf.carVehicle, hf.motorbike, hf.busStop, hf.provinces, hf.driveVerb, hf.cafe, a1.sorry, a1.located, a1.where, a1.straight, a1.want, a1.no, a1.go, a1.can, hf.exitVerb],
     turns: [
       {
         kind: "reply-tiles",
@@ -705,9 +705,9 @@ export const a1ExtraConversations: Conversation[] = [
         kind: "line",
         line: {
           speaker: "npc",
-          tokens: [t(hf.busStop), t(a1.located), t(a1.inFront), t(hf.cafe), { kind: "w", word: a1.khrap }],
-          roman: "bpâai-rót-mee yùu khâang-nâa khaa-fêe khráp",
-          en: "The bus stop is right in front of the cafe.",
+          tokens: [t(hf.busStop), t(a1.located), t(a1.straight), t(hf.cafe), { kind: "w", word: a1.khrap }],
+          roman: "bpâai-rót-mee yùu dtrong-bpai khaa-fêe khráp",
+          en: "The bus stop is straight ahead by the cafe.",
         },
       },
       {
@@ -738,7 +738,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Kru May",
     npcRole: "Tutor",
     npcSpeaker: "f",
-    words: [hf.teachV, hf.practiceV, hf.chatV, hf.smileV, hf.laughV, hf.answerV, hf.hearV],
+    words: [hf.teachV, hf.practiceV, hf.chatV, hf.smileV, hf.laughV, hf.answerV, hf.hearV, a1.today, a1.we, a1.want, a1.you, a1.everyDay, a1.yes, a1.listen],
     turns: [
       {
         kind: "line",
@@ -751,11 +751,11 @@ export const a1ExtraConversations: Conversation[] = [
       },
       {
         kind: "reply-blank",
-        prompt: "Tell Kru May you enjoy it when she teaches and chats slowly:",
-        parts: [fixed(SELF), fixed(t(a1.happy)), fixed(t(a1.you)), blank(t(hf.teachV)), fixed(t(a1.andW)), blank(t(hf.chatV)), fixed(t(a1.slow)), fixed(POLITE)],
+        prompt: "Tell Kru May you want her to teach and chat every day:",
+        parts: [fixed(SELF), fixed(t(a1.want)), fixed(t(a1.you)), blank(t(hf.teachV)), blank(t(hf.chatV)), fixed(t(a1.everyDay)), fixed(POLITE)],
         extra: [t(hf.cryV), t(hf.hurryV), t(hf.answerV)],
-        roman: "{self} dii-jai khun sǎawn láe khui cháa {polite}",
-        en: "I'm happy when you teach and chat slowly.",
+        roman: "{self} yàak khun sǎawn khui thúk-wan {polite}",
+        en: "I want you to teach and chat every day.",
       },
       {
         kind: "line",
@@ -768,11 +768,11 @@ export const a1ExtraConversations: Conversation[] = [
       },
       {
         kind: "reply-tiles",
-        prompt: "Reply: “Yes, I listen and practice speaking every day!”",
-        answer: [t(a1.yes), SELF, t(a1.listen), t(hf.practiceV), t(a1.everyDay), POLITE],
+        prompt: "Reply: “Yes, I listen and practice chatting every day!”",
+        answer: [t(a1.yes), SELF, t(a1.listen), t(hf.practiceV), t(hf.chatV), t(a1.everyDay), POLITE],
         extra: [t(a1.forget), t(hf.standV)],
-        roman: "châi · {self} fang fùek thúk-wan {polite}",
-        en: "Yes, I listen and practice every day!",
+        roman: "châi · {self} fang fùek khui thúk-wan {polite}",
+        en: "Yes, I listen and practice chatting every day!",
       },
     ],
   },
@@ -785,7 +785,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Khao",
     npcRole: "Friend",
     npcSpeaker: "m",
-    words: [a1.should, a1.together, a1.we, hf.weGroup, hf.everyone, hf.togetherWith, hf.however, hf.andThen],
+    words: [a1.should, a1.together, a1.we, hf.weGroup, hf.everyone, hf.togetherWith, hf.however, hf.andThen, a1.go, a1.study, a1.before, a1.eat, a1.tomorrow, a1.morning, a1.busy, a1.np, a1.evening],
     turns: [
       {
         kind: "line",
@@ -832,7 +832,7 @@ export const a1ExtraConversations: Conversation[] = [
     npcName: "Pim",
     npcRole: "Friend",
     npcSpeaker: "f",
-    words: [hf.goShopping, hf.deptStore, hf.coffeeShop, hf.payMoney, hf.changeMoney, hf.exercise],
+    words: [hf.goShopping, hf.deptStore, hf.coffeeShop, hf.payMoney, hf.changeMoney, hf.exercise, hf.togetherWith, a1.you, a1.andW, a1.hasHave, a1.want, a1.evening, a1.willW, a1.can],
     turns: [
       {
         kind: "line",
@@ -867,6 +867,288 @@ export const a1ExtraConversations: Conversation[] = [
         extra: [t(hf.gardening), t(a1.sleepy)],
         roman: "dâai · {self} yàak àawk-gam-lang-gaai dûai-gan {polite}",
         en: "Sure — I want to exercise together!",
+      },
+    ],
+  },
+  {
+    id: "talk-a1-people-3",
+    unitId: "people",
+    level: "A1",
+    title: "Meeting Siblings, Kids & the Driver",
+    setting: "Introducing your family members and welcoming everyone before dinner.",
+    npcName: "P'Nok",
+    npcRole: "Host",
+    npcSpeaker: "f",
+    words: [hf.weGroup, hf.everyone, hf.olderBro, hf.olderSis, hf.son, hf.daughter, hf.driver, a1.hasHave, a1.family, a1.beCopula, a1.well, a1.hello],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.hello), t(hf.everyone), t(hf.weGroup), t(a1.well), { kind: "w", word: a1.khaQ }],
+          roman: "sà-wàt-dii · thúk-khon phûak-rao sà-baai-dii khá",
+          en: "Hello everyone! Are we all doing well?",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Tell P'Nok you have an older brother and an older sister in your family:",
+        parts: [fixed(SELF), blank(t(a1.hasHave)), blank(t(hf.olderBro)), fixed(t(hf.olderSis)), fixed(t(a1.family)), fixed(POLITE)],
+        extra: [t(hf.youngerBro), t(hf.youngerSis), t(hf.owner)],
+        roman: "{self} mii phîi-chaai phîi-sǎao khrâawp-khrua {polite}",
+        en: "I have an older brother and older sister in the family.",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.hasHave), t(hf.son), t(hf.daughter), t(hf.driver), { kind: "w", word: a1.beCopula }, { kind: "w", word: a1.family }, { kind: "w", word: a1.kha }],
+          roman: "mii lûuk-chaai lûuk-sǎao · khon-khàp-rót bpen khrâawp-khrua khâ",
+          en: "My son and daughter are here, and the driver is like family!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Say everyone in our group is doing well:",
+        answer: [t(hf.weGroup), t(hf.everyone), t(a1.well), POLITE],
+        extra: [t(hf.customer), t(hf.otherPeople)],
+        roman: "phûak-rao thúk-khon sà-baai-dii {polite}",
+        en: "Everyone in our group is doing well!",
+      },
+    ],
+  },
+  {
+    id: "talk-a1-numbers-3",
+    unitId: "numbers-unit",
+    level: "A1",
+    title: "Bowls, Cups, Boxes & First Order",
+    setting: "Ordering bowls of noodles, cups of coffee, and takeout boxes for a group.",
+    npcName: "Nong Mint",
+    npcRole: "Cashier",
+    npcSpeaker: "f",
+    words: [hf.clfBowl, hf.clfCup, hf.clfBox, hf.clfPiece, hf.everyAdj, hf.firstAdj, a1.one, a1.two, a1.please, a1.noodles, a1.coffee, a1.snack, a1.thanks],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.noodles), t(hf.clfBowl), t(a1.coffee), t(hf.clfCup), { kind: "w", word: a1.kha }],
+          roman: "gǔai-dtǐiao chaam · gaa-fae thûai khâ",
+          en: "Noodles come by the bowl, coffee by the cup!",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Ask for two bowls of noodles and one box of snack:",
+        parts: [fixed(t(a1.please)), fixed(t(a1.noodles)), fixed(t(a1.two)), blank(t(hf.clfBowl)), fixed(t(a1.snack)), fixed(t(a1.one)), blank(t(hf.clfBox)), fixed(POLITE)],
+        extra: [t(hf.clfPiece), t(hf.clfBook), t(hf.clfPair)],
+        roman: "khǎaw gǔai-dtǐiao sǎawng chaam · khà-nǒm nùeng glàawng {polite}",
+        en: "Two bowls of noodles and one box of snack, please.",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf.firstAdj), t(a1.one), t(hf.clfPiece), t(hf.everyAdj), { kind: "w", word: a1.snack }, { kind: "w", word: a1.kha }],
+          roman: "râaek · nùeng chín thúk khà-nǒm khâ",
+          en: "You're first — every snack piece is fresh out!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Add two cups of coffee and say thank you:",
+        answer: [t(a1.please), t(a1.coffee), t(a1.two), t(hf.clfCup), t(a1.thanks), POLITE],
+        extra: [t(hf.clfVehicle), t(hf.million)],
+        roman: "khǎaw gaa-fae sǎawng thûai · khàawp-khun {polite}",
+        en: "Two cups of coffee please — thank you!",
+      },
+    ],
+  },
+  {
+    id: "talk-a1-time-3",
+    unitId: "time",
+    level: "A1",
+    title: "Months, Weekend Plans & Songkran Timing",
+    setting: "Planning trips in April, May, and December and checking your weekend.",
+    npcName: "Pim",
+    npcRole: "Friend",
+    npcSpeaker: "f",
+    words: [hf.april, hf.may, hf.december, hf.weekend, hf.inMorning, hf.lastNight, hf.rightNow, a1.holiday, a1.go, a1.study, a1.thailand],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf.april), t(hf.may), t(a1.holiday), t(a1.thailand), { kind: "w", word: a1.kha }],
+          roman: "mee-sǎa-yon phrúet-sà-phaa-khom wan-yùt bprà-thêet-thai khâ",
+          en: "April and May bring holidays in Thailand!",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Say you studied last night and want to go out this weekend:",
+        parts: [fixed(SELF), fixed(t(a1.study)), blank(t(hf.lastNight)), fixed(t(hf.weekend)), blank(t(a1.go)), fixed(t(a1.thailand)), fixed(POLITE)],
+        extra: [t(hf.rightNow), t(hf.december), t(hf.lateNight)],
+        roman: "{self} riian mûea-khuuen · sǎo-aa-thít bpai bprà-thêet-thai {polite}",
+        en: "I studied last night — this weekend I'm heading out!",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf.inMorning), t(hf.rightNow), t(a1.study), { kind: "w", word: a1.khaQ }],
+          roman: "dtaawn-cháao dǐiao-níi riian khá",
+          en: "Are you studying this morning right now?",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Reply: “Wait until December — it's a holiday!”",
+        answer: [t(hf.december), t(a1.holiday), t(hf.weekend), POLITE],
+        extra: [t(hf.april), t(hf.justAgo)],
+        roman: "than-waa-khom wan-yùt sǎo-aa-thít {polite}",
+        en: "December has great weekend holidays!",
+      },
+    ],
+  },
+  {
+    id: "talk-a1-home-3",
+    unitId: "home-things",
+    level: "A1",
+    title: "Sofa, Bath Kit, Stationery & Pets",
+    setting: "Unpacking bath supplies and meeting your roommate's dog and cat at home.",
+    npcName: "Boss",
+    npcRole: "Roommate",
+    npcSpeaker: "m",
+    words: [hf.sofa, hf.towel, hf.soap, hf.toothbrush, hf.notebook, hf.pencil, hf.dog, hf.cat, a1.located, a1.bag, a1.table, a1.bathroom, a1.where, a1.hasHave, a1.two, a1.clfBody],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf.towel), t(hf.soap), t(hf.toothbrush), t(a1.located), t(a1.bathroom), { kind: "w", word: a1.khrap }],
+          roman: "phâa-chét-dtua sà-bùu bpraaeng-sǐi-fan yùu hông-náam khráp",
+          en: "The towel, soap, and toothbrush are in the bathroom.",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Ask where your notebook and pencil are located:",
+        parts: [blank(t(hf.notebook)), blank(t(hf.pencil)), fixed(t(a1.located)), fixed(t(a1.where)), fixed(POLITE_Q)],
+        extra: [t(hf.towel), t(hf.sofa), t(hf.pillow)],
+        roman: "sà-mùt din-sǎaw yùu thîi-nǎi {politeQ}",
+        en: "Where are my notebook and pencil?",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.located), t(a1.table), t(hf.sofa), t(a1.hasHave), t(hf.dog), t(hf.cat), t(a1.two), t(a1.clfBody), { kind: "w", word: a1.khrap }],
+          roman: "yùu dtó soo-faa · mii mǎa maaeo sǎawng dtua khráp",
+          en: "On the table by the sofa — and we have a dog and a cat, two pets!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Reply: “The notebook is on the sofa!”",
+        answer: [t(hf.notebook), t(a1.located), t(hf.sofa), POLITE],
+        extra: [t(hf.mirror), t(hf.bird)],
+        roman: "sà-mùt yùu soo-faa {polite}",
+        en: "The notebook is on the sofa!",
+      },
+    ],
+  },
+  {
+    id: "talk-a1-health-3",
+    unitId: "body-health",
+    level: "A1",
+    title: "Throat, Shoulders, Thirst & the Dentist",
+    setting: "Checking in after a long walk when you feel thirsty, sleepy, and need a mask.",
+    npcName: "Dr. Ek",
+    npcRole: "Dentist / Doctor",
+    npcSpeaker: "m",
+    words: [hf.neckThroat, hf.shoulder, hf.leg, hf.thirsty, hf.sleepyFeeling, hf.faceMask, hf.dentist, a1.ache, a1.want, a1.water, a1.sleep, a1.go, a1.please, a1.today],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.today), t(a1.ache), t(hf.neckThroat), t(hf.shoulder), t(hf.leg), { kind: "w", word: a1.khrap }],
+          roman: "wan-níi bpùat khaaw lài khǎa khráp",
+          en: "Do your neck, shoulders, or legs ache today?",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Say you're thirsty for water and feeling sleepy:",
+        parts: [fixed(SELF), blank(t(hf.thirsty)), fixed(t(a1.water)), blank(t(hf.sleepyFeeling)), fixed(t(a1.want)), fixed(t(a1.sleep)), fixed(POLITE)],
+        extra: [t(hf.neckThroat), t(hf.dentist), t(hf.warm)],
+        roman: "{self} hǐu-náam náam · ngûang-naawn yàak naawn {polite}",
+        en: "I'm thirsty for water and sleepy — I want to rest!",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf.faceMask), t(a1.go), t(hf.dentist), { kind: "w", word: a1.khrap }],
+          roman: "nâa-gàak · bpai mǎaw-fan khráp",
+          en: "Put on a face mask if you head to the dentist!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Ask politely for a face mask:",
+        answer: [t(a1.please), t(hf.faceMask), POLITE],
+        extra: [t(hf.brain), t(hf.skin)],
+        roman: "khǎaw nâa-gàak {polite}",
+        en: "May I have a face mask, please?",
+      },
+    ],
+  },
+  {
+    id: "talk-a1-adjectives-3",
+    unitId: "adjectives-a1",
+    level: "A1",
+    title: "Bright Room, Tall Teacher & Correct Notes",
+    setting: "Describing your classroom and checking which answers are right or wrong.",
+    npcName: "Fah",
+    npcRole: "Classmate",
+    npcSpeaker: "f",
+    words: [hf.skilled, hf.correctAdj, hf.wrongAdj, hf.important, hf.brightAdj, hf.darkAdj, hf.tallHigh, a1.good, a1.many, a1.teacher, a1.study, a1.room, a1.yes, a1.no],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.room), t(a1.study), t(hf.brightAdj), t(a1.no), t(hf.darkAdj), { kind: "w", word: a1.kha }],
+          roman: "hâawng riian sà-wàang mâi mûuet khâ",
+          en: "The study room is bright, not dark!",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Say our tall teacher is very skilled:",
+        parts: [fixed(t(a1.teacher)), blank(t(hf.tallHigh)), blank(t(hf.skilled)), fixed(t(a1.many)), fixed(POLITE)],
+        extra: [t(hf.shortHeight), t(hf.darkAdj), t(hf.badTerrible)],
+        roman: "khruu sǔung gèng mâak {polite}",
+        en: "Our tall teacher is very skilled!",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf.important), t(hf.correctAdj), t(a1.good), { kind: "w", word: a1.kha }],
+          roman: "sǎm-khan · thùuk-dtâawng dii khâ",
+          en: "It's important to get it right!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Say: “Yes — correct, not wrong!”",
+        answer: [t(a1.yes), t(hf.correctAdj), t(a1.no), t(hf.wrongAdj), POLITE],
+        extra: [t(hf.lonely), t(hf.fullCup)],
+        roman: "châi · thùuk-dtâawng mâi phìt {polite}",
+        en: "Yes — correct, not wrong!",
       },
     ],
   },

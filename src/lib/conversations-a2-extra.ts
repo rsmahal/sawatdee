@@ -24,7 +24,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "P'Noi",
     npcRole: "Vendor",
     npcSpeaker: "f",
-    words: [a2.somtam, a2.grill, a2.pork, a2.shrimp, a2.special, a2.regular, a2.takeaway, a2.spoon],
+    words: [a2.somtam, a2.grill, a2.pork, a2.shrimp, a2.special, a2.regular, a2.takeaway, a2.spoon, a1.orW, a1.please, a2.chicken, a1.alsoW, a1.yes, a1.andW, a2.fork],
     turns: [
       {
         kind: "line",
@@ -71,7 +71,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "Nok",
     npcRole: "Airline Staff",
     npcSpeaker: "f",
-    words: [a2.airport, a2.flight, a2.gate, a2.seat, a2.ticket, a2.suitcase, a2.late, a2.far],
+    words: [a2.airport, a2.flight, a2.gate, a2.seat, a2.ticket, a2.suitcase, a2.late, a2.far, a1.please, a1.andW, a2.passport, a1.which, a1.no, a2.crossRoad, a2.exitW, a1.thanks, a1.want],
     turns: [
       {
         kind: "line",
@@ -118,7 +118,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "P'Win",
     npcRole: "Friend",
     npcSpeaker: "m",
-    words: [a2.nameW, a2.comeFrom, a2.reside, a2.pronounce, a2.translate, a2.meaning, a2.askPermission, a2.ofCourse],
+    words: [a2.nameW, a2.comeFrom, a2.reside, a2.pronounce, a2.translate, a2.meaning, a2.askPermission, a2.ofCourse, a1.you, a1.country, a1.what, a1.thisOne, a1.how, a1.iM, a1.help, a1.bangkok, a1.want, a1.know],
     turns: [
       {
         kind: "line",
@@ -165,7 +165,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "Fah",
     npcRole: "Friend",
     npcSpeaker: "f",
-    words: [a2.storm, a2.cloud, a2.sky, a2.moon, a2.star, a2.sun, a2.forest, a2.tired],
+    words: [a2.storm, a2.cloud, a2.sky, a2.moon, a2.star, a2.sun, a2.forest, a2.tired, a1.afternoon, a1.already, a1.now, a1.pretty, a1.no, a1.andW, a1.walk, a1.today, a2.aLittle, a1.butW, a2.fun],
     turns: [
       {
         kind: "line",
@@ -212,7 +212,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "Arm",
     npcRole: "Coworker",
     npcSpeaker: "m",
-    words: [a2.different, a2.similar, a2.quite, a2.although, a2.always, a2.neverW, a2.sometimes, a2.maybe],
+    words: [a2.different, a2.similar, a2.quite, a2.although, a2.always, a2.neverW, a2.sometimes, a2.maybe, a1.morning, a1.andW, a1.evening, a1.good, a2.late, a1.you, a1.come, a1.go, a1.market, a1.night],
     turns: [
       {
         kind: "line",
@@ -259,7 +259,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "Khun Boss",
     npcRole: "Manager",
     npcSpeaker: "m",
-    words: [a2.boss, a2.project, a2.document, a2.deadline, a2.download, a2.callPhone, a2.answerCall, a2.saveRecord],
+    words: [a2.boss, a2.project, a2.document, a2.deadline, a2.download, a2.callPhone, a2.answerCall, a2.saveRecord, a1.today, a1.already, a1.willW, a2.sendW, a2.email, a1.ifW, a2.meeting, a1.iM, a1.andW],
     turns: [
       {
         kind: "line",
@@ -306,7 +306,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "P'Bua",
     npcRole: "Landlord",
     npcSpeaker: "f",
-    words: [a2.rent, a2.rentFee, a2.apartment, a2.washer, a2.doLaundry, a2.mall, a2.convenienceStore, a2.parking],
+    words: [a2.rent, a2.rentFee, a2.apartment, a2.washer, a2.doLaundry, a2.mall, a2.convenienceStore, a2.parking, a1.thisOne, a2.clean, a1.andW, a2.near, a1.howMuch, a1.located, a1.where, a2.corner, a2.stairs, a1.ifW, a1.can],
     turns: [
       {
         kind: "line",
@@ -353,7 +353,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "P'Som",
     npcRole: "Market Seller",
     npcSpeaker: "f",
-    words: [a2.atm, a2.withdraw, a2.banknote, a2.giveChange, a2.bargain, a2.freeBonus, a2.warranty, a2.choose],
+    words: [a2.atm, a2.withdraw, a2.banknote, a2.giveChange, a2.bargain, a2.freeBonus, a2.warranty, a2.choose, a1.what, a1.can, a1.willW, a1.money, a1.buy, a1.two, a1.one, a1.pay, a1.please],
     turns: [
       {
         kind: "line",
@@ -401,7 +401,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "Officer Dan",
     npcRole: "Tourist Police",
     npcSpeaker: "m",
-    words: [a2.police, a2.missing, a2.dizzy, a2.painkiller, a2.urgent, a2.seeDoctor, a2.safe, a2.restStay],
+    words: [a2.police, a2.missing, a2.dizzy, a2.painkiller, a2.urgent, a2.seeDoctor, a2.safe, a2.restStay, a1.hello, a1.help, a1.what, a1.bag, a1.andW, a1.before, a2.here, a1.thanks, a1.willW, a1.please],
     turns: [
       {
         kind: "line",
@@ -448,7 +448,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "P'Ploy",
     npcRole: "Neighbor",
     npcSpeaker: "f",
-    words: [a2.neighbor, a2.partner, a2.introduce, a2.polite, a2.cute, a2.hardworking, a2.quiet, a2.impressed],
+    words: [a2.neighbor, a2.partner, a2.introduce, a2.polite, a2.cute, a2.hardworking, a2.quiet, a2.impressed, a1.hello, a1.newW, a1.andW, a1.good, a1.want, a2.meetUp, a1.withW, a1.you],
     turns: [
       {
         kind: "line",
@@ -495,7 +495,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "Natt",
     npcRole: "Friend",
     npcSpeaker: "m",
-    words: [a2.concert, a2.exhibition, a2.showEvent, a2.news, a2.intend, a2.succeed, a2.holdCarry, a2.placePut],
+    words: [a2.concert, a2.exhibition, a2.showEvent, a2.news, a2.intend, a2.succeed, a2.holdCarry, a2.placePut, a1.saturday, a1.thisOne, a1.andW, a1.watch, a1.already, a1.go, a1.iM, a2.ticket, a1.inW, a1.bag],
     turns: [
       {
         kind: "line",
@@ -542,7 +542,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "P'June",
     npcRole: "Mentor",
     npcSpeaker: "f",
-    words: [a2.past, a2.future, a2.summary, a2.reason, a2.truth, a2.immediately, a2.example],
+    words: [a2.past, a2.future, a2.summary, a2.reason, a2.truth, a2.immediately, a2.example, a1.you, a2.speak, a2.thaiLang, a2.aLittle, a1.study, a1.everyDay, a1.willW, a1.doMake, a1.what],
     turns: [
       {
         kind: "line",
@@ -589,7 +589,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "P'Ploy",
     npcRole: "Server",
     npcSpeaker: "f",
-    words: [hf2.kaphrao, hf2.greenCurry, hf2.coconutMilk, hf2.steamedRice, hf2.thaiIcedTea, hf2.crispy, hf2.seafood],
+    words: [hf2.kaphrao, hf2.greenCurry, hf2.coconutMilk, hf2.steamedRice, hf2.thaiIcedTea, hf2.crispy, hf2.seafood, a1.today, a1.hasHave, a1.andW, a1.please, a2.chicken, a1.orW, hf2.icedCoffee, a2.lessSweet],
     turns: [
       {
         kind: "line",
@@ -636,7 +636,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "Win",
     npcRole: "Friend",
     npcSpeaker: "m",
-    words: [hf2.travelGo, hf2.trafficJam, hf2.skytrainStation, hf2.pier, hf2.tuktuk, hf2.fare, hf2.passenger],
+    words: [hf2.travelGo, hf2.trafficJam, hf2.skytrainStation, hf2.pier, hf2.tuktuk, hf2.fare, hf2.passenger, a1.now, a1.many, a1.want, a1.go, a1.orW, a2.near, a1.howMuch],
     turns: [
       {
         kind: "line",
@@ -683,7 +683,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "P'June",
     npcRole: "Tutor",
     npcSpeaker: "f",
-    words: [hf2.wordTerm, hf2.sentence, hf2.questionNoun, hf2.answerNoun, hf2.explain, hf2.narrate, hf2.clearAdj],
+    words: [hf2.wordTerm, hf2.sentence, hf2.questionNoun, hf2.answerNoun, hf2.explain, hf2.narrate, hf2.clearAdj, a1.you, a1.hasHave, a1.maiQ, a1.help, a1.thisDet, a2.gladly, a1.iF, a1.willW, a1.thanks, a2.understand, a1.already],
     turns: [
       {
         kind: "line",
@@ -730,7 +730,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "P'Beam",
     npcRole: "Supervisor",
     npcSpeaker: "m",
-    words: [hf2.team, hf2.supervisor, hf2.dataInfo, hf2.fileDoc, hf2.verifyCheck, hf2.uploadV, hf2.online],
+    words: [hf2.team, hf2.supervisor, hf2.dataInfo, hf2.fileDoc, hf2.verifyCheck, hf2.uploadV, hf2.online, a1.mustW, a1.already, a1.willW, a1.good, a1.many, a1.work, a1.fast],
     turns: [
       {
         kind: "line",
@@ -753,9 +753,9 @@ export const a2ExtraConversations: Conversation[] = [
         kind: "line",
         line: {
           speaker: "npc",
-          tokens: [t(hf2.supervisor), t(a2.agreeOpinion), t(hf2.dataInfo), t(a1.good), { kind: "w", word: a1.khrap }],
-          roman: "hǔa-nâa hěn-dûai · khâaw-muun dii khráp",
-          en: "Our supervisor agrees — the data looks great!",
+          tokens: [t(hf2.supervisor), t(hf2.dataInfo), t(a1.good), t(a1.many), { kind: "w", word: a1.khrap }],
+          roman: "hǔa-nâa · khâaw-muun dii mâak khráp",
+          en: "Our supervisor says the data is very good!",
         },
       },
       {
@@ -777,7 +777,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "Nong Mint",
     npcRole: "Cashier",
     npcSpeaker: "f",
-    words: [hf2.promo, hf2.discountAmt, hf2.coupon, hf2.member, hf2.quality, hf2.mobileBanking, hf2.transferSlip],
+    words: [hf2.promo, hf2.discountAmt, hf2.coupon, hf2.member, hf2.quality, hf2.mobileBanking, hf2.transferSlip, a1.today, a1.hasHave, a1.pay, a1.can, a1.please, a2.sendW, a1.already, a1.good],
     turns: [
       {
         kind: "line",
@@ -824,7 +824,7 @@ export const a2ExtraConversations: Conversation[] = [
     npcName: "P'Dao",
     npcRole: "Friend",
     npcSpeaker: "f",
-    words: [hf2.goalTarget, hf2.planNoun, hf2.opportunity, hf2.ideaLoan, hf2.success, hf2.resultOutcome, hf2.interesting],
+    words: [hf2.goalTarget, hf2.planNoun, hf2.opportunity, hf2.ideaLoan, hf2.success, hf2.resultOutcome, hf2.interesting, hf2.worthwhile, a1.you, a1.hasHave, a1.orW, a1.what, a1.andW, a1.want, a1.newW, a1.many, a1.thanks, a1.good],
     turns: [
       {
         kind: "line",
@@ -859,6 +859,288 @@ export const a2ExtraConversations: Conversation[] = [
         extra: [t(hf2.mistake), t(hf2.impossible)],
         roman: "khàawp-khun · phǒn-láp khúm-khâa láe dii {polite}",
         en: "Thank you — the result is worthwhile and great!",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-out-3",
+    unitId: "out",
+    level: "A2",
+    title: "Forecast, Nature Park & Mosquitoes",
+    setting: "Checking the temperature forecast before heading out to a nature park.",
+    npcName: "Win",
+    npcRole: "Guide",
+    npcSpeaker: "m",
+    words: [hf2.forecast, hf2.temperature, hf2.degree, hf2.coolPleasant, hf2.nature, hf2.elephant, hf2.mosquito, a1.today, a1.hasHave, a1.andW, a2.like, a1.want, a1.no, a1.many],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf2.forecast), t(a1.today), t(hf2.temperature), t(hf2.coolPleasant), { kind: "w", word: a1.khrap }],
+          roman: "phá-yaa-gaawn-aa-gàat wan-níi un-hà-phuum yen-sà-baai khráp",
+          en: "Today's forecast shows a cool, pleasant temperature!",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Say you like nature and want to see elephants:",
+        parts: [fixed(SELF), blank(t(a2.like)), fixed(t(hf2.nature)), fixed(t(a1.andW)), fixed(t(a1.want)), blank(t(hf2.elephant)), fixed(POLITE)],
+        extra: [t(hf2.flood), t(hf2.dust), t(hf2.fog)],
+        roman: "{self} châawp tham-má-châat láe yàak cháang {polite}",
+        en: "I love nature and want to see elephants!",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.today), t(hf2.coolPleasant), t(hf2.mosquito), t(a1.no), t(a1.many), { kind: "w", word: a1.khrap }],
+          roman: "wan-níi yen-sà-baai · yung mâi mâak khráp",
+          en: "It's breezy today so there aren't many mosquitoes!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Say the temperature feels cool and comfortable:",
+        answer: [t(hf2.temperature), t(hf2.degree), t(hf2.coolPleasant), POLITE],
+        extra: [t(hf2.humid), t(hf2.earthquake)],
+        roman: "un-hà-phuum ong-sǎa yen-sà-baai {polite}",
+        en: "The temperature degree is cool and pleasant!",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-compare-3",
+    unitId: "a2-compare",
+    level: "A2",
+    title: "Checking Costs, Probability & Decisions",
+    setting: "Comparing cafe budgets and deciding how to solve a planning issue together.",
+    npcName: "P'Bua",
+    npcRole: "Colleague",
+    npcSpeaker: "f",
+    words: [hf2.oughtTo, hf2.approximately, hf2.atLeast, hf2.theMost, hf2.especially, hf2.verifyCheck, hf2.decide, a1.tomorrow, a1.we, a1.mustW, a1.before, a1.go, a1.thisOne, a1.good],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.thisOne), t(hf2.especially), t(a1.good), t(hf2.theMost), { kind: "w", word: a1.kha }],
+          roman: "an-níi dooi-chà-pháw dii thîi-sùt khâ",
+          en: "This option especially looks the very best!",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Say we should check the details before deciding:",
+        parts: [fixed(t(a1.we)), blank(t(a1.mustW)), fixed(t(hf2.verifyCheck)), fixed(t(a1.before)), blank(t(hf2.decide)), fixed(POLITE)],
+        extra: [t(hf2.atMost), t(hf2.reduce), t(hf2.dueTo)],
+        roman: "rao dtâawng dtrùat-sàawp gàawn dtàt-sǐn-jai {polite}",
+        en: "We should inspect everything before deciding.",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.tomorrow), t(hf2.oughtTo), t(a1.go), t(hf2.approximately), t(hf2.atLeast), { kind: "w", word: a1.kha }],
+          roman: "phrûng-níi nâa-jà bpai bprà-maan yàang-náawy khâ",
+          en: "Tomorrow ought to work — approximately early at least.",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Reply: “Yes, let's inspect and decide tomorrow!”",
+        answer: [t(hf2.verifyCheck), t(hf2.decide), t(a1.tomorrow), POLITE],
+        extra: [t(hf2.especially), t(hf2.majority)],
+        roman: "dtrùat-sàawp dtàt-sǐn-jai phrûng-níi {polite}",
+        en: "Let's check and decide tomorrow!",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-errands-3",
+    unitId: "a2-home-errands",
+    level: "A2",
+    title: "Lease Contract, Bills, Spare Key & Laundry",
+    setting: "Sorting out your condo paperwork, spare key, and laundry errand.",
+    npcName: "P'Ann",
+    npcRole: "Landlord",
+    npcSpeaker: "f",
+    words: [hf2.landlord, hf2.leaseContract, hf2.utilitiesBill, hf2.spareKey, hf2.buildingMgmt, hf2.laundryShop, hf2.haircut, a1.please, a1.hasHave, a1.located, a1.where, a1.tomorrow, a1.go],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf2.landlord), t(a1.hasHave), t(hf2.leaseContract), t(hf2.utilitiesBill), { kind: "w", word: a1.kha }],
+          roman: "jâo-khǎawng-bâan mii sǎn-yaa-châo khâa-náam-khâa-fai khâ",
+          en: "Here are the landlord's lease contract and utility bills.",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Ask politely for a spare key and ask where the juristic office is:",
+        parts: [fixed(t(a1.please)), blank(t(hf2.spareKey)), fixed(t(hf2.buildingMgmt)), blank(t(a1.located)), fixed(t(a1.where)), fixed(POLITE_Q)],
+        extra: [t(hf2.tenant), t(hf2.microwave), t(hf2.broom)],
+        roman: "khǎaw gun-jae-sǎam-raawng · ní-dtì-bùk-khon yùu thîi-nǎi {politeQ}",
+        en: "May I have a spare key — and where is the juristic office?",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf2.buildingMgmt), t(a1.hasHave), t(hf2.spareKey), { kind: "w", word: a1.kha }],
+          roman: "ní-dtì-bùk-khon mii gun-jae-sǎam-raawng khâ",
+          en: "The juristic office holds the spare key!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Say tomorrow you're going to the laundry shop and for a haircut:",
+        answer: [t(a1.tomorrow), SELF, t(a1.go), t(hf2.laundryShop), t(hf2.haircut), POLITE],
+        extra: [t(hf2.carWash), t(hf2.gasStove)],
+        roman: "phrûng-níi {self} bpai sák-rîit dtàt-phǒm {polite}",
+        en: "Tomorrow I'm going to the laundry shop and for a haircut.",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-health-3",
+    unitId: "a2-health-safety",
+    level: "A2",
+    title: "Clinic Checkup, Vitamins & Fire Exit",
+    setting: "Reviewing test results at a neighborhood clinic and noting safety signs.",
+    npcName: "P'Gai",
+    npcRole: "Nurse",
+    npcSpeaker: "f",
+    words: [hf2.clinic, hf2.xray, hf2.testResult, hf2.vitamin, hf2.selfCare, hf2.washHands, hf2.fireExit, a1.good, a1.eat, a1.located, a1.where, a1.mustW, a1.everyDay],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf2.clinic), t(hf2.xray), t(hf2.testResult), t(a1.good), { kind: "w", word: a1.kha }],
+          roman: "khlii-nìk · ék-sà-ree phǒn-dtrùat dii khâ",
+          en: "Your clinic X-ray and test results look good!",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Say you take vitamins and wash your hands every day for self-care:",
+        parts: [fixed(SELF), fixed(t(a1.eat)), blank(t(hf2.vitamin)), fixed(t(hf2.washHands)), blank(t(hf2.selfCare)), fixed(t(a1.everyDay)), fixed(POLITE)],
+        extra: [t(hf2.surgery), t(hf2.toothache), t(hf2.alarm)],
+        roman: "{self} gin wí-dtaa-min láang-muue duu-laae-dtua-eeng thúk-wan {polite}",
+        en: "I take vitamins and wash my hands for daily self-care.",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.mustW), t(hf2.selfCare), t(hf2.washHands), { kind: "w", word: a1.kha }],
+          roman: "dtâawng duu-laae-dtua-eeng láang-muue khâ",
+          en: "Keep up the self-care and hand-washing!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Ask where the fire exit is located:",
+        answer: [t(hf2.fireExit), t(a1.located), t(a1.where), POLITE_Q],
+        extra: [t(hf2.ambulance), t(hf2.extinguisher)],
+        roman: "thaang-nǐi-fai yùu thîi-nǎi {politeQ}",
+        en: "Where is the fire exit?",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-personality-3",
+    unitId: "a2-personality",
+    level: "A2",
+    title: "Staying Calm, Sincere & Missing Friends",
+    setting: "Checking in on a stressed friend over coffee and encouraging them to relax.",
+    npcName: "Nong Mint",
+    npcRole: "Friend",
+    npcSpeaker: "f",
+    words: [hf2.calmHeart, hf2.stressed, hf2.relaxed, hf2.missSomeone, hf2.takeCareOf, hf2.sincere, hf2.forgive, a1.today, a1.no, a1.want, a1.mustW, a1.friend, a1.we],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.today), t(hf2.stressed), t(hf2.missSomeone), t(a1.friend), { kind: "w", word: a1.kha }],
+          roman: "wan-níi khrîiat · khít-thǔeng phûean khâ",
+          en: "Today I'm stressed and missing our friends.",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Tell Mint to stay calm and take care of herself:",
+        parts: [blank(t(hf2.calmHeart)), fixed(t(a1.no)), fixed(t(a1.mustW)), fixed(t(hf2.stressed)), blank(t(hf2.takeCareOf)), fixed(t(hf2.relaxed)), fixed(POLITE)],
+        extra: [t(hf2.impatient), t(hf2.argue), t(hf2.selfish)],
+        roman: "jai-yen mâi dtâawng khrîiat · duu-laae phàawn-khlaai {polite}",
+        en: "Stay calm, don't stress — take care and relax!",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.we), t(hf2.sincere), t(hf2.forgive), { kind: "w", word: a1.kha }],
+          roman: "rao jing-jai hâi-à-phai khâ",
+          en: "We're always sincere and quick to forgive.",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Reply: “I miss our friends too — relax!”",
+        answer: [SELF, t(hf2.missSomeone), t(a1.friend), t(hf2.relaxed), POLITE],
+        extra: [t(hf2.jealous), t(hf2.shy)],
+        roman: "{self} khít-thǔeng phûean · phàawn-khlaai {polite}",
+        en: "I miss our friends — take it easy and relax!",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-culture-3",
+    unitId: "a2-actions-media",
+    level: "A2",
+    title: "Thai Exam, Social Media & Etiquette",
+    setting: "Talking about passing your Thai exam, cultural etiquette, and online study.",
+    npcName: "P'Keng",
+    npcRole: "Tutor",
+    npcSpeaker: "m",
+    words: [hf2.examTest, hf2.passV, hf2.homework, hf2.socialMedia, hf2.culture, hf2.waiGreeting, hf2.removeShoes, a1.study, a1.mustW, a1.good, a1.temple, a1.already, a1.andW],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf2.homework), t(hf2.examTest), t(hf2.passV), t(a1.already), { kind: "w", word: a1.khrap }],
+          roman: "gaan-bâan sàawp phàan láaeo khráp",
+          en: "You finished your homework and passed the exam!",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Say you studied Thai culture and social media:",
+        parts: [fixed(SELF), fixed(t(a1.study)), blank(t(hf2.culture)), fixed(t(a1.andW)), blank(t(hf2.socialMedia)), fixed(POLITE)],
+        extra: [t(hf2.failV), t(hf2.scoreGrade), t(hf2.hide)],
+        roman: "{self} riian wát-thá-ná-tham láe soo-chîiao-mii-dìia {polite}",
+        en: "I studied culture and social media!",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.temple), t(a1.mustW), t(hf2.waiGreeting), t(hf2.removeShoes), { kind: "w", word: a1.khrap }],
+          roman: "wát dtâawng wâai · thàawt-raawng-tháo khráp",
+          en: "At a temple, remember to wai and take off your shoes!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Reply: “Yes, I do the wai greeting and take off shoes at the temple!”",
+        answer: [SELF, t(hf2.waiGreeting), t(a1.andW), t(hf2.removeShoes), t(a1.temple), POLITE],
+        extra: [t(hf2.throwV), t(hf2.monk)],
+        roman: "{self} wâai láe thàawt-raawng-tháo wát {polite}",
+        en: "I wai and take off my shoes at the temple!",
       },
     ],
   },

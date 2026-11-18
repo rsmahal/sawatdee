@@ -275,7 +275,23 @@ export const useProgress = create<Data & Actions>()(
     }),
     {
       name: "sawatdee-v1",
+      version: 2,
       skipHydration: true,
+      migrate: (persistedState) => {
+        const saved = (persistedState ?? {}) as Partial<Data>;
+        return {
+          theme: saved.theme === "dark" ? ("dark" as const) : ("light" as const),
+          scriptStyle: saved.scriptStyle === "traditional" ? ("traditional" as const) : ("modern" as const),
+          speechMethod:
+            saved.speechMethod === "google" || saved.speechMethod === "browser"
+              ? saved.speechMethod
+              : ("auto" as const),
+          reviewLimit:
+            "reviewLimit" in saved ? normalizeReviewLimit(saved.reviewLimit) : DEFAULT_REVIEW_LIMIT,
+          pathLevel: null,
+          collapsedUnits: {} as Record<string, boolean>,
+        };
+      },
       merge: (persisted, current) => {
         const saved = (persisted ?? {}) as Partial<Data>;
         const collapsedUnits: Record<string, boolean> = {};

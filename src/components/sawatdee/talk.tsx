@@ -105,7 +105,7 @@ export function Talk({
         <div className="mt-8 rounded-3xl border border-line bg-sheet p-6 text-center">
           <p className="text-lg font-extrabold">No unlocked conversations yet</p>
           <p className="mt-1 text-sm text-pretty text-muted">
-            Finish Unit 1 lessons (Hello, Thanks, Yes & no) on the Learn path to unlock your first conversation.
+            Finish the opening Unit 1 lessons (Greetings &amp; Goodbyes, Thanks, Sorry &amp; Courtesy, Yes, No &amp; Ability) on the Learn path to unlock your first conversation.
           </p>
           <button
             type="button"
