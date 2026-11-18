@@ -1,9 +1,11 @@
 import { a1Vocab } from "./curriculum-a1";
 import { a2Vocab } from "./curriculum-a2";
+import { a2HfVocab } from "./curriculum-a2-hf";
 import type { Conversation, ConversationBlankPart, Tok, Word } from "./curriculum-types";
 
 const a1 = a1Vocab;
 const a2 = a2Vocab;
+const hf2 = a2HfVocab;
 
 const t = (word: Word): Tok => ({ kind: "w", word });
 const fixed = (token: Tok): ConversationBlankPart => ({ kind: "fixed", token });
@@ -575,6 +577,288 @@ export const a2ExtraConversations: Conversation[] = [
         extra: [t(a2.past), t(a2.solution)],
         roman: "à-naa-khót {self} jà phûut phaa-sǎa-thai than-thii {polite}",
         en: "In the future, I'll speak Thai right away!",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-meal-3",
+    unitId: "meal",
+    level: "A2",
+    title: "Basil Stir-Fry, Green Curry & Thai Iced Tea",
+    setting: "Ordering classic local favorites at a cozy neighborhood Thai eatery.",
+    npcName: "P'Ploy",
+    npcRole: "Server",
+    npcSpeaker: "f",
+    words: [hf2.kaphrao, hf2.greenCurry, hf2.coconutMilk, hf2.steamedRice, hf2.thaiIcedTea, hf2.crispy, hf2.seafood],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.today), t(a1.hasHave), t(hf2.greenCurry), t(hf2.coconutMilk), t(a1.andW), t(hf2.seafood), { kind: "w", word: a1.kha }],
+          roman: "wan-níi mii gaaeng-khǐiao-wǎan gà-thí láe aa-hǎan-thá-lee khâ",
+          en: "Today we have creamy coconut green curry and fresh seafood!",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Order crispy holy-basil chicken and steamed white rice:",
+        parts: [fixed(t(a1.please)), blank(t(hf2.kaphrao)), fixed(t(a2.chicken)), blank(t(hf2.crispy)), fixed(t(a1.andW)), fixed(t(hf2.steamedRice)), fixed(POLITE)],
+        extra: [t(hf2.greenCurry), t(hf2.bitter), t(hf2.noodleShop)],
+        roman: "khǎaw gà-phrao gài gràawp láe khâao-sǔai {polite}",
+        en: "Crispy basil chicken with steamed rice, please.",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf2.thaiIcedTea), t(a1.orW), t(hf2.icedCoffee), { kind: "w", word: a1.khaQ }],
+          roman: "chaa-yen rǔue gaa-fae-yen khá",
+          en: "Would you like Thai iced tea or iced coffee?",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Order green curry and less-sweet Thai iced tea:",
+        answer: [t(a1.please), t(hf2.greenCurry), t(hf2.thaiIcedTea), t(a2.lessSweet), POLITE],
+        extra: [t(hf2.icedCoffee), t(hf2.larb)],
+        roman: "khǎaw gaaeng-khǐiao-wǎan chaa-yen wǎan-náawy {polite}",
+        en: "Green curry and less-sweet Thai iced tea, please.",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-going-3",
+    unitId: "going",
+    level: "A2",
+    title: "Skipping Traffic via the Skytrain & Boat Pier",
+    setting: "Finding the quickest route across Bangkok during rush hour.",
+    npcName: "Win",
+    npcRole: "Friend",
+    npcSpeaker: "m",
+    words: [hf2.travelGo, hf2.trafficJam, hf2.skytrainStation, hf2.pier, hf2.tuktuk, hf2.fare, hf2.passenger],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.now), t(hf2.trafficJam), t(a1.many), { kind: "w", word: a1.khrap }],
+          roman: "dtaawn-níi rót-dtìt mâak khráp",
+          en: "Right now traffic is really jammed!",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Say you want to travel to the Skytrain station or boat pier instead:",
+        parts: [fixed(SELF), fixed(t(a1.want)), blank(t(hf2.travelGo)), fixed(t(a1.go)), blank(t(hf2.skytrainStation)), fixed(t(a1.orW)), fixed(t(hf2.pier)), fixed(POLITE)],
+        extra: [t(hf2.tuktuk), t(hf2.expressway), t(hf2.trafficLight)],
+        roman: "{self} yàak doen-thaang bpai sà-thǎa-nii-rót-fai-fáa rǔue thâa-ruea {polite}",
+        en: "I want to travel via the Skytrain station or boat pier.",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf2.skytrainStation), t(a2.near), t(hf2.pier), t(hf2.passenger), { kind: "w", word: a1.many }, { kind: "w", word: a1.khrap }],
+          roman: "sà-thǎa-nii-rót-fai-fáa glâi thâa-ruea · phûu-dooi-sǎan mâak khráp",
+          en: "The Skytrain station is near the pier — lots of passengers though!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Ask how much the fare is:",
+        answer: [t(hf2.fare), t(a1.howMuch), POLITE_Q],
+        extra: [t(hf2.tuktuk), t(hf2.minivan)],
+        roman: "khâa-dooi-sǎan thâo-rài {politeQ}",
+        en: "How much is the fare?",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-talking-3",
+    unitId: "talking",
+    level: "A2",
+    title: "Explaining Sentences & Questions Clearly",
+    setting: "Asking a language partner to explain an everyday Thai expression.",
+    npcName: "P'June",
+    npcRole: "Tutor",
+    npcSpeaker: "f",
+    words: [hf2.wordTerm, hf2.sentence, hf2.questionNoun, hf2.answerNoun, hf2.explain, hf2.narrate, hf2.clearAdj],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.you), t(a1.hasHave), t(hf2.questionNoun), t(a1.maiQ), { kind: "w", word: a1.khaQ }],
+          roman: "khun mii kham-thǎam mǎi khá",
+          en: "Do you have any questions?",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Ask P'June to please explain this sentence clearly:",
+        parts: [fixed(t(a1.help)), blank(t(hf2.explain)), blank(t(hf2.sentence)), fixed(t(a1.thisDet)), fixed(t(hf2.clearAdj)), fixed(POLITE)],
+        extra: [t(hf2.refuse), t(hf2.answerNoun), t(hf2.accent)],
+        roman: "chûai à-thí-baai bprà-yòok níi chát-jeen {polite}",
+        en: "Please explain this sentence clearly.",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a2.gladly), t(a1.iF), t(a1.willW), t(hf2.narrate), t(hf2.answerNoun), { kind: "w", word: a1.kha }],
+          roman: "yin-dii · chǎn jà lâo kham-dtàawp khâ",
+          en: "Gladly! I'll share the answer and story behind it.",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Reply: “Thank you — I understand this word clearly now!”",
+        answer: [t(a1.thanks), SELF, t(a2.understand), t(hf2.wordTerm), t(a1.thisDet), t(hf2.clearAdj), t(a1.already), POLITE],
+        extra: [t(hf2.spokenLang), t(hf2.writtenLang)],
+        roman: "khàawp-khun · {self} khâo-jai kham níi chát-jeen láaeo {polite}",
+        en: "Thank you — I understand this word clearly now!",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-work-tech-3",
+    unitId: "a2-work-tech",
+    level: "A2",
+    title: "Checking Online Files with Your Team",
+    setting: "Coordinating an upload with your team supervisor before an online review.",
+    npcName: "P'Beam",
+    npcRole: "Supervisor",
+    npcSpeaker: "m",
+    words: [hf2.team, hf2.supervisor, hf2.dataInfo, hf2.fileDoc, hf2.verifyCheck, hf2.uploadV, hf2.online],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf2.team), t(a1.mustW), t(hf2.verifyCheck), t(hf2.dataInfo), t(hf2.online), { kind: "w", word: a1.khrap }],
+          roman: "thiim dtâawng dtrùat-sàawp khâaw-muun aawn-lai khráp",
+          en: "The team needs to check the online data.",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Tell your supervisor you already verified the file and will upload it:",
+        parts: [fixed(SELF), blank(t(hf2.verifyCheck)), fixed(t(hf2.fileDoc)), fixed(t(a1.already)), fixed(SELF), fixed(t(a1.willW)), blank(t(hf2.uploadV)), fixed(POLITE)],
+        extra: [t(hf2.deleteV), t(hf2.copyV), t(hf2.system)],
+        roman: "{self} dtrùat-sàawp fai láaeo · {self} jà áp-lòot {polite}",
+        en: "I already checked the file and will upload it.",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf2.supervisor), t(a2.agreeOpinion), t(hf2.dataInfo), t(a1.good), { kind: "w", word: a1.khrap }],
+          roman: "hǔa-nâa hěn-dûai · khâaw-muun dii khráp",
+          en: "Our supervisor agrees — the data looks great!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Say: “Great — the team works online quickly!”",
+        answer: [t(a1.good), t(hf2.team), t(a1.work), t(hf2.online), t(a1.fast), POLITE],
+        extra: [t(hf2.overtime), t(hf2.signal)],
+        roman: "dii · thiim tham-ngaan aawn-lai reo {polite}",
+        en: "Great — the team works online fast!",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-shopping-bank-3",
+    unitId: "a2-shopping-bank",
+    level: "A2",
+    title: "Promotions, Coupons & Online Banking Slips",
+    setting: "Using a member coupon and showing your mobile banking transfer slip at checkout.",
+    npcName: "Nong Mint",
+    npcRole: "Cashier",
+    npcSpeaker: "f",
+    words: [hf2.promo, hf2.discountAmt, hf2.coupon, hf2.member, hf2.quality, hf2.mobileBanking, hf2.transferSlip],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.today), t(a1.hasHave), t(hf2.promo), t(hf2.member), t(hf2.discountAmt), { kind: "w", word: a1.kha }],
+          roman: "wan-níi mii bproo-moo-chân sà-maa-chik sùan-lót khâ",
+          en: "Today we have a member discount promotion!",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Say you have a coupon and ask if you can pay via online banking:",
+        parts: [fixed(SELF), fixed(t(a1.hasHave)), blank(t(hf2.coupon)), fixed(t(a1.pay)), blank(t(hf2.mobileBanking)), fixed(t(a1.can)), fixed(POLITE_Q)],
+        extra: [t(hf2.debt), t(hf2.tax), t(hf2.counterfeit)],
+        roman: "{self} mii khuu-bpawng · jàai thá-naa-khaan-aawn-lai dâai {politeQ}",
+        en: "I have a coupon — can I pay with online banking?",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.can), t(a1.please), t(hf2.transferSlip), { kind: "w", word: a1.kha }],
+          roman: "dâai · khǎaw sà-líp khâ",
+          en: "Yes! Please show me the transfer slip.",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Send the slip and praise the quality:",
+        answer: [t(a2.sendW), t(hf2.transferSlip), t(a1.already), t(hf2.quality), t(a1.good), POLITE],
+        extra: [t(hf2.serviceFee), t(hf2.counterfeit)],
+        roman: "sòng sà-líp láaeo · khun-ná-phâap dii {polite}",
+        en: "Sent the slip already — the quality is great!",
+      },
+    ],
+  },
+  {
+    id: "talk-a2-story-3",
+    unitId: "a2-finale",
+    level: "A2",
+    title: "Sharing Plans, Ideas & New Opportunities",
+    setting: "Wrapping up your A2 journey over coffee and talking about your next goals.",
+    npcName: "P'Dao",
+    npcRole: "Friend",
+    npcSpeaker: "f",
+    words: [hf2.goalTarget, hf2.planNoun, hf2.opportunity, hf2.ideaLoan, hf2.success, hf2.resultOutcome, hf2.interesting],
+    turns: [
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(a1.you), t(a1.hasHave), t(hf2.planNoun), t(a1.orW), t(hf2.goalTarget), t(a1.what), { kind: "w", word: a1.khaQ }],
+          roman: "khun mii phǎaaen-gaan rǔue bpâo-mǎai à-rai khá",
+          en: "What plans or goals do you have next?",
+        },
+      },
+      {
+        kind: "reply-blank",
+        prompt: "Share your plan: “I have an interesting idea and want a new opportunity.”",
+        parts: [fixed(SELF), fixed(t(a1.hasHave)), blank(t(hf2.ideaLoan)), fixed(t(hf2.interesting)), fixed(t(a1.andW)), fixed(t(a1.want)), blank(t(hf2.opportunity)), fixed(t(a1.newW)), fixed(POLITE)],
+        extra: [t(hf2.mistake), t(hf2.boring), t(hf2.disadvantage)],
+        roman: "{self} mii ai-diia nâa-sǒn-jai láe yàak oo-gàat mài {polite}",
+        en: "I have an interesting idea and want a new opportunity.",
+      },
+      {
+        kind: "line",
+        line: {
+          speaker: "npc",
+          tokens: [t(hf2.interesting), t(a1.many), t(hf2.success), { kind: "w", word: a1.kha }],
+          roman: "nâa-sǒn-jai mâak · khwaam-sǎm-rèt khâ",
+          en: "So interesting — wishing you huge success!",
+        },
+      },
+      {
+        kind: "reply-tiles",
+        prompt: "Reply: “Thank you — the result is worthwhile and good!”",
+        answer: [t(a1.thanks), t(hf2.resultOutcome), t(hf2.worthwhile), t(a1.andW), t(a1.good), POLITE],
+        extra: [t(hf2.mistake), t(hf2.impossible)],
+        roman: "khàawp-khun · phǒn-láp khúm-khâa láe dii {polite}",
+        en: "Thank you — the result is worthwhile and great!",
       },
     ],
   },

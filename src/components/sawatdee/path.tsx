@@ -63,6 +63,11 @@ export function Path({
   const levelUnits = units.filter((unit) => unit.level === activeLevel.id);
   const levelUnitIds = new Set(levelUnits.map((u) => u.id));
   const levelWords = vocabulary.filter((word) => word.level === activeLevel.id).length;
+  const activeLevelIdx = levels.findIndex((l) => l.id === activeLevel.id);
+  const cumulativeLevelWords = vocabulary.filter((word) => {
+    const idx = levels.findIndex((l) => l.id === word.level);
+    return idx >= 0 && idx <= activeLevelIdx;
+  }).length;
   const levelLessons = lessons.filter((l) => levelUnitIds.has(l.unit));
   const levelDone = levelLessons.filter((l) => completed[l.id]).length;
   const allUnitsDone = levelLessons.length > 0 && levelDone >= levelLessons.length;
@@ -160,13 +165,19 @@ export function Path({
 
       {/* CEFR Track / Path Selector */}
       <div className="mt-7 grid grid-cols-2 gap-3" role="tablist" aria-label="Course paths">
-        {levels.map((level) => {
+        {levels.map((level, levelIdx) => {
           const isSelected = level.id === activeLevel.id;
           const lvlUnits = units.filter((u) => u.level === level.id);
           const lvlUnitSet = new Set(lvlUnits.map((u) => u.id));
           const lvlLessons = lessons.filter((l) => lvlUnitSet.has(l.unit));
           const lvlDone = lvlLessons.filter((l) => completed[l.id]).length;
           const lvlWords = vocabulary.filter((w) => w.level === level.id).length;
+          const lvlCumulativeWords = vocabulary.filter((w) => {
+            const idx = levels.findIndex((item) => item.id === w.level);
+            return idx >= 0 && idx <= levelIdx;
+          }).length;
+          const wordSummary =
+            levelIdx > 0 ? `${lvlWords} new · ${lvlCumulativeWords} total` : `${lvlWords} words`;
           const pct = lvlLessons.length > 0 ? Math.round((100 * lvlDone) / lvlLessons.length) : 0;
           const isCurrent = Boolean(next && nextUnitLevel === level.id);
           const isComplete = lvlLessons.length > 0 && lvlDone >= lvlLessons.length;
@@ -209,7 +220,7 @@ export function Path({
                 </div>
                 <p className="mt-1 text-base font-extrabold sm:text-lg">{level.title}</p>
                 <p className="mt-0.5 text-xs font-bold text-muted tabular-nums">
-                  {lvlDone}/{lvlLessons.length} lessons · {lvlWords} words
+                  {lvlDone}/{lvlLessons.length} lessons · {wordSummary}
                 </p>
               </div>
               <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-paper" aria-hidden>
@@ -231,7 +242,10 @@ export function Path({
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="min-w-0 flex-1">
             <p className="text-xs font-extrabold tracking-wide text-chili uppercase">
-              CEFR {activeLevel.id} · {levelUnits.length} units · {levelWords} words
+              CEFR {activeLevel.id} · {levelUnits.length} units ·{" "}
+              {activeLevelIdx > 0
+                ? `${levelWords} new (${cumulativeLevelWords} cumulative words)`
+                : `${levelWords} words`}
             </p>
             <h2 className="text-2xl font-extrabold">{activeLevel.title}</h2>
             <p className="text-sm text-pretty text-muted">{activeLevel.blurb}</p>

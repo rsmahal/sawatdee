@@ -784,7 +784,7 @@ export const a2Lessons: Lesson[] = [
       choice("th-en", v.meeting, [v.appointment, v.project, v.document]),
       choice("en-th", v.boss, [v.coworker, v.career, v.salary]),
       choice("listen", v.document, [v.project, v.deadline, v.workNoun]),
-      tiles("Have a meeting tomorrow", [t(a1.tomorrow), t(v.meeting)], [t(v.appointment), t(v.salary)]),
+      tiles("Have a meeting tomorrow", [t(a1.tomorrow), t(a1.hasHave), t(v.meeting)], [t(v.appointment), t(v.salary)]),
       pairs([v.workNoun, v.meeting, v.appointment, v.boss]),
       pairs([v.coworker, v.document, v.project, v.salary]),
       choice("th-en", v.deadline, [v.salary, v.career, v.project]),

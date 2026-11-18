@@ -102,7 +102,7 @@ const baseConversations: Conversation[] = [
     npcName: "Ton",
     npcRole: "Friend",
     npcSpeaker: "m",
-    words: [a1.howru, a1.well, a1.friend, a1.work, a1.bangkok, a1.thailand],
+    words: [a1.howru, a1.well, a1.friend, a1.work, a1.bangkok, a1.thailand, a1.beCopula, a1.hasHave],
     turns: [
       {
         kind: "line",
@@ -126,18 +126,18 @@ const baseConversations: Conversation[] = [
         kind: "line",
         line: {
           speaker: "npc",
-          tokens: [{ kind: "w", word: a1.iM }, t(a1.work), t(a1.bangkok), { kind: "w", word: a1.khrap }],
-          roman: "phǒm tham-ngaan grung-thêep khráp",
-          en: "I work in Bangkok.",
+          tokens: [{ kind: "w", word: a1.iM }, t(a1.beCopula), t(a1.teacher), t(a1.bangkok), { kind: "w", word: a1.khrap }],
+          roman: "phǒm bpen khruu grung-thêep khráp",
+          en: "I'm a teacher in Bangkok.",
         },
       },
       {
         kind: "reply-blank",
-        prompt: "Respond naturally about yourself:",
-        parts: [fixed(SELF), blank(t(a1.study)), blank(t(a1.thailand)), fixed(POLITE)],
-        extra: [t(a1.work), t(a1.family), t(a1.bangkok)],
-        roman: "{self} riian bprà-thêet-thai {polite}",
-        en: "I study in Thailand.",
+        prompt: "Respond about where you study and having a friend in Thailand:",
+        parts: [fixed(SELF), blank(t(a1.study)), fixed(t(a1.thailand)), fixed(t(a1.andW)), blank(t(a1.hasHave)), fixed(t(a1.friend)), fixed(POLITE)],
+        extra: [t(a1.work), t(a1.beCopula), t(a1.bangkok)],
+        roman: "{self} riian bprà-thêet-thai láe mii phûean {polite}",
+        en: "I study in Thailand and have friends here.",
       },
     ],
   },
@@ -150,14 +150,14 @@ const baseConversations: Conversation[] = [
     npcName: "P'Daeng",
     npcRole: "Vendor",
     npcSpeaker: "f",
-    words: [a1.hungry, a1.friedRice, a1.coffee, a1.please, a1.thisOne, a1.howMuch, a1.spicy, a1.tasty],
+    words: [a1.hungry, a1.friedRice, a1.coffee, a1.please, a1.thisOne, a1.howMuch, a1.spicy, a1.tasty, a1.maiQ],
     turns: [
       {
         kind: "line",
         line: {
           speaker: "npc",
-          tokens: [t(a1.eat), t(a1.rice), t(a1.khaQ)],
-          roman: "gin khâao khá",
+          tokens: [t(a1.eat), t(a1.rice), t(a1.maiQ), t(a1.khaQ)],
+          roman: "gin khâao mǎi khá",
           en: "Having a meal? (What would you like?)",
         },
       },
@@ -174,9 +174,9 @@ const baseConversations: Conversation[] = [
         kind: "line",
         line: {
           speaker: "npc",
-          tokens: [t(a1.spicy), { kind: "w", word: a1.khaQ }],
-          roman: "phèt khá",
-          en: "Spicy?",
+          tokens: [t(a1.spicy), t(a1.maiQ), { kind: "w", word: a1.khaQ }],
+          roman: "phèt mǎi khá",
+          en: "Do you want it spicy?",
         },
       },
       {

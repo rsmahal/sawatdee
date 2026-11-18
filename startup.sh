@@ -1,5 +1,5 @@
 #!/bin/sh
-cd /workspace
+cd "$(dirname "$0")" || cd /workspace
 if curl -sf -o /dev/null --max-time 1 http://127.0.0.1:3000/; then
   exit 0
 fi

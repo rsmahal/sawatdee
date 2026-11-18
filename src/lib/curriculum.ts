@@ -1,5 +1,7 @@
 import { a1Lessons, a1Units, a1Vocab } from "./curriculum-a1";
+import { a1HfLessons } from "./curriculum-a1-hf";
 import { a2Lessons, a2Units, a2Vocab } from "./curriculum-a2";
+import { a2HfLessons } from "./curriculum-a2-hf";
 import type {
   CefrLevel,
   CurriculumCatalog,
@@ -131,7 +133,39 @@ function withFullWordCoverage(rawLessons: Lesson[]): Lesson[] {
   });
 }
 
-export const lessons: Lesson[] = withFullWordCoverage([...a1Lessons, ...a2Lessons]);
+function buildOrderedLessons(base: Lesson[], extra: Lesson[]): Lesson[] {
+  const extraByUnit = new Map<string, Lesson[]>();
+  for (const lesson of extra) {
+    const list = extraByUnit.get(lesson.unit) ?? [];
+    list.push(lesson);
+    extraByUnit.set(lesson.unit, list);
+  }
+  const ordered: Lesson[] = [];
+  for (let i = 0; i < base.length; i++) {
+    const current = base[i]!;
+    const next = base[i + 1];
+    if (current.checkpoint) {
+      ordered.push(current);
+      continue;
+    }
+    ordered.push(current);
+    const isEndOfUnitBeforeCheckpoint = Boolean(next?.checkpoint && next.unit === current.unit);
+    const isEndOfUnit = !next || next.unit !== current.unit;
+    if (isEndOfUnitBeforeCheckpoint || isEndOfUnit) {
+      const additions = extraByUnit.get(current.unit);
+      if (additions) {
+        ordered.push(...additions);
+        extraByUnit.delete(current.unit);
+      }
+    }
+  }
+  return ordered;
+}
+
+export const lessons: Lesson[] = withFullWordCoverage([
+  ...buildOrderedLessons(a1Lessons, a1HfLessons),
+  ...buildOrderedLessons(a2Lessons, a2HfLessons),
+]);
 
 export const vocabularyCatalog: VocabularyEntry[] = (() => {
   const entries: VocabularyEntry[] = [];
@@ -160,7 +194,7 @@ export const vocabularyCatalog: VocabularyEntry[] = (() => {
   return entries;
 })();
 
-export const CURRICULUM_VERSION = `cefr-a1-a2-v5-u${units.length}-l${lessons.length}-w${vocabularyCatalog.length}`;
+export const CURRICULUM_VERSION = `cefr-a1-a2-v6-u${units.length}-l${lessons.length}-w${vocabularyCatalog.length}`;
 
 export const staticCurriculumCatalog: CurriculumCatalog = {
   version: CURRICULUM_VERSION,
@@ -173,7 +207,7 @@ const a1Total = vocabularyCatalog.filter((v) => v.level === "A1").length;
 const a2Total = vocabularyCatalog.filter((v) => v.level === "A2").length;
 
 export const courseNote =
-  `Full CEFR A1 (${a1Total} words) & A2 (${a2Total} words), stored in PostgreSQL.`;
+  `CEFR A1 (${a1Total} words) & A2 (${a2Total} new · ${a1Total + a2Total} cumulative), stored in PostgreSQL.`;
 
 export const dailyPhrases: Word[] = [
   a1Vocab.hello,

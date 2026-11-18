@@ -22,30 +22,32 @@ function hasGlobbedMigrations(root: string): boolean {
 }
 
 /**
- * Finish PGLite bootstrap during dev-server setup (before traffic). Vite awaits
- * async `configureServer` hooks. Production: `src/lib/db` kicks `ensureDbReady`
- * on import.
- *
- * Vite awaiting the hook puts this on time-to-first-render, so an app with no
- * migrations — no schema to apply — skips it entirely rather than paying for a
- * PGLite instance it never queries.
+ * Kick off PGLite bootstrap right after Vite starts listening on port 3000 so
+ * migrations run in parallel while the readiness check already sees the open
+ * port. Any request calling `getSql()` awaits the shared bootstrap promise in
+ * `src/lib/db.ts`.
  */
 function pgliteBootstrapPlugin(): Plugin {
   return {
     name: "app-builder:pglite-bootstrap",
     apply: "serve",
-    async configureServer(server) {
+    configureServer(server) {
       if (!hasGlobbedMigrations(server.config.root)) return;
-      try {
-        const mod = (await server.ssrLoadModule("/src/lib/db.ts")) as {
-          ensureDbReady?: () => Promise<void>;
-        };
-        if (typeof mod.ensureDbReady === "function") {
-          await mod.ensureDbReady();
-        }
-      } catch (err) {
-        console.error("[app-builder] DB bootstrap failed:", err);
-        throw err;
+      const bootstrap = () => {
+        void server
+          .ssrLoadModule("/src/lib/db.ts")
+          .then((mod) => {
+            const dbMod = mod as { ensureDbReady?: () => Promise<void> };
+            return typeof dbMod.ensureDbReady === "function" ? dbMod.ensureDbReady() : undefined;
+          })
+          .catch((err) => {
+            console.error("[app-builder] DB bootstrap failed:", err);
+          });
+      };
+      if (server.httpServer) {
+        server.httpServer.once("listening", bootstrap);
+      } else {
+        bootstrap();
       }
     },
   };

@@ -102,15 +102,47 @@ export const unitGuides: UnitGuideInfo[] = [
   },
   {
     unitId: "people",
-    headline: "Subject + Verb + Place (no 'in/at' needed)",
+    headline: "Use เป็น (roles) & มี (have) + Subject + Verb + Place",
     summary:
-      "Thai uses the same Subject → Verb → Object/Place order as English, often dropping prepositions like 'in' or 'at' when the verb already implies location.",
+      "Thai uses Subject → เป็น (to be a role/job) for professions, and Subject → มี (to have) for family or possessions—never use เป็น for adjectives.",
     patterns: [
       {
-        title: "Talking About Work & Study",
-        formula: ["Subject", "Verb", "Place / Country", "Polite"],
+        title: "Roles with เป็น & Having with มี",
+        formula: ["Subject (ฉัน / เรา / เขา)", "เป็น / มี", "Noun", "Polite"],
         setup:
-          "Start with ฉัน (chǎn) or ผม (phǒm), add an action verb like ทำงาน (work) or เรียน (study), then place the city or country directly after it.",
+          "Use เป็น (bpen) for jobs and identities (ฉันเป็นครู = I'm a teacher) and มี (mii) for having family or things (เรามีเพื่อน = We have friends).",
+        examples: [
+          {
+            thai: "{self}เป็นครู{polite}",
+            roman: "{self} bpen khruu {polite}",
+            en: "I am a teacher.",
+            slots: [
+              { role: "Subject", thai: "{self}", roman: "{self}", en: "I" },
+              { role: "Copula", thai: "เป็น", roman: "bpen", en: "am", accent: true },
+              { role: "Job", thai: "ครู", roman: "khruu", en: "teacher" },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
+          {
+            thai: "เขามีครอบครัวใหญ่{polite}",
+            roman: "khǎo mii khrâawp-khrua yài {polite}",
+            en: "He/she has a big family.",
+            slots: [
+              { role: "Subject", thai: "เขา", roman: "khǎo", en: "he/she", accent: true },
+              { role: "Have", thai: "มี", roman: "mii", en: "has", accent: true },
+              { role: "Noun", thai: "ครอบครัว", roman: "khrâawp-khrua", en: "family" },
+              { role: "Adj", thai: "ใหญ่", roman: "yài", en: "big" },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
+        ],
+        watchOut: "Never say ฉันเป็นสบายดี—skip เป็น before adjectives like สบายดี, สวย, or ดี.",
+      },
+      {
+        title: "Talking About Work & Asking Yes/No with ไหม",
+        formula: ["Subject / Statement", "Verb (+ Place)", "(ไหม)", "Polite"],
+        setup:
+          "Put the city directly after ทำงาน (work) or เรียน (study), and attach ไหม (mǎi) at the end to turn any statement into a yes/no question.",
         examples: [
           {
             thai: "{self}ทำงานกรุงเทพฯ{polite}",
@@ -123,25 +155,6 @@ export const unitGuides: UnitGuideInfo[] = [
               { role: "Polite", thai: "{polite}", roman: "{polite}" },
             ],
           },
-          {
-            thai: "{self}เรียนประเทศไทย{polite}",
-            roman: "{self} riian bprà-thêet-thai {polite}",
-            en: "I study in Thailand.",
-            slots: [
-              { role: "Subject", thai: "{self}", roman: "{self}", en: "I" },
-              { role: "Verb", thai: "เรียน", roman: "riian", en: "study" },
-              { role: "Place", thai: "ประเทศไทย", roman: "bprà-thêet-thai", en: "Thailand", accent: true },
-              { role: "Polite", thai: "{polite}", roman: "{polite}" },
-            ],
-          },
-        ],
-      },
-      {
-        title: "Asking Yes/No with ไหม (mǎi)",
-        formula: ["Statement", "ไหม (?)", "Polite"],
-        setup:
-          "Keep the statement order untouched and simply attach ไหม (mǎi) at the end to turn it into a yes/no question.",
-        examples: [
           {
             thai: "สบายดีไหม{politeQ}",
             roman: "sà-baai-dii mǎi {politeQ}",
@@ -191,11 +204,22 @@ export const unitGuides: UnitGuideInfo[] = [
         ],
       },
       {
-        title: "Asking Prices",
-        formula: ["Item", "เท่าไหร่ (how much)", "Polite"],
+        title: "Asking Prices & Availability (มี ... ไหม / นี้)",
+        formula: ["มี (Do you have) / Item + นี้", "ไหม / เท่าไหร่", "Polite"],
         setup:
-          "Unlike English ('How much is this?'), Thai puts the item first and the question word เท่าไหร่ after it.",
+          "Use มี + item + ไหม to ask if a stall has something (มีน้ำไหม), and place นี้ (níi, this) or นั้น (nán, that) right after a noun.",
         examples: [
+          {
+            thai: "มีน้ำไหม{politeQ}",
+            roman: "mii náam mǎi {politeQ}",
+            en: "Do you have water?",
+            slots: [
+              { role: "Have", thai: "มี", roman: "mii", en: "have", accent: true },
+              { role: "Item", thai: "น้ำ", roman: "náam", en: "water" },
+              { role: "Question", thai: "ไหม", roman: "mǎi", en: "?", accent: true },
+              { role: "Polite", thai: "{politeQ}", roman: "{politeQ}" },
+            ],
+          },
           {
             thai: "อันนี้เท่าไหร่{politeQ}",
             roman: "an-níi thâo-rài {politeQ}",
@@ -507,11 +531,23 @@ export const unitGuides: UnitGuideInfo[] = [
         ],
       },
       {
-        title: "In-Situ Questions",
-        formula: ["Who (ใคร)", "จะ (will)", "Verb", "กับ (with)", "Person", "Polite"],
+        title: "In-Situ Questions & Advice (ควร / กัน / ก็ / ที่)",
+        formula: ["Subject", "ควร (should) / ก็ (then)", "Verb", "กัน (together)", "Polite"],
         setup:
-          "Question words (ใคร who, อะไร what, ที่ไหน where, เมื่อไหร่ when) sit in the exact grammatical slot the answer fills.",
+          "Question words (ใคร who, อะไร what, ที่ไหน where) stay where the answer goes. Use ควร (should) before a verb, กัน (together) after it, ก็ for 'also/then', and ที่ for 'that/which'.",
         examples: [
+          {
+            thai: "เราควรไปกัน{polite}",
+            roman: "rao khuan bpai gan {polite}",
+            en: "We should go together.",
+            slots: [
+              { role: "Subject", thai: "เรา", roman: "rao", en: "we" },
+              { role: "Should", thai: "ควร", roman: "khuan", en: "should", accent: true },
+              { role: "Verb", thai: "ไป", roman: "bpai", en: "go" },
+              { role: "Together", thai: "กัน", roman: "gan", en: "together", accent: true },
+              { role: "Polite", thai: "{polite}", roman: "{polite}" },
+            ],
+          },
           {
             thai: "ใครจะไปกับ{self}{politeQ}",
             roman: "khrai jà bpai gàp {self} {politeQ}",
